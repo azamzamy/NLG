@@ -48,7 +48,7 @@ import simplenlg.features.*;
 
 public class WineModel {
 
-	private static final String file = "file:src/main/resources/data/Wine2.0.owl";
+	private static final String file = "file:src/main/resources/data/wine77.owl";
 	private static final String NS = "http://www.w3.org/TR/2003/PR-owl-guide-20031209/food#";
 	private static final String NSWine = "http://www.w3.org/TR/2003/PR-owl-guide-20031209/wine#";
 	private static PrintWriter out;
@@ -70,12 +70,12 @@ public class WineModel {
 		PrintWriter out2 = new PrintWriter(System.out);
 		ManchesterSyntaxExplanationRenderer renderer = new ManchesterSyntaxExplanationRenderer();
 
-		renderer.startRendering(out);
+		renderer.startRendering(out2);
 		OWLOntologyManager manager = OWL.manager;
 		OWLOntology ontology = manager.loadOntology(IRI.create(file));
 		OWLDataFactory fac = manager.getOWLDataFactory();
-		PrefixManager pm = new DefaultPrefixManager(
-				IRI.create("file:src/main/resources/data/Wine2.0.owl").toString());
+//		PrefixManager pm = new DefaultPrefixManager(
+//				IRI.create("file:src/main/resources/data/wine77.owl").toString());
 		PelletReasoner reasoner = PelletReasonerFactory.getInstance().createReasoner(ontology);
 		PelletExplanation expGen = new PelletExplanation(reasoner);
 
@@ -86,12 +86,14 @@ public class WineModel {
 		OWLClass seafoodCourse = OWL.Class(NS + "seaFoodCourse");
 		OWLClass wine = OWL.Class(NSWine + "Winery");
 		OWLClass sauvignon = OWL.Class(NSWine + "SauvignonBlanc");
+		OWLClass margaux = OWL.Class(NSWine + "Margaux");
 		OWLClass thing = OWL.Class("http://www.w3.org/2002/07/owl#Thing");
 		int count = 0;
 		
 		// manager.saveOntology(ontology, new SystemOutDocumentTarget());
 		OWLNamedIndividual tuna1 = fac.getOWLNamedIndividual(IRI.create(NS+"TunaSalad"));
-		OWLNamedIndividual wine1 = fac.getOWLNamedIndividual(IRI.create(NS+"StonleighSauvignonBlanc"));
+		OWLNamedIndividual duck = fac.getOWLNamedIndividual(IRI.create(NS+"RoastedDuck"));
+//		OWLNamedIndividual wine1 = fac.getOWLNamedIndividual(IRI.create(NS+"StonleighSauvignonBlanc"));
 		OWLObjectPropertyExpression property = fac.getOWLObjectProperty(IRI.create("http://www.w3.org/TR/2003/PR-owl-guide-20031209/food#goesWellWith"));
 		try {
 			//System.out.println("testing mealCourse: " + mealCourse.toString()+"\n");
@@ -113,13 +115,13 @@ public class WineModel {
 		// //System.out.println("--------------------------------------------------------------");
 
 		Set<OWLNamedIndividual> individuals = reasoner.getInstances(consumable, false).getFlattened();
-		Set<OWLNamedIndividual> individuals2 = reasoner.getInstances(sauvignon, false).getFlattened();
+		Set<OWLNamedIndividual> individuals2 = reasoner.getInstances(margaux, false).getFlattened();
 		//System.out.println("ind 2 size: "+individuals2.size());
 		//System.out.println("individuals: " + individuals.size());
 		for (OWLNamedIndividual ind : individuals) {
 			int c = 0;
 			IRI cIRI = ind.getIRI();
-			boolean check = cIRI.toString().equals(tuna1.getIRI().toString());
+			boolean check = cIRI.toString().equals(duck.getIRI().toString());
 			if(check){
 			//System.out.println("loop" + ++count);
 			Set<OWLAnnotationAssertionAxiom> list = ontology.getAnnotationAssertionAxioms(cIRI);
@@ -151,7 +153,7 @@ public class WineModel {
 										//System.out.println(assertion.toString());
 										// OWLAxiom axiom = OWL.classAssertion(
 										try{
-										Set<Set<OWLAxiom>> exp2 = expGen.getEntailmentExplanations(assertion);
+										Set<Set<OWLAxiom>> exp2 = expGen.getEntailmentExplanations(assertion, 2);
 										renderer.render(exp2);
 										
 										} catch(Exception e){

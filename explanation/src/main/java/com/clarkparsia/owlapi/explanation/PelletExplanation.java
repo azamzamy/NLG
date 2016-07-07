@@ -85,7 +85,13 @@ public class PelletExplanation {
 
     public Set<Set<OWLAxiom>> getEntailmentExplanations(OWLAxiom axiom, int maxExplanations) {
     	OWLClassExpression unsatClass = converter.convert( axiom );
-    	return getUnsatisfiableExplanations( unsatClass, maxExplanations );
+    	try{
+    		return getUnsatisfiableExplanations( unsatClass, maxExplanations );
+    	} catch(Exception e){
+    		System.out.println("emsek hena tany: ");
+    		e.printStackTrace();
+    	}
+    		return getUnsatisfiableExplanations( unsatClass, maxExplanations );
     }
     
     

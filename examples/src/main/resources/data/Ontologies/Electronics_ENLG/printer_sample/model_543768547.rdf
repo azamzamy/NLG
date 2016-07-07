@@ -1,0 +1,480 @@
+Prefix(j.0:=<http://purl.org/dc/terms/>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+Prefix(cl:=<http://www.ebusiness-unibw.org/ontologies/consumerelectronics/v1#>)
+Prefix(:=<http://rdf4ecommerce.esolda.com/esolda2/consumerelectronics/printer/model_543768547#>)
+Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)
+Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(gr:=<http://purl.org/goodrelations/v1#>)
+Prefix(dc:=<http://purl.org/dc/elements/1.1/>)
+Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
+Prefix(nlowl:=<http://www.aueb.gr/users/ion/nlowl/nlowl#>)
+Prefix(dgr:=<http://www.aueb.gr/users/ion/nlowl/dgr#>)
+
+
+Ontology(<http://rdf4ecommerce.esolda.com/esolda2/consumerelectronics/printer/model_543768547>
+Import(<http://purl.org/goodrelations/v1>)
+Import(<http://www.ebusiness-unibw.org/ontologies/consumerelectronics/v1>)
+Annotation(dc:rights "This Information is provided by Smart Information Systems GmbH from Open ICEcat data under \"OPEN ICECAT FAIR USE POLICY\" (http://icecat.biz/forum.cgi?thread=17;post=3004;) according to \"Open Content License Agreement\": \"OpenContent License (OPL) Version 1.0, July 14. 1998 This document outlines the principles underlying the OpenContent (OC) movement and may be redistributed provided it remains unaltered. For legal purposes, this document is the license under which OpenContent is made available for use. The original version of this document may be found at http://www.opencontent.org/opl.html LICENSE Terms and Conditions for Copying, Distributing, and Modifying Items other than copying, distributing, and modifying the Content with which this license was distributed (such as using, etc.) are outside the scope of this license. 1. You may copy and distribute exact replicas of the OpenContent (OC) as you receive it, in any medium, provided that you conspicuously and appropriately publish on each copy an appropriate copyright notice and disclaimer of warranty; keep intact all the notices that refer to this License and to the absence of any warranty; and give any other recipients of the OC a copy of this License along with the OC. You may at your option charge a fee for the media and/or handling involved in creating a unique copy of the OC for use offline, you may at your option offer instructional support for the OC in exchange for a fee, or you may at your option offer warranty in exchange for a fee. You may not charge a fee for the OC itself. You may not charge a fee for the sole service of providing access to and/or use of the OC via a network (e.g. the Internet), whether it be via the world wide web, FTP, or any other method. 2. You may modify your copy or copies of the OpenContent or any portion of it, thus forming works based on the Content, and distribute such modifications or work under the terms of Section 1 above, provided that you also meet all of these conditions: a) You must cause the modified content to carry prominent notices stating that you changed it, the exact nature and content of the changes, and the date of any change. b) You must cause any work that you distribute or publish, that in whole or in part contains or is derived from the OC or any part thereof, to be licensed as a whole at no charge to all third parties under the terms of this License, unless otherwise permitted under applicable Fair Use law These requirements apply to the modified work as a whole. If identifiable sections of that work are not derived from the OC, and can be reasonably considered independent and separate works in themselves, then this License, and its terms, do not apply to those sections when you distribute them as separate works. But when you distribute the same sections as part of a whole which is a work based on the OC, the distribution of the whole must be on the terms of this License, whose permissions for other licensees extend to the entire whole, and thus to each and every part regardless of who wrote it. Exceptions are made to this requirement to release modified works free of charge under this license only in compliance with Fair Use law where applicable. 3. You are not required to accept this License, since you have not signed it. However, nothing else grants you permission to copy, distribute or modify the OC. These actions are prohibited by law if you do not accept this License. Therefore, by distributing or translating the OC, or by deriving works herefrom, you indicate your acceptance of this License to do so, and all its terms and conditions for copying, distributing or translating the OC. NO WARRANTY 4. BECAUSE THE OPENCONTENT (OC) IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY FOR THE OC, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE OC \"AS IS\" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK OF USE OF THE OC IS WITH YOU. SHOULD THE OC PROVE FAULTY, INACCURATE, OR OTHERWISE UNACCEPTABLE YOU ASSUME THE COST OF ALL NECESSARY REPAIR OR CORRECTION. 5. IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MIRROR AND/OR REDISTRIBUTE THE OC AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE OC, EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF\" THE POSSIBILITY OF SUCH DAMAGES.	"@en)
+Annotation(j.0:license <http://www.opencontent.org/opl.html>)
+
+AnnotationAssertion(nlowl:hasNLName gr:ProductOrServiceModel dgr:productNLN_English) AnnotationAssertion(nlowl:hasNLName gr:ProductOrServiceModel nlowl:anonymous)
+ClassAssertion(gr:QuantitativeValueFloat :Depth)
+DataPropertyAssertion(gr:hasUnitOfMeasurement :Depth "cm"^^xsd:string)
+DataPropertyAssertion(gr:hasValueFloat :Depth "40.6"^^xsd:float)
+ClassAssertion(gr:QuantitativeValueFloat :Height)
+DataPropertyAssertion(gr:hasUnitOfMeasurement :Height "cm"^^xsd:string)
+DataPropertyAssertion(gr:hasValueFloat :Height "26.0"^^xsd:float)
+ClassAssertion(cl:MediaFormat :Legal)
+ClassAssertion(cl:CompatibleOperatingSystems :MacOSX)
+ClassAssertion(gr:QuantitativeValueFloat :MaxOutputCapacity)
+DataPropertyAssertion(gr:hasValueFloat :MaxOutputCapacity "300.0"^^xsd:float)
+ClassAssertion(gr:QuantitativeValueFloat :MaxPrintableResolutionBlackWhiteHorizontal)
+DataPropertyAssertion(gr:hasUnitOfMeasurement :MaxPrintableResolutionBlackWhiteHorizontal "dots"^^xsd:string)
+DataPropertyAssertion(gr:hasValueFloat :MaxPrintableResolutionBlackWhiteHorizontal "1200.0"^^xsd:float)
+ClassAssertion(gr:QuantitativeValueFloat :MaxPrintableResolutionBlackWhiteVertical)
+DataPropertyAssertion(gr:hasUnitOfMeasurement :MaxPrintableResolutionBlackWhiteVertical "dots"^^xsd:string)
+DataPropertyAssertion(gr:hasValueFloat :MaxPrintableResolutionBlackWhiteVertical "1200.0"^^xsd:float)
+ClassAssertion(gr:QuantitativeValueFloat :PrintSpeed)
+DataPropertyAssertion(gr:hasUnitOfMeasurement :PrintSpeed "PPM (Pages per Minute)"^^xsd:string)
+DataPropertyAssertion(gr:hasValueFloat :PrintSpeed "18.0"^^xsd:float)
+ClassAssertion(cl:CompatibleOperatingSystems :Unix)
+ClassAssertion(gr:QuantitativeValueFloat :Weight)
+DataPropertyAssertion(gr:hasUnitOfMeasurement :Weight "grm"^^xsd:string)
+DataPropertyAssertion(gr:hasValueFloat :Weight "13800.0"^^xsd:float)
+ClassAssertion(gr:QuantitativeValueFloat :Width)
+DataPropertyAssertion(gr:hasUnitOfMeasurement :Width "cm"^^xsd:string)
+DataPropertyAssertion(gr:hasValueFloat :Width "37.0"^^xsd:float)
+ClassAssertion(cl:CompatibleOperatingSystems :Windows)
+AnnotationAssertion(:hasDimension :model "40.6 x 37 x 26"^^xsd:string)
+AnnotationAssertion(rdfs:isDefinedBy :model <http://rdf4ecommerce.esolda.com/esolda2/consumerelectronics/printer/model_543768547>)
+AnnotationAssertion(:hasPrinterTechnology :model "Laser"^^xsd:string)
+AnnotationAssertion(:hasPrintResolution :model "1200 x 1200 dpi"^^xsd:string)
+AnnotationAssertion(:hasCdDvdPrint :model "false"^^xsd:boolean)
+AnnotationAssertion(:hasBorderLessPrinting :model "false"^^xsd:boolean)
+AnnotationAssertion(:hasPrinterType :model "Arbeitsgruppendrucker"^^xsd:string)
+AnnotationAssertion(rdfs:label :model "Lexmark E 360dn"^^xsd:string)
+AnnotationAssertion(:hasEthernetPort :model "true"^^xsd:boolean)
+AnnotationAssertion(:hasPrintSpeed :model :PrintSpeed)
+AnnotationAssertion(:hasWlanSupport :model "false"^^xsd:boolean)
+AnnotationAssertion(rdfs:comment :model "Lexmark E 360dn"^^xsd:string)
+ClassAssertion(gr:ProductOrServiceModel :model)
+ClassAssertion(cl:Printer :model)
+ObjectPropertyAssertion(gr:hasManufacturer :model cl:Lexmark)
+ObjectPropertyAssertion(cl:hasCompatibleOperatingSystem :model :Windows)
+ObjectPropertyAssertion(cl:hasCompatibleOperatingSystem :model :Unix)
+ObjectPropertyAssertion(cl:hasCompatibleOperatingSystem :model :MacOSX)
+ObjectPropertyAssertion(cl:hasDataInterfaceType :model cl:USB2.0)
+ObjectPropertyAssertion(cl:hasDepth :model :Depth)
+ObjectPropertyAssertion(cl:hasFeature :model cl:DuplexPrint)
+ObjectPropertyAssertion(cl:hasHeight :model :Height)
+ObjectPropertyAssertion(cl:hasMaxMediaFormat :model cl:A4)
+ObjectPropertyAssertion(cl:hasMaxMediaFormat :model :Legal)
+ObjectPropertyAssertion(cl:hasMaxOutputCapacity :model :MaxOutputCapacity)
+ObjectPropertyAssertion(cl:hasMaxPrintableResolutionBlackWhiteHorizontal :model :MaxPrintableResolutionBlackWhiteHorizontal)
+ObjectPropertyAssertion(cl:hasMaxPrintableResolutionBlackWhiteVertical :model :MaxPrintableResolutionBlackWhiteVertical)
+ObjectPropertyAssertion(cl:hasWeight :model :Weight)
+ObjectPropertyAssertion(cl:hasWidth :model :Width)
+DataPropertyAssertion(cl:hasNetworkAbility :model "true"^^xsd:boolean)
+ClassAssertion(cl:MediaFormat cl:A4)
+ClassAssertion(gr:BusinessEntity cl:Lexmark)
+
+
+
+
+
+
+
+
+
+AnnotationAssertion(nlowl:hasOrder gr:hasManufacturer "3")
+AnnotationAssertion(nlowl:hasSection gr:hasManufacturer dgr:manufactureSection)
+AnnotationAssertion(nlowl:hasSentencePlan gr:hasManufacturer dgr:hasManufacturerEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasMaxPrintableResolutionBlackWhiteHorizontal "31")
+AnnotationAssertion(nlowl:hasSection cl:hasMaxPrintableResolutionBlackWhiteHorizontal dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasMaxPrintableResolutionBlackWhiteHorizontal dgr:hasMaxPrintableResolutionBlackWhiteHorizontalEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasMaxPrintableResolutionBlackWhiteVertical "32")
+AnnotationAssertion(nlowl:hasSection cl:hasMaxPrintableResolutionBlackWhiteVertical dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasMaxPrintableResolutionBlackWhiteVertical dgr:hasMaxPrintableResolutionBlackWhiteVerticalEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasMaxPrintableResolutionColorHorizontal "33")
+AnnotationAssertion(nlowl:hasSection cl:hasMaxPrintableResolutionColorHorizontal dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasMaxPrintableResolutionColorHorizontal dgr:hasMaxPrintableResolutionColorHorizontalEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasMaxPrintableResolutionColorVertical "34")
+AnnotationAssertion(nlowl:hasSection cl:hasMaxPrintableResolutionColorVertical dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasMaxPrintableResolutionColorVertical dgr:hasMaxPrintableResolutionColorVerticalEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasMaxMediaFormat "41")
+AnnotationAssertion(nlowl:hasSection cl:hasMaxMediaFormat dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasMaxMediaFormat dgr:hasMaxMediaFormatEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasMaxOutputCapacity "42")
+AnnotationAssertion(nlowl:hasSection cl:hasMaxOutputCapacity dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasMaxOutputCapacity dgr:hasMaxOutputCapacityEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasViewFinder "10")
+AnnotationAssertion(nlowl:hasSection cl:hasViewFinder dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasViewFinder dgr:hasViewFinderEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasFocusSize "12")
+AnnotationAssertion(nlowl:hasSection cl:hasFocusSize dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasFocusSize dgr:hasFocusSizeEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:has35mmCameraLensEquivalentRange "13")
+AnnotationAssertion(nlowl:hasSection cl:has35mmCameraLensEquivalentRange dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:has35mmCameraLensEquivalentRange dgr:has35mmCameraLensEquivalentRangeEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasShutterLag "16")
+AnnotationAssertion(nlowl:hasSection cl:hasShutterLag dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasShutterLag dgr:hasShutterLagEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasDepth "27")
+AnnotationAssertion(nlowl:hasSection cl:hasDepth dgr:dimensionsSection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDepth dgr:hasDepthEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasDigitalZoomFactor "22")
+AnnotationAssertion(nlowl:hasSection cl:hasDigitalZoomFactor dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDigitalZoomFactor dgr:hasDigitalZoomFactorEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasDisplay "30")
+AnnotationAssertion(nlowl:hasSection cl:hasDisplay dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDisplay dgr:hasDisplayEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasDisplayResolutionHorizontal "33")
+AnnotationAssertion(nlowl:hasSection cl:hasDisplayResolutionHorizontal dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDisplayResolutionHorizontal dgr:hasDisplayResolutionHorizontalEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasDisplayResolutionVertical "34")
+AnnotationAssertion(nlowl:hasSection cl:hasDisplayResolutionVertical dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDisplayResolutionVertical dgr:hasDisplayResolutionVerticalEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasDisplaySize "32")
+AnnotationAssertion(nlowl:hasSection cl:hasDisplaySize dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDisplaySize dgr:hasDisplaySizeEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasDisplayType "31")
+AnnotationAssertion(nlowl:hasSection cl:hasDisplayType dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDisplayType dgr:hasDisplayTypeEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasMinIllumination "15")
+AnnotationAssertion(nlowl:hasSection cl:hasMinIllumination dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasMinIllumination dgr:hasMinIlluminationEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasOpticalZoomFactor "21")
+AnnotationAssertion(nlowl:hasSection cl:hasOpticalZoomFactor dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasOpticalZoomFactor dgr:hasOpticalZoomFactorEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasPhotographicFilterSize "14")
+AnnotationAssertion(nlowl:hasSection cl:hasPhotographicFilterSize dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasPhotographicFilterSize dgr:hasPhotographicFilterSizeEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasLensSystem "10")
+AnnotationAssertion(nlowl:hasSection cl:hasLensSystem dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasLensSystem dgr:hasLensSystemEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasZoom "20")
+AnnotationAssertion(nlowl:hasSection cl:hasZoom dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasZoom dgr:hasZoomEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasFocus "23")
+AnnotationAssertion(nlowl:hasSection cl:hasFocus dgr:lenseZoomDisplaySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasFocus dgr:hasFocusEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasAccessory "18")
+AnnotationAssertion(nlowl:hasSection cl:hasAccessory dgr:otherFeatures)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasAccessory dgr:hasAccessoryEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasFeature "17")
+AnnotationAssertion(nlowl:hasSection cl:hasFeature dgr:otherFeatures)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasFeature dgr:featuresEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasLightExposureControl "12")
+AnnotationAssertion(nlowl:hasSection cl:hasLightExposureControl dgr:otherFeatures)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasLightExposureControl dgr:hasLightExposureControlEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasSelfTimer "19")
+AnnotationAssertion(nlowl:hasSection cl:hasSelfTimer dgr:otherFeatures)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasSelfTimer dgr:hasSelfTimerEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasSceneMode "16")
+AnnotationAssertion(nlowl:hasSection cl:hasSceneMode dgr:otherFeatures)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasSceneMode dgr:hasSceneModeEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasSensorType "14")
+AnnotationAssertion(nlowl:hasSection cl:hasSensorType dgr:otherFeatures)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasSensorType dgr:hasSensorTypeEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasWhiteBalance "13")
+AnnotationAssertion(nlowl:hasSection cl:hasWhiteBalance dgr:otherFeatures)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasWhiteBalance dgr:hasWhiteBalanceEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasTouchscreen "15")
+AnnotationAssertion(nlowl:hasSection cl:hasTouchscreen dgr:otherFeatures)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasTouchscreen dgr:hasTouchscreenEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasEnergySource "10")
+AnnotationAssertion(nlowl:hasSection cl:hasEnergySource dgr:energySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasEnergySource dgr:hasEnergySourceEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasUsagePowerConsumption "11")
+AnnotationAssertion(nlowl:hasSection cl:hasUsagePowerConsumption dgr:energySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasUsagePowerConsumption dgr:hasUsagePowerConsumptionEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasStandbyPowerConsumption "12")
+AnnotationAssertion(nlowl:hasSection cl:hasStandbyPowerConsumption dgr:energySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasStandbyPowerConsumption dgr:hasStandbyPowerConsumptionEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasSoundEmission "13")
+AnnotationAssertion(nlowl:hasSection cl:hasSoundEmission dgr:energySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasSoundEmission dgr:hasSoundEmissionEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasDataFormat "22")
+AnnotationAssertion(nlowl:hasSection cl:hasDataFormat dgr:connectivitySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDataFormat dgr:hasDataFormatEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasExpansionSlot "11")
+AnnotationAssertion(nlowl:hasSection cl:hasExpansionSlot dgr:connectivitySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasExpansionSlot dgr:hasExpansionSlotEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasInternalMemoryCapacity "20")
+AnnotationAssertion(nlowl:hasSection cl:hasInternalMemoryCapacity dgr:connectivitySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasInternalMemoryCapacity dgr:hasInternalMemoryCapacityEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasStorageMedia "21")
+AnnotationAssertion(nlowl:hasSection cl:hasStorageMedia dgr:connectivitySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasStorageMedia dgr:hasStorageMediaEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasDataInterfaceType "12")
+AnnotationAssertion(nlowl:hasSection cl:hasDataInterfaceType dgr:connectivitySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDataInterfaceType dgr:hasDataInterfaceTypeEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasUSBPortsQuantity "13")
+AnnotationAssertion(nlowl:hasSection cl:hasUSBPortsQuantity dgr:connectivitySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasUSBPortsQuantity dgr:hasUSBPortsQuantityEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasCompatibleOperatingSystem "30")
+AnnotationAssertion(nlowl:hasSection cl:hasCompatibleOperatingSystem dgr:connectivitySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasCompatibleOperatingSystem dgr:hasCompatibleOperatingSystemEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasNetworkAbility "10")
+AnnotationAssertion(nlowl:hasSection cl:hasNetworkAbility dgr:connectivitySection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasNetworkAbility dgr:hasNetworkAbilityEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasBodyColor "10")
+AnnotationAssertion(nlowl:hasSection cl:hasBodyColor dgr:dimensionsSection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasBodyColor dgr:hasBodyColorEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasHeight "20")
+AnnotationAssertion(nlowl:hasSection cl:hasHeight dgr:dimensionsSection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasHeight dgr:hasHeightEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasWeight "30")
+AnnotationAssertion(nlowl:hasSection cl:hasWeight dgr:dimensionsSection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasWeight dgr:hasWeightEnglish)
+
+AnnotationAssertion(nlowl:hasOrder cl:hasWidth "25")
+AnnotationAssertion(nlowl:hasSection cl:hasWidth dgr:dimensionsSection)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasWidth dgr:hasWidthEnglish)
+
+AnnotationAssertion(nlowl:hasNLName cl:Camcorder dgr:CamcorderNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:Microphon dgr:MicrophoneNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:Microphone dgr:MicrophoneNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:ZoomDigital dgr:digitalNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:FocusAuto dgr:automaticNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:AutoWhiteBalance dgr:automaticNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:IR_Remote dgr:IR_RemoteNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:Sports dgr:SportsNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:OneStepFixed dgr:OneStepFixedNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:LCD dgr:LCDNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:SensorType_3CCD dgr:3CCDNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:CMOS dgr:CMOSNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:LithiumIon dgr:LithiumIonNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:MemoryStick dgr:MemoryStickNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:MPEG dgr:MPEGNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:Silver dgr:silverNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:NightMode dgr:NightModeNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:SelfTimer dgr:SelfTimerNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:HDV dgr:HDVNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:AutomaticPictureStabilizer dgr:AutomaticPictureStabilizerNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:VideoRecording dgr:VideoRecordingNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:USB2.0 dgr:USB2.0NLN_English)
+
+AnnotationAssertion(nlowl:hasNLName :Akku dgr:batteryNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName :Batterie dgr:batteryNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:SD dgr:SDNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:XDPictureCard dgr:XDPictureCardNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:ViewFinderElectronic dgr:electronicNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName :MacOSX dgr:MacOSXNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:A4 dgr:A4NLN_English)
+
+AnnotationAssertion(nlowl:hasNLName :A3Plus dgr:A3PlusNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:DuplexPrint dgr:DuplexPrintNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:ColorPrint dgr:ColorPrintNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:PictBridge dgr:PictBridgeNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName :Legal dgr:LegalNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName :Rolle6cm dgr:Rolle6cmNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName :Rolle21cm dgr:Rolle21cmNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName :Rolle11cm dgr:Rolle11cmNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:Printer dgr:PrinterNLN_English)
+
+AnnotationAssertion(nlowl:hasNLName cl:DigitalCamera dgr:DigitalCameraNLN_English)
+
+
+
+
+DataPropertyAssertion(nlowl:maxRepetitions _:umslot1 "3"^^xsd:integer)
+ObjectPropertyAssertion(nlowl:forUserType _:umslot1 dgr:Adult) DataPropertyAssertion(nlowl:hasInterest _:umslot1 "2"^^xsd:integer)
+
+ObjectPropertyAssertion(nlowl:forUserType _:slot1 dgr:Adult)
+AnnotationAssertion(nlowl:forProperty _:slot1 cl:hasOpticalSensorResolution)
+DataPropertyAssertion(nlowl:hasInterest _:slot1 "0"^^xsd:integer)
+
+ObjectPropertyAssertion(nlowl:forUserType _:slot2 dgr:Adult)
+AnnotationAssertion(nlowl:forProperty _:slot2 cl:hasOpticalSensorSize)
+DataPropertyAssertion(nlowl:hasInterest _:slot2 "0"^^xsd:integer)
+
+ObjectPropertyAssertion(nlowl:forUserType _:slot3 dgr:Adult)
+AnnotationAssertion(nlowl:forProperty _:slot3 gr:hasEAN_UCC-13)
+DataPropertyAssertion(nlowl:hasInterest _:slot3 "0"^^xsd:integer)
+
+ObjectPropertyAssertion(nlowl:forUserType _:slot5 dgr:Adult)
+AnnotationAssertion(nlowl:forProperty _:slot5 gr:hasManufacturer)
+DataPropertyAssertion(nlowl:hasInterest _:slot5 "0"^^xsd:integer)
+
+ObjectPropertyAssertion(nlowl:forUserType _:slot6 dgr:Adult)
+AnnotationAssertion(nlowl:forProperty _:slot6 cl:hasZoom)
+DataPropertyAssertion(nlowl:hasInterest _:slot6 "0"^^xsd:integer)
+
+ObjectPropertyAssertion(nlowl:forUserType _:slot7 dgr:Adult)
+AnnotationAssertion(nlowl:forProperty _:slot7 cl:hasDisplay)
+DataPropertyAssertion(nlowl:hasInterest _:slot7 "0"^^xsd:integer)
+
+ObjectPropertyAssertion(nlowl:forUserType _:slot8 dgr:Adult)
+AnnotationAssertion(nlowl:forProperty _:slot8 cl:has35mmCameraLensEquivalentRange)
+DataPropertyAssertion(nlowl:hasInterest _:slot8 "0"^^xsd:integer)
+
+ObjectPropertyAssertion(nlowl:forUserType _:slot9 dgr:Adult)
+AnnotationAssertion(nlowl:forProperty _:slot9 nlowl:isA)
+DataPropertyAssertion(nlowl:hasInterest _:slot9 "0"^^xsd:integer)
+
+ObjectPropertyAssertion(nlowl:forUserType _:slot10 dgr:Adult)
+AnnotationAssertion(nlowl:forProperty _:slot10 cl:hasBatteryRechargeTime)
+DataPropertyAssertion(nlowl:hasInterest _:slot10 "0"^^xsd:integer)
+
+AnnotationAssertion(nlowl:hasSentencePlan cl:has35mmCameraLensEquivalentRange dgr:has35mmEquivalentFocalLengthEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasAccessory dgr:featuresEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasAccessory dgr:hasEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasBodyColor dgr:isColorEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasBodyColor dgr:isEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasCompatibleOperatingSystem dgr:hasCompatibilityOperatingSystemEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasCompatibleOperatingSystem dgr:isCompatibleOperatingSystemEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDataFormat dgr:hasDataFormatSupportEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDataFormat dgr:providesDataFormatSupportEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDataInterfaceType dgr:hasDataInterfaceTypeSupportEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDataInterfaceType dgr:providesDataInterfaceTypeSupportEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDepth dgr:depthIsEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDigitalZoom dgr:hasDigitalZoomEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDigitalZoom dgr:providesDigitalZoomEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDisplay dgr:featuresDisplayEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDisplay dgr:includesDisplayEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDisplayResolutionHorizontal dgr:displayResolutionHorizontalIsEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDisplayResolutionHorizontal dgr:resolutionHorizontalOfDisplayIsEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDisplayResolutionVertical dgr:displayResolutionVerticalIsEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDisplayResolutionVertical dgr:resolutionVerticalOfDisplayIsEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDisplaySize dgr:featuresSizeDisplayEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDisplaySize dgr:hasSizeDisplayEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDisplayType dgr:featuresTypeDisplayEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasDisplayType dgr:hasTypeDisplayEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasEnergySource dgr:hasEnergySourceAsPowerSourceEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasEnergySource dgr:hasEnergySourceForPowerEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasExpansionSlot dgr:featuresExpansionSlotEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasFeature dgr:hasAccessoryEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasFeature dgr:hasEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasFocus dgr:focusIsEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasFocus dgr:providesFocusEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasFocusSize dgr:focusSizeRangesEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasHeight dgr:heightIsEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasInternalMemoryCapacity dgr:featuresInternalMemoryCapacityEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasInternalMemoryCapacity dgr:internalMemoryCapacityIsEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasLensSystem dgr:lensSystemIsEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasLensSystem dgr:usesLensSystemEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasLightExposureControl dgr:featuresLightExposureControlEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasLightExposureControl dgr:providesLightExposureControlEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasMaxMediaFormat dgr:usesMaxMediaFormatEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasMaxOutputCapacity dgr:hasMaxCapacityOfOutputEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasMaxPrintableResolutionBlackWhiteHorizontal dgr:hasPrintableResolutionBlackWhiteHorizontalUpToEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasMaxPrintableResolutionBlackWhiteVertical dgr:hasPrintableResolutionBlackWhiteVerticalUpToEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasMaxPrintableResolutionColorHorizontal dgr:hasPrintableResolutionColorHorizontalUpToEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasMaxPrintableResolutionColorVertical dgr:hasPrintableResolutionColorVerticalUpToEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasMinIllumination dgr:requiresMinIlluminationEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasNetworkAbility dgr:featuresNetworkAbilityEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasOpticalZoomFactor dgr:hasOpticalZoomEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasOpticalZoomFactor dgr:providesOpticalZoomEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasPhotographicFilterSize dgr:hasPhotographicSizeFilterEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasPhotographicFilterSize dgr:photographicSizeFilterIsEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasSceneMode dgr:featuresSceneModeEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasSceneMode dgr:offersSceneModeEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasSelfTimer dgr:featuresSelfTimerEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasSelfTimer dgr:providesSelfTimerEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasSensorType dgr:sensorTypeIsEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasSensorType dgr:usesSensorTypeEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasShutterLag dgr:shutterLagsEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasSoundEmission dgr:emitsSoundEmissionEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasStandbyPowerConsumption dgr:requiresStandbyPowerConsumptionEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasStandbyPowerConsumption dgr:usesStandbyPowerConsumptionEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasStorageMedia dgr:hasStorageMediaSupportEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasStorageMedia dgr:providesStorageMediaSupportEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasTouchscreen dgr:featuresTouchscreenEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasUsagePowerConsumption dgr:requiresUsagePowerConsumptionEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasUsagePowerConsumption dgr:usesUsagePowerConsumptionEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasUSBPortsQuantity dgr:featuresUSBPortsQuantityEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasUSBPortsQuantity dgr:includesUSBPortsQuantityEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasViewFinder dgr:featuresViewFinderEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasViewFinder dgr:viewFinderIsEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasWeight dgr:isHeavyEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasWeight dgr:weightIsEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasWhiteBalance dgr:featuresWhiteBalanceEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasWhiteBalance dgr:whiteBalanceIsEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasWidth dgr:widthIsEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasZoom dgr:capableOfZoomEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan cl:hasZoom dgr:featuresZoomEnglish)
+AnnotationAssertion(nlowl:hasSentencePlan gr:hasManufacturer dgr:manufacturerIsEnglish)
+)

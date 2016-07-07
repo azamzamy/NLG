@@ -991,6 +991,13 @@ public class ATermUtils {
 	}
 	
 	public final static boolean isTop(ATermAppl a) {
+		
+		try{
+		return a.equals( TOP ) || a.equals( TOP_LIT );
+		} catch(Exception e){
+			System.out.println("emsek 3andak: ");
+			e.printStackTrace();
+		}
 		return a.equals( TOP ) || a.equals( TOP_LIT );
 	}
 
