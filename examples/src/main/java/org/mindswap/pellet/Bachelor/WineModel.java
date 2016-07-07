@@ -1,3 +1,4 @@
+
 package org.mindswap.pellet.Bachelor;
 
 import java.io.BufferedReader;
@@ -12,6 +13,7 @@ import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
 
+import org.apache.xerces.util.SynchronizedSymbolTable;
 import org.semanticweb.owlapi.io.SystemOutDocumentTarget;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
@@ -52,17 +54,17 @@ public class WineModel {
 	private static final String NS = "http://www.w3.org/TR/2003/PR-owl-guide-20031209/food#";
 	private static final String NSWine = "http://www.w3.org/TR/2003/PR-owl-guide-20031209/wine#";
 	private static PrintWriter out;
-	private static String lang = "eng";
-//	private static String country = "US";
-//	Locale currentLocale = new Locale(lang, country)
-    ResourceBundle messages;
+	private static String lang = "en";
+	private static String country = "US";
+	private static Locale currentLocale = new Locale(lang, country);
+	private static ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
 
 	@SuppressWarnings("deprecation")
 	public void run() throws OWLOntologyCreationException, OWLException, IOException {
 
 		// File file = new File("src/main/resources/data/output.txt");
 		PrintWriter out = new PrintWriter(
-				new FileWriter("/Users/zamzamy/Desktop/pellet/examples/src/main/resources/data/output.txt"));
+				new FileWriter("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt"));
 
 		
 		PelletExplanation.setup();
@@ -70,12 +72,12 @@ public class WineModel {
 		PrintWriter out2 = new PrintWriter(System.out);
 		ManchesterSyntaxExplanationRenderer renderer = new ManchesterSyntaxExplanationRenderer();
 
-		renderer.startRendering(out2);
+		renderer.startRendering(out);
 		OWLOntologyManager manager = OWL.manager;
 		OWLOntology ontology = manager.loadOntology(IRI.create(file));
 		OWLDataFactory fac = manager.getOWLDataFactory();
 //		PrefixManager pm = new DefaultPrefixManager(
-//				IRI.create("file:src/main/resources/data/wine77.owl").toString());
+//				IRI.create("file:src/main/resources/data/wineTunaSubclass3.owl").toString());
 		PelletReasoner reasoner = PelletReasonerFactory.getInstance().createReasoner(ontology);
 		PelletExplanation expGen = new PelletExplanation(reasoner);
 
@@ -92,8 +94,7 @@ public class WineModel {
 		
 		// manager.saveOntology(ontology, new SystemOutDocumentTarget());
 		OWLNamedIndividual tuna1 = fac.getOWLNamedIndividual(IRI.create(NS+"TunaSalad"));
-		OWLNamedIndividual duck = fac.getOWLNamedIndividual(IRI.create(NS+"RoastedDuck"));
-//		OWLNamedIndividual wine1 = fac.getOWLNamedIndividual(IRI.create(NS+"StonleighSauvignonBlanc"));
+		OWLNamedIndividual wine1 = fac.getOWLNamedIndividual(IRI.create(NS+"StonleighSauvignonBlanc"));
 		OWLObjectPropertyExpression property = fac.getOWLObjectProperty(IRI.create("http://www.w3.org/TR/2003/PR-owl-guide-20031209/food#goesWellWith"));
 		try {
 			//System.out.println("testing mealCourse: " + mealCourse.toString()+"\n");
@@ -115,49 +116,41 @@ public class WineModel {
 		// //System.out.println("--------------------------------------------------------------");
 
 		Set<OWLNamedIndividual> individuals = reasoner.getInstances(consumable, false).getFlattened();
-		Set<OWLNamedIndividual> individuals2 = reasoner.getInstances(margaux, false).getFlattened();
-		//System.out.println("ind 2 size: "+individuals2.size());
-		//System.out.println("individuals: " + individuals.size());
-		for (OWLNamedIndividual ind : individuals) {
-			int c = 0;
-			IRI cIRI = ind.getIRI();
-			boolean check = cIRI.toString().equals(duck.getIRI().toString());
-			if(check){
-			//System.out.println("loop" + ++count);
+			Set<OWLNamedIndividual> individuals2 = reasoner.getInstances(margaux, false).getFlattened();
+			//System.out.println("ind 2 size: "+individuals2.size());
+			//System.out.println("individuals: " + individuals.size());
+			for (OWLNamedIndividual ind : individuals) {
+				int c = 0;
+				IRI cIRI = ind.getIRI();
+//				boolean check = cIRI.toString().equals(tuna1.getIRI().toString());
+//				if(check){
+				//System.out.println("loop" + ++count);
 			Set<OWLAnnotationAssertionAxiom> list = ontology.getAnnotationAssertionAxioms(cIRI);
 			for (OWLAnnotationAssertionAxiom a : list) {
 				//System.out.println("In 2nd Loop");
 				////System.out.println(ind.getIRI().getFragment());
-//				count++;
+				count++;
 						for (OWLNamedIndividual ind2 : individuals2) {
-							
-							System.out.println("ind 2 size: " + individuals2.size());
+							//System.out.println("counter Two: " + c++);
+							//System.out.println("ind 2 size: " + individuals2.size());
 							IRI cIRI2 = ind2.getIRI();
-							Set<OWLAnnotationAssertionAxiom> list2 = ontology.getAnnotationAssertionAxioms(cIRI2);
-							System.out.println("list2 size: " + list2.size());
-							
-							for (OWLAnnotationAssertionAxiom a2 : list2) {
-								System.out.println(a2.getValue());
-								
+							for (OWLAnnotationAssertionAxiom a2 : list) {
 								if (a2.getValue() instanceof OWLLiteral && !a2.equals(null)) {
 									//if (cIRI2.toString().equals("http://www.w3.org/TR/2003/PR-owl-guide-20031209/wine#StonleighSauvignonBlanc")) {
-										
+										//System.out.println("horraaaay");
 										OWLLiteral val = (OWLLiteral) a2.getValue();
-										
 										OWLObjectPropertyAssertionAxiom assertion = fac
 												.getOWLObjectPropertyAssertionAxiom(property, ind, ind2);
-										System.out.println("property: " + property.toString());
-										System.out.println("ind: " + ind.toString());
-										System.out.println("ind2: " + ind2.toString());
-										
 										//System.out.println(assertion.toString());
 										// OWLAxiom axiom = OWL.classAssertion(
 										try{
-										Set<Set<OWLAxiom>> exp2 = expGen.getEntailmentExplanations(assertion, 2);
+										Set<Set<OWLAxiom>> exp2 = expGen.getEntailmentExplanations(assertion, 1);
 										renderer.render(exp2);
-										
+										} catch(NullPointerException e){
+											//System.out.println(e.toString());
+											
 										} catch(Exception e){
-											e.printStackTrace();
+											//System.out.println(e.toString());
 										}
 										
 										
@@ -165,7 +158,7 @@ public class WineModel {
 //												"--------------------------------------------------------------");
 										break;
 									//}
-								}
+//								}
 //								OWLLiteral val = (OWLLiteral) a.getValue();
 								// OWLObjectPropertyAssertionAxiom assertion =
 								// fac.getOWLObjectPropertyAssertionAxiom(property,
@@ -179,7 +172,6 @@ public class WineModel {
 //								break;
 							}
 						}
-						break;
 					}
 				}
 			}
@@ -191,8 +183,8 @@ public class WineModel {
 
 	public void naturalGeneration() throws IOException {
 		
-		PrintWriter outer = new PrintWriter("/Users/zamzamy/Desktop/pellet/examples/src/main/resources/data/out2.txt");
-		FileReader fr = new FileReader("/Users/zamzamy/Desktop/pellet/examples/src/main/resources/data/output.txt");
+		PrintWriter outer = new PrintWriter("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out2.txt"); 
+		FileReader fr = new FileReader("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt");
 		BufferedReader br = new BufferedReader(fr);
 		StringTokenizer st;
 		String statement;
@@ -202,24 +194,50 @@ public class WineModel {
          NLGFactory nlgFactory = new NLGFactory(lexicon);
          Realiser realiser = new Realiser(lexicon);
 		
-         NLGElement s1 = nlgFactory.createSentence("my dog is happy");
-         String output = realiser.realiseSentence(s1);	
-         outer.println(output);
+//         NLGElement s1 = nlgFactory.createSentence("my dog is happy");
+//         String output = realiser.realiseSentence(s1);	
+         
+
+//         System.out.println(messages.getString("tunasalad"));
          
         statement = br.readLine();
 		while(statement != null){
 			st = new StringTokenizer(statement);
 			while(st.hasMoreTokens()){
+//				System.out.println(st.nextToken());
+				String orig = splitCamelCase(st.nextToken());
 				
-				System.out.println(st.nextToken());
+				String s = genCorrectness(orig);
 				
+				outer.println();
 			}
 			statement = br.readLine();
 		}
 		
 		 
+		outer.close();
+	}
+	
+	public static String genCorrectness(String s){
+		
+		String ret = messages.getString(s);
+		
+		
+		
+		return "";
 		
 	}
+	
+	public static String splitCamelCase(String s) {
+		   return s.replaceAll(
+				   String.format("%s|%s|%s",
+					         "(?<=[A-Z])(?=[A-Z][a-z])",
+					         "(?<=[^A-Z])(?=[A-Z])",
+					         "(?<=[A-Za-z])(?=[^A-Za-z])"
+					    		  		),	
+					      					" "
+					   );
+		}
 
 	public static void main(String[] args) throws OWLOntologyCreationException, OWLException, IOException {
 		WineModel app = new WineModel();
