@@ -57,12 +57,18 @@ public class WineModel {
 	private static String lang = "en";
 	private static String country = "US";
 	private static Locale currentLocale = new Locale(lang, country);
-	private static ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+	private static final ResourceBundle messages = ResourceBundle.getBundle("MessagesBundle", currentLocale);
+    private boolean sameSentence = false;
+    private static PrintWriter outer; 
+    private static FileReader fr;
+    private static BufferedReader br = new BufferedReader(fr);
+	private static StringTokenizer st;
 
 	@SuppressWarnings("deprecation")
 	public void run() throws OWLOntologyCreationException, OWLException, IOException {
 
-		// File file = new File("src/main/resources/data/output.txt");
+		outer = new PrintWriter("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out2.txt");
+		fr = new FileReader("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt");
 		PrintWriter out = new PrintWriter(
 				new FileWriter("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt"));
 
@@ -183,10 +189,7 @@ public class WineModel {
 
 	public void naturalGeneration() throws IOException {
 		
-		PrintWriter outer = new PrintWriter("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out2.txt"); 
-		FileReader fr = new FileReader("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt");
-		BufferedReader br = new BufferedReader(fr);
-		StringTokenizer st;
+		
 		String statement;
 		String word = "";
 		
@@ -199,18 +202,29 @@ public class WineModel {
          
 
 //         System.out.println(messages.getString("tunasalad"));
-         
+         br.readLine();
         statement = br.readLine();
+        int count  = 0;
+
 		while(statement != null){
 			st = new StringTokenizer(statement);
 			while(st.hasMoreTokens()){
-//				System.out.println(st.nextToken());
-				String orig = splitCamelCase(st.nextToken());
+				String orig = st.nextToken();
+				if(orig.contains("DisjointClasses")){
+					System.out.println("statement: " + statement);
+					sameSentence = true;
+					disjointPrinting(statement);
+				}
+				String s = getCorrectness(orig);
 				
-				String s = genCorrectness(orig);
-				
-				outer.println();
+//				System.out.println(orig);
+//				System.out.println(orig + "  -  " + s);				
+//				System.out.println("____________");
+				if(s.contains("Rule")) break;
+					outer.print(s + " ");
 			}
+			count++;
+			if(count == 3) {count =0; outer.println(); }
 			statement = br.readLine();
 		}
 		
@@ -218,22 +232,46 @@ public class WineModel {
 		outer.close();
 	}
 	
-	public static String genCorrectness(String s){
+	public static String disjointPrinting(String s){
+		outer.print("Disjoint Classes are: "+ );
+		outer.print(s.substring(16));
+		String component = br.readLine();
+		while(!component.contains(")")){
+		st = new StringTokenizer(br.readLine());
 		
-		String ret = messages.getString(s);
+		component = br.readLine();
+		}
+		outer.print(getCorrectness(component.substring(0, component.length()-1)));
+		
+
+		
 		
 		
 		
 		return "";
+	}
+	
+	public static String getCorrectness(String s){
+		
+		String ret = "";
+		try {
+			messages.getString(""+s+"");
+		} catch(Exception e){
+//			System.out.println("error came from the word: " + s);
+			ret = splitCamelCase(s);
+			return ret; 
+			
+		}
+		
+		
+		
+		return messages.getString(""+s+"");
 		
 	}
 	
 	public static String splitCamelCase(String s) {
 		   return s.replaceAll(
-				   String.format("%s|%s|%s",
-					         "(?<=[A-Z])(?=[A-Z][a-z])",
-					         "(?<=[^A-Z])(?=[A-Z])",
-					         "(?<=[A-Za-z])(?=[^A-Za-z])"
+				   String.format("(?<!(^|[A-Z0-9]))(?=[A-Z0-9])|(?<!^)(?=[A-Z][a-z])"
 					    		  		),	
 					      					" "
 					   );

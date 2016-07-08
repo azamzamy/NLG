@@ -1,114 +1,14 @@
-Explanation (s ):
-1)
-Dark Meat Fowl
-disjoint With
-Light Meat Fowl
-Medoc
-equivalent To
-Bordeaux
-and
-located In
-value
-Medoc Region
-has Food
-domain
-Meal Course
-Red Wine
-equivalent To
-Wine
-and
-has Color
-value
-Red
-Red Meat
-sub Class Of
-Meat
-Margaux
-equivalent To
-Medoc
-and
-located In
-value
-Margaux Region
-Non Red Meat
-sub Class Of
-Meat
-Meat Course
-equivalent To
-Meal Course
-and
-has Food
-some
-Fowl
-or
-Meat
-Medoc
-sub Class Of
-has Color
-value
-Red
-Non Red Meat Course
-equivalent To
-Meal Course
-and
-has Food
-only
-Non Red Meat
-Rule ( Red Bordeaux (?y ),
-Dark Meat Fowl Course (?x )
-->
-goes Well With (?x ,
-?y ))
-Red Bordeaux
-equivalent To
-Bordeaux
-and
-Red Wine
-Red Meat Course
-equivalent To
-Meal Course
-and
-has Food
-only
-Red Meat
-Bordeaux
-equivalent To
-Wine
-and
-located In
-value
-Bordeaux Region
-Duck
-type
-Dark Meat Fowl
-Disjoint Classes ( Fowl
-Meat
-Pasta
-Seafood
-Vegetarian Food )
-Chateau Margaux
-type
-Margaux
-Dark Meat Fowl
-sub Class Of
-Fowl
-Roasted Duck
-has Food
-Duck
-Meat Course
-equivalent To
-Dark Meat Fowl Course
-or
-Light Meat Fowl Course
-or
-Non Red Meat Course
-or
-Red Meat Course
-Light Meat Fowl Course
-equivalent To
-Meal Course
-and
-has Food
-only
-Light Meat Fowl
-2)3)4)5)6)
+1) Dark Meat Fowl is disjoint with Light Meat Fowl Medoc is the same as Bordeaux that  is located in  Medoc Region 
+contains domain Meal Course Red Wine is the same as Wine that  has the color   Red 
+Red Meat sub Class Of Meat Margaux is the same as Medoc that  is located in  Margaux Region 
+Non Red Meat sub Class Of Meat Meat Course is the same as Meal Course that  contains some Fowl 
+or Meat Medoc sub Class Of has the color   Red Non Red Meat Course is the same as Meal Course 
+that  contains only Non Red Meat Red Bordeaux is the same as Bordeaux 
+that  Red Wine Red Meat Course is the same as Meal Course that  contains only Red Meat 
+Bordeaux is the same as Wine that  is located in  Bordeaux Region Duck is Dark Meat Fowl 
+Disjoint Classes( Fowl Meat Pasta 
+Seafood Vegetarian Food) Chateau Margaux is Margaux 
+Dark Meat Fowl sub Class Of Fowl Roasted Duck contains Duck Meat Course is the same as Dark Meat Fowl Course 
+or Light Meat Fowl Course  or Non Red Meat Course or Red Meat Course 
+Light Meat Fowl Course  is the same as Meal Course that  contains only Light Meat Fowl 
+2) 3) 4) 5) 6) 
