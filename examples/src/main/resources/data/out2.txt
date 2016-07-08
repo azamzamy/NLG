@@ -1,13 +1,13 @@
-1) Dark Meat Fowl is disjoint with Light Meat Fowl Medoc is the same as Bordeaux that  is located in  Medoc Region 
-contains domain Meal Course Red Wine is the same as Wine that  has the color   Red 
-Red Meat sub Class Of Meat Margaux is the same as Medoc that  is located in  Margaux Region 
-Non Red Meat sub Class Of Meat Meat Course is the same as Meal Course that  contains some Fowl 
-or Meat Medoc sub Class Of has the color   Red Non Red Meat Course is the same as Meal Course 
-that  contains only Non Red Meat Red Bordeaux is the same as Bordeaux 
-that  Red Wine Red Meat Course is the same as Meal Course that  contains only Red Meat 
-Bordeaux is the same as Wine that  is located in  Bordeaux Region Duck is Dark Meat Fowl 
-Disjoint Classes( Fowl Chateau Margaux is Margaux Dark Meat Fowl sub Class Of Fowl 
-Roasted Duck contains Duck Meat Course is the same as Dark Meat Fowl Course or Light Meat Fowl Course  
-or Non Red Meat Course or Red Meat Course Light Meat Fowl Course  is the same as Meal Course 
-that  contains only Light Meat Fowl 
-2) 3) 4) 5) 6) 
+1) Dark Meat Fowl is disjoint with.
+Light Meat Fowl Medoc is equivalent to.
+Bordeaux that has the color .
+Red Red Meat is a subclass of Meat that is located in .
+Margaux Region Meat Course is equivalent to Meal Course or.
+Meat Non Red Meat Course is equivalent to.
+Meal Course Rule( Red Bordeaux(?y),that Red Wine that contains only Red Meat that is located in .
+Bordeaux Region Disjoint Classes are: Fowl, Seafood, Vegetarian Food Pasta .
+Dark Meat Fowl is a subclass of.
+Fowl Meat Course is equivalent to Dark Meat Fowl Course or.
+Non Red Meat Course Light Meat Fowl Course  is equivalent to.
+Meal Course .
+2) 3) 4) 5) 6) .
