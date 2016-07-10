@@ -66,6 +66,7 @@
 						boolean lastSentence;
 						static String statement;
 						static String buffer;
+
 						
 						@SuppressWarnings("deprecation")
 						public void run() throws OWLOntologyCreationException, OWLException, IOException {
@@ -73,7 +74,7 @@
 							outer = new PrintWriter("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out2.txt");
 							fr = new FileReader("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt");
 							br = new BufferedReader(fr);
-							PrintWriter out = new PrintWriter(
+							out = new PrintWriter(
 									new FileWriter("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt"));
 					
 							PelletExplanation.setup();
@@ -195,6 +196,57 @@
 							renderer.endRendering();
 							out.flush();
 							naturalGeneration();
+							removeExtras();
+						}
+						
+						public static void removeExtras() throws IOException{
+							fr = new FileReader("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out2.txt");
+							out = new PrintWriter("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out3.txt");
+							br = new BufferedReader(fr);
+							String s =br.readLine();
+							while(s!=null){
+								String exp = s;
+								if(s.matches(".*\\d+.*") || exp.trim().equals("") || exp.trim() == null) {
+									s=br.readLine();
+									continue;
+								}
+								String res = s.replaceAll("\\s+", " ");
+								String finale = "";
+								String res1 = "";
+								String res2 = "";
+								boolean split = false;
+								try{
+									finale = res.substring(0, res.length()-1) + "."; 
+								} catch(Exception e){
+									System.out.println();
+								}
+								if(finale.length() >= 81){
+
+									for(int i=71; i<91 ; i++){
+											try{
+												if((int)finale.charAt(i) == 32){
+												res1 = "-" + finale.substring(0, i);
+												res2 = finale.substring(i);
+												split = true;
+												}
+											} catch(Exception e){
+													
+												}
+										}
+									}
+								
+							if(!split)
+								out.println("-" + finale);
+							else{
+								out.println(res1);
+								out.println(res2);
+									
+							}
+							s = br.readLine();
+							}
+							out.close();
+							
+							
 						}
 					
 						public void naturalGeneration() throws IOException {
@@ -225,16 +277,22 @@
 								if (statement.contains("domain") || statement.contains("Rule")) {
 									statement = br.readLine();
 									continue;
+								} else if (statement.contains("DisjointClasses")) {
+									System.out.println("statement: " + statement);
+									outer.print(disjointPrinting(statement)+"\n");
+									buffer = br.readLine();
+									continue;
 								}
-					
+
 								st = new StringTokenizer(statement);
 								String out = "";
 								while (st.hasMoreTokens()) {
 									String orig = st.nextToken();
-									if (orig.contains("DisjointClasses")) {
-										System.out.println("statement: " + statement);
-										outer.print(disjointPrinting(statement));
-									} else {
+									System.out.println("A TOKEN HERE IS: " + orig);
+									if((int)orig.charAt(0) == 49 ) {
+										continue;
+									}
+									
 										String s;
 										outer.print(s = getCorrectness(orig) + " ");
 										if(end){
@@ -243,17 +301,12 @@
 										else {
 											outer.print(" ");										
 										}
-										
-
-										
-									}
 								}
 								if (end) {
-									outer.print(".\n");
+									outer.print("\n");
 									end = false;
 					
 								} else {
-									outer.print(" ");
 									
 								}
 							}
@@ -267,7 +320,7 @@
 								return true;
 							}
 							for (i = 0; i < buffer.length(); i++) {
-								System.out.print("#" + i + ": " + (int) buffer.charAt(i) + " ");
+//								System.out.print("#" + i + ": " + (int) buffer.charAt(i) + " ");
 								if ((int) buffer.charAt(i) == 32)
 									continue;
 								else
@@ -296,22 +349,25 @@
 					
 						public static String disjointPrinting(String s) throws IOException {
 							String result = "";
-					
+							System.out.println("what is this??" + s);
 							result += "Disjoint Classes are: ";
 							result += s.substring(21) + ", ";
-					
-							String component = br.readLine();
-							while (component != null && !component.contains(")")) {
-								st = new StringTokenizer(component);
-								result += getCorrectness(st.nextToken());
+							String component = buffer;
+							component.replace(" ", "");
+							System.out.println("should be meat, is it?" + component);
+								while (component.charAt(component.length()-1) != ')' ){
+								component.replace(" ", "");
+								result += getCorrectness(component);
 								result += ", ";
-								component = br.readLine();
+								buffer = br.readLine();
+								component = buffer;
 							}
-							st = new StringTokenizer(component);
-							String temp = st.nextToken();
+								component.replace(" ", "");
+								component =  component.substring(0, component.length());
+							
 							if (component != null)
-								result += getCorrectness(temp.substring(0, temp.length() - 1));
-					
+								result += getCorrectness(component);
+							
 							System.out.println("RESULT IIIIIISSSS: " + result);
 							return result;
 						}
