@@ -56,7 +56,7 @@ import simplenlg.framework.*;
 					
 					public class WineModel {
 					
-						private static String file = "file:src/main/resources/data/wine77.owl";;
+						private static String file = "file:src/main/resources/data/wine77.owl";
 						private static final String NS = "http://www.w3.org/TR/2003/PR-owl-guide-20031209/food#";
 						private static final String NSWine = "http://www.w3.org/TR/2003/PR-owl-guide-20031209/wine#";
 						private static PrintWriter out;

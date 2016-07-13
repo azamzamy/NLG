@@ -84,22 +84,26 @@ public class Wine {
 	
 
 	public Wine(String f) throws OWLOntologyCreationException, OWLException, IOException {
-		file = f;
-		run(f);
+		file = "file:/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/wine77.owl"; 
 		out2 = new PrintWriter(System.out);
 		renderer = new ManchesterSyntaxExplanationRenderer();
+		PelletExplanation.setup();
+		out = new PrintWriter(new FileWriter(file));
 		renderer.startRendering(out);
 		manager = OWL.manager;
 		ontology = manager.loadOntology(IRI.create(file));
 		fac = manager.getOWLDataFactory();
 		reasoner = PelletReasonerFactory.getInstance().createReasoner(ontology);
-		PelletExplanation.setup();
+
 		expGen = new PelletExplanation(reasoner);
 		m = new ArrayList<BiValue>();
+		System.out.println("been through here");
 		initObjectProperties();
+		run(f);
+		
 	}
 
-	//
+	
 	@SuppressWarnings("deprecation")
 	public void run(String file) throws OWLOntologyCreationException, OWLException, IOException {
 
@@ -108,7 +112,6 @@ public class Wine {
 		br = new BufferedReader(fr);
 		out = new PrintWriter(
 				new FileWriter("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt"));
-
 		addObjectProperties();
 		System.out.println(manager.getOntologies().toString());
 
@@ -224,6 +227,14 @@ public class Wine {
 		naturalGeneration();
 		removeExtras();
 	}
+	
+	public Set<OWLClass> getClasses(){
+		
+		return ontology.getClassesInSignature();
+		
+	}
+	
+	
 
 	public void initObjectProperties(){
 		
@@ -236,6 +247,7 @@ public class Wine {
 		m.add(new BiValue("hasDrink", "food"));
 		m.add(new BiValue("hasFlavor", "wine"));
 		m.add(new BiValue("hasMaker", "wine"));
+		System.out.println("hobaaaa");
 		m.add(new BiValue("locatedIn", "wine"));
 		m.add(new BiValue("madeIntoWine", "wine"));
 		m.add(new BiValue("hasBody", "wine"));
@@ -300,6 +312,7 @@ public class Wine {
 	private void addObjectProperties() {
 		
 		for(int i=0; i<17; i++){
+			try{
 			if(m.get(i).getValue() == "wine"){
 			OWLObjectProperty local = fac.getOWLObjectProperty((IRI.create(NSWine + m.get(i).getKey())));
 		}
@@ -307,7 +320,11 @@ public class Wine {
 				OWLObjectProperty local = fac.getOWLObjectProperty((IRI.create(NS + m.get(i).getKey())));	
 			}
 		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 		
+	}
 	}
 
 	public Collection getIndividuals() {

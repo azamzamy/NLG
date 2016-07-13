@@ -32,6 +32,7 @@ package org.mindswap.pellet.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -71,12 +72,12 @@ import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
 import com.hp.hpl.jena.ontology.ObjectProperty;
 import com.hp.hpl.jena.ontology.OntClass;
 
-public class ContactEditor extends javax.swing.JFrame {
+public class GUI extends javax.swing.JFrame {
 	
 	
 	Wine wine;
 	
-	public ContactEditor() {
+	public GUI() {
 		initComponents();
 	}
 
@@ -141,7 +142,18 @@ public class ContactEditor extends javax.swing.JFrame {
 		jButton7.setText("Browse");
 		jButton7.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				jButton7ActionPerformed(evt);
+				try {
+					jButton7ActionPerformed(evt);
+				} catch (OWLOntologyCreationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (OWLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 
@@ -393,7 +405,9 @@ public class ContactEditor extends javax.swing.JFrame {
 			} else {
 				fname.setText(path);
 				box1.setEnabled(true);
+				System.out.println("got the path");
 				wine = new Wine(path);
+				
 			}
 		}
 	}
@@ -478,8 +492,12 @@ public class ContactEditor extends javax.swing.JFrame {
 				break;
 			}
 			
-			Set<OWLClass> classes = wine.getClasses();
 		} 
+
+		Set<OWLClass> classes = wine.getClasses();
+		for(OWLClass cls : classes){
+			box2.addItem(cls.getIRI().getFragment());
+		}
 		
 		
 	}
@@ -511,16 +529,16 @@ public class ContactEditor extends javax.swing.JFrame {
 					break;
 				}
 		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(ContactEditor.class.getName()).log(java.util.logging.Level.SEVERE, null,
+			java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null,
 					ex);
 		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(ContactEditor.class.getName()).log(java.util.logging.Level.SEVERE, null,
+			java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null,
 					ex);
 		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(ContactEditor.class.getName()).log(java.util.logging.Level.SEVERE, null,
+			java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null,
 					ex);
 		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(ContactEditor.class.getName()).log(java.util.logging.Level.SEVERE, null,
+			java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null,
 					ex);
 		}
 		// </editor-fold>
@@ -528,7 +546,7 @@ public class ContactEditor extends javax.swing.JFrame {
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				new ContactEditor().setVisible(true);
+				new GUI().setVisible(true);
 			}
 		});
 	}
