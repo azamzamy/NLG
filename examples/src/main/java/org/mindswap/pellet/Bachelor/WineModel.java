@@ -8,7 +8,10 @@
 					import java.io.FileWriter;
 					import java.io.IOException;
 					import java.io.PrintWriter;
-					import java.util.Locale;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Locale;
 					import java.util.ResourceBundle;
 					import java.util.Set;
 					import java.util.StringTokenizer;
@@ -41,8 +44,11 @@
 					import com.clarkparsia.owlapiv3.OWL;
 					import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
 					import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
-					
-					import simplenlg.framework.*;
+import com.hp.hpl.jena.ontology.ObjectProperty;
+import com.hp.hpl.jena.ontology.OntClass;
+import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+
+import simplenlg.framework.*;
 					import simplenlg.lexicon.*;
 					import simplenlg.realiser.english.*;
 					import simplenlg.phrasespec.*;
@@ -50,7 +56,7 @@
 					
 					public class WineModel {
 					
-						private static final String file = "file:src/main/resources/data/wine77.owl";
+						private static String file = "file:src/main/resources/data/wine77.owl";;
 						private static final String NS = "http://www.w3.org/TR/2003/PR-owl-guide-20031209/food#";
 						private static final String NSWine = "http://www.w3.org/TR/2003/PR-owl-guide-20031209/wine#";
 						private static PrintWriter out;
@@ -65,9 +71,15 @@
 						private static StringTokenizer st;
 						boolean lastSentence;
 						static String statement;
+						ArrayList<OWLObjectProperty> objects = new ArrayList<OWLObjectProperty>();
 						static String buffer;
+				
 
-						
+//						public WineModel(String f) throws OWLOntologyCreationException, OWLException, IOException{
+//							file = f;
+//							run(f);
+//						}
+//						
 						@SuppressWarnings("deprecation")
 						public void run() throws OWLOntologyCreationException, OWLException, IOException {
 					
@@ -90,7 +102,15 @@
 							// IRI.create("file:src/main/resources/data/wineTunaSubclass3.owl").toString());
 							PelletReasoner reasoner = PelletReasonerFactory.getInstance().createReasoner(ontology);
 							PelletExplanation expGen = new PelletExplanation(reasoner);
-					
+//							fac.OWLEquivalentobje
+							
+//							
+//							while (classes.hasNext()) {
+//								 OWLClass onto = classes.next();
+//								 System.out.println("ONTOOOO: " + onto.getSignature());
+//								
+//								 }
+							
 							OWLClass meatCourse = OWL.Class(NS + "DarkMeatFowlCourse");
 							OWLClass mealCourse = OWL.Class(NS + "MealCourse");
 							OWLClass consumable = OWL.Class(NS + "ConsumableThing");
@@ -107,6 +127,9 @@
 							OWLNamedIndividual wine1 = fac.getOWLNamedIndividual(IRI.create(NS + "StonleighSauvignonBlanc"));
 							OWLObjectPropertyExpression property = fac
 									.getOWLObjectProperty(IRI.create("http://www.w3.org/TR/2003/PR-owl-guide-20031209/food#goesWellWith"));
+//							System.out.println(reasoner.getObjectPropertyDomains(property, false).toString());
+
+							
 							try {
 								// System.out.println("testing mealCourse: " +
 								// mealCourse.toString()+"\n");
@@ -248,6 +271,10 @@
 							
 							
 						}
+						
+						public void getIndividuals(){
+							
+						}
 					
 						public void naturalGeneration() throws IOException {
 					
@@ -288,7 +315,7 @@
 								String out = "";
 								while (st.hasMoreTokens()) {
 									String orig = st.nextToken();
-									System.out.println("A TOKEN HERE IS: " + orig);
+//									System.out.println("A TOKEN HERE IS: " + orig);
 									if((int)orig.charAt(0) == 49 ) {
 										continue;
 									}
@@ -393,10 +420,11 @@
 						public static String splitCamelCase(String s) {
 							return s.replaceAll(String.format("(?<!(^|[A-Z0-9]))(?=[A-Z0-9])|(?<!^)(?=[A-Z][a-z])"), " ");
 						}
-					
+
 						public static void main(String[] args) throws OWLOntologyCreationException, OWLException, IOException {
 							WineModel app = new WineModel();
-					
+
 							app.run();
 						}
+					
 					}
