@@ -84,11 +84,15 @@ public class Wine {
 	
 
 	public Wine(String f) throws OWLOntologyCreationException, OWLException, IOException {
-		file = "file:/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/wine77.owl"; 
+		file = "file://" + f; 
+		outer = new PrintWriter("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out2.txt");
+		fr = new FileReader("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt");
+		br = new BufferedReader(fr);
+		out = new PrintWriter(
+				new FileWriter("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt"));
 		out2 = new PrintWriter(System.out);
 		renderer = new ManchesterSyntaxExplanationRenderer();
 		PelletExplanation.setup();
-		out = new PrintWriter(new FileWriter(file));
 		renderer.startRendering(out);
 		manager = OWL.manager;
 		ontology = manager.loadOntology(IRI.create(file));
@@ -99,19 +103,15 @@ public class Wine {
 		m = new ArrayList<BiValue>();
 		System.out.println("been through here");
 		initObjectProperties();
-		run(f);
+		run();
 		
 	}
 
 	
 	@SuppressWarnings("deprecation")
-	public void run(String file) throws OWLOntologyCreationException, OWLException, IOException {
+	public void run() throws OWLOntologyCreationException, OWLException, IOException {
 
-		outer = new PrintWriter("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out2.txt");
-		fr = new FileReader("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt");
-		br = new BufferedReader(fr);
-		out = new PrintWriter(
-				new FileWriter("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt"));
+		
 		addObjectProperties();
 		System.out.println(manager.getOntologies().toString());
 
@@ -121,6 +121,7 @@ public class Wine {
 		
 
 		OWLClass meatCourse = OWL.Class(NS + "DarkMeatFowlCourse");
+		
 		OWLClass mealCourse = OWL.Class(NS + "MealCourse");
 		OWLClass consumable = OWL.Class(NS + "ConsumableThing");
 		OWLClass tuna = OWL.Class(NS + "Tuna");
@@ -129,6 +130,8 @@ public class Wine {
 		OWLClass sauvignon = OWL.Class(NSWine + "SauvignonBlanc");
 		OWLClass margaux = OWL.Class(NSWine + "Margaux");
 		OWLClass thing = OWL.Class("http://www.w3.org/2002/07/owl#Thing");
+		System.out.println("thing: " + thing.getNestedClassExpressions());
+		
 		int count = 0;
 
 		// manager.saveOntology(ontology, new SystemOutDocumentTarget());
@@ -230,6 +233,7 @@ public class Wine {
 	
 	public Set<OWLClass> getClasses(){
 		
+		System.out.println(ontology.getClassesInSignature());
 		return ontology.getClassesInSignature();
 		
 	}

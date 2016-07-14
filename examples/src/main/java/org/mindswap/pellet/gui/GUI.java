@@ -495,7 +495,9 @@ public class GUI extends javax.swing.JFrame {
 		} 
 
 		Set<OWLClass> classes = wine.getClasses();
+		System.out.println(classes.toString());
 		for(OWLClass cls : classes){
+			System.out.println("ay haga b2a");
 			box2.addItem(cls.getIRI().getFragment());
 		}
 		
