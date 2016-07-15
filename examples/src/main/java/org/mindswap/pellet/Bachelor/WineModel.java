@@ -37,7 +37,8 @@ import java.util.Locale;
 					import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 					import org.semanticweb.owlapi.model.OWLOntologyManager;
 					import org.semanticweb.owlapi.model.PrefixManager;
-					import org.semanticweb.owlapi.util.DefaultPrefixManager;
+import org.semanticweb.owlapi.rdf.rdfxml.renderer.OWLOntologyXMLNamespaceManager;
+import org.semanticweb.owlapi.util.DefaultPrefixManager;
 					
 					import com.clarkparsia.owlapi.explanation.PelletExplanation;
 					import com.clarkparsia.owlapi.explanation.io.manchester.ManchesterSyntaxExplanationRenderer;
@@ -98,12 +99,14 @@ import simplenlg.framework.*;
 							OWLOntologyManager manager = OWL.manager;
 							OWLOntology ontology = manager.loadOntology(IRI.create(file));
 							OWLDataFactory fac = manager.getOWLDataFactory();
-							// PrefixManager pm = new DefaultPrefixManager(
-							// IRI.create("file:src/main/resources/data/wineTunaSubclass3.owl").toString());
+						
+//							 PrefixManager pm = new PrefixManager();
+//							 IRI.create("file:src/main/resources/data/wineTunaSubclass3.owl").toString());
+//							 System.out.println("meal course shit pm _______: " + pm.getIRI("MealCourse"));
 							PelletReasoner reasoner = PelletReasonerFactory.getInstance().createReasoner(ontology);
 							PelletExplanation expGen = new PelletExplanation(reasoner);
-//							fac.OWLEquivalentobje
 							
+//							fac.OWLEquivalentobje
 //							
 //							while (classes.hasNext()) {
 //								 OWLClass onto = classes.next();
@@ -112,6 +115,7 @@ import simplenlg.framework.*;
 //								 }
 							
 							OWLClass meatCourse = OWL.Class(NS + "DarkMeatFowlCourse");
+							System.out.println("meat course namespace: " + meatCourse.getIRI().getNamespace());
 							OWLClass mealCourse = OWL.Class(NS + "MealCourse");
 							OWLClass consumable = OWL.Class(NS + "ConsumableThing");
 							OWLClass tuna = OWL.Class(NS + "Tuna");
@@ -158,6 +162,7 @@ import simplenlg.framework.*;
 							// System.out.println("ind 2 size: "+individuals2.size());
 							// System.out.println("individuals: " + individuals.size());
 							for (OWLNamedIndividual ind : individuals) {
+//								System.out.println("indiiii" + ind.getIRI().);
 								int c = 0;
 								IRI cIRI = ind.getIRI();
 								// boolean check =
@@ -222,6 +227,34 @@ import simplenlg.framework.*;
 							removeExtras();
 						}
 						
+						public static PrintWriter getOut() {
+							return out;
+						}
+
+						public static void setOut(PrintWriter out) {
+							WineModel.out = out;
+						}
+
+						public ArrayList<OWLObjectProperty> getObjects() {
+							return objects;
+						}
+
+						public void setObjects(ArrayList<OWLObjectProperty> objects) {
+							this.objects = objects;
+						}
+
+						public static String getNs() {
+							return NS;
+						}
+
+						public static String getNswine() {
+							return NSWine;
+						}
+
+						public static ResourceBundle getMessages() {
+							return messages;
+						}
+
 						public static void removeExtras() throws IOException{
 							fr = new FileReader("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out2.txt");
 							out = new PrintWriter("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out3.txt");

@@ -1,3 +1,4 @@
+
 /*
  * Copyright (c) 2010, Oracle. All rights reserved.
  *
@@ -32,6 +33,8 @@ package org.mindswap.pellet.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import javax.swing.JFileChooser;
@@ -39,9 +42,11 @@ import javax.swing.JOptionPane;
 
 import org.mindswap.pellet.Bachelor.Wine;
 import org.semanticweb.owlapi.model.OWLException;
+import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 
 import org.apache.xerces.util.SynchronizedSymbolTable;
+import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.io.SystemOutDocumentTarget;
 import org.semanticweb.owlapi.model.IRI;
 import org.semanticweb.owlapi.model.OWLAnnotation;
@@ -61,8 +66,16 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.PrefixManager;
+import org.semanticweb.owlapi.reasoner.Node;
+import org.semanticweb.owlapi.reasoner.NodeSet;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
+import org.semanticweb.owlapi.util.InferredAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredObjectPropertyCharacteristicAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredOntologyGenerator;
+import org.semanticweb.owlapi.util.InferredPropertyAssertionGenerator;
+import org.semanticweb.owlapi.util.InferredSubObjectPropertyAxiomGenerator;
 
 import com.clarkparsia.owlapi.explanation.PelletExplanation;
 import com.clarkparsia.owlapi.explanation.io.manchester.ManchesterSyntaxExplanationRenderer;
@@ -72,12 +85,11 @@ import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
 import com.hp.hpl.jena.ontology.ObjectProperty;
 import com.hp.hpl.jena.ontology.OntClass;
 
-public class GUI extends javax.swing.JFrame {
-	
-	
+public class Gui extends javax.swing.JFrame {
+
 	Wine wine;
-	
-	public GUI() {
+
+	public Gui() {
 		initComponents();
 	}
 
@@ -89,7 +101,6 @@ public class GUI extends javax.swing.JFrame {
 	// <editor-fold defaultstate="collapsed" desc="Generated Code">
 	private void initComponents() {
 
-		
 		buttonGroup1 = new javax.swing.ButtonGroup();
 		jPanel1 = new javax.swing.JPanel();
 		jLabel1 = new javax.swing.JLabel();
@@ -99,11 +110,11 @@ public class GUI extends javax.swing.JFrame {
 		jButton7 = new javax.swing.JButton();
 		fname = new javax.swing.JLabel();
 		label2 = new javax.swing.JLabel();
-		box2 = new javax.swing.JComboBox();
+		box2 = new javax.swing.JComboBox<ClassObj>();
 		label3 = new javax.swing.JLabel();
-		box3 = new javax.swing.JComboBox();
+		box3 = new javax.swing.JComboBox<IndObj>();
 		label4 = new javax.swing.JLabel();
-		box4 = new javax.swing.JComboBox();
+		box4 = new javax.swing.JComboBox<PropertyObj>();
 		jButton8 = new javax.swing.JButton();
 		jLabel2 = new javax.swing.JLabel();
 		label5 = new javax.swing.JLabel();
@@ -163,6 +174,11 @@ public class GUI extends javax.swing.JFrame {
 
 		box2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Classes" }));
 		box2.setEnabled(false);
+		box2.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				box2ActionPerformed(evt);
+			}
+		});
 
 		label3.setText("Choose Instance: ");
 
@@ -180,7 +196,12 @@ public class GUI extends javax.swing.JFrame {
 		box4.setEnabled(false);
 		box4.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				box4ActionPerformed(evt);
+				try {
+					box4ActionPerformed(evt);
+				} catch (OWLOntologyCreationException | InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		});
 
@@ -385,15 +406,68 @@ public class GUI extends javax.swing.JFrame {
 		// TODO add your handling code here:
 	}
 
-	private void box4ActionPerformed(java.awt.event.ActionEvent evt) {
+	private void box4ActionPerformed(java.awt.event.ActionEvent evt) throws OWLOntologyCreationException, InterruptedException {
 		// TODO add your handling code here:
+		
+		revalidateMatches();
+		
+		
+		
+	}
+	
+	public void revalidateMatches() throws OWLOntologyCreationException{
+		box5.removeAllItems();
+		this.revalidate();
+		this.repaint();
+		
+		
+		PropertyObj prop = (PropertyObj) box4.getSelectedItem();
+		IndObj obj = (IndObj) box3.getSelectedItem();
+		Set<OWLNamedIndividual> indi  = wine.getReasoner().getObjectPropertyValues(obj.getIndOf(), prop.getObj()).getFlattened();
+        
+		for(OWLNamedIndividual ind : indi){
+			box5.addItem(new IndObj(ind));
+		}
+		
+		OWLOntologyManager outputOntologyManager = OWLManager.createOWLOntologyManager();
+		List<InferredAxiomGenerator<? extends OWLAxiom>> gens = new ArrayList<>();
+		gens.add( new InferredSubObjectPropertyAxiomGenerator());
+        gens.add( new InferredObjectPropertyCharacteristicAxiomGenerator());
+		gens.add( new InferredPropertyAssertionGenerator());
+        wine.getReasoner().getKB().realize(); 
+        InferredOntologyGenerator iog = new InferredOntologyGenerator(wine.getReasoner(), gens);
+        OWLOntology infOnt = outputOntologyManager.createOntology();
+        iog.fillOntology(wine.getReasoner().getManager().getOWLDataFactory(), infOnt);
+        PelletReasoner reas = PelletReasonerFactory.getInstance().createReasoner(infOnt);
+        indi  = reas.getObjectPropertyValues(obj.getIndOf(), prop.getObj()).getFlattened();
+        infOnt.getObjectPropertyRangeAxioms(prop.getObj());
+        System.out.println("infOnt is empty?: " + infOnt.isEmpty());
+        try {
+        	             Wine.getManager().saveOntology(infOnt, 
+        	 IRI.create("file://src/main/resources/data/OntoInferred.owl"));
+        	         } catch (Exception e1) {
+        	             // TODO Auto-generated catch block
+        	             e1.printStackTrace();
+        	         }
+        	
+        
+		for(OWLNamedIndividual ind : indi){
+			box5.addItem(new IndObj(ind));
+		}
+		
+		
 	}
 
 	private void box3ActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
+//		box5.removeAllItems();
+//		revalidateMatches();
+		
+		
 	}
 
-	private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) throws OWLOntologyCreationException, OWLException, IOException {
+	private void jButton7ActionPerformed(java.awt.event.ActionEvent evt)
+			throws OWLOntologyCreationException, OWLException, IOException {
 		JFileChooser fileChooser = new JFileChooser();
 		int returnValue = fileChooser.showOpenDialog(null);
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
@@ -407,11 +481,32 @@ public class GUI extends javax.swing.JFrame {
 				box1.setEnabled(true);
 				System.out.println("got the path");
 				wine = new Wine(path);
-				
+
 			}
 		}
 	}
 
+	private void box2ActionPerformed(java.awt.event.ActionEvent evt) {
+		
+		
+		box3.removeAllItems();
+		this.revalidate();
+		this.repaint();
+		ClassObj cl = (ClassObj) box2.getSelectedItem();
+
+		System.out.println("_______cl___________: " + cl.toString());
+		Set<OWLNamedIndividual> indi = Wine.getReasoner().getInstances(cl.getClassOf(), false).getFlattened();
+//		System.out.println("tab eh gai wla eldor elgai" + indi);
+		for (OWLNamedIndividual ind : indi) {
+//			System.out.println("tab eh gai wla eldor elgai" + ind);
+			box3.addItem(new IndObj(ind));
+			
+		}
+
+
+	}
+
+	@SuppressWarnings("deprecation")
 	private void box1ActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
 		if (box1.getSelectedIndex() == 0) {
@@ -421,21 +516,25 @@ public class GUI extends javax.swing.JFrame {
 
 			case 1: {
 				label2.setText("Choose Class of 1st individual:");
-				box2.setSelectedItem("Classes");
-				
+//				box2.setSelectedItem("Classes");
+
 				label3.setText("Choose Instance:");
 				box3.setSelectedItem("Instances");
-				
+
 				label4.setText("Choose Object Property:");
 				box4.setSelectedItem("Object Properties");
-				
+
 				label5.setText("Choose corresponding instance:");
 				box2.setSelectedItem("Instances");
-				
+
 				box2.setEnabled(true);
 				box3.setEnabled(true);
 				box4.setEnabled(true);
 				box5.setEnabled(true);
+				
+				for(OWLObjectProperty obj : wine.getObjectProps()){
+					box4.addItem(new PropertyObj(obj));
+				}
 			}
 				break;
 
@@ -464,7 +563,7 @@ public class GUI extends javax.swing.JFrame {
 			case 4: {
 				label2.setText("Choose Subclass:");
 				box2.setSelectedItem("Subclasses");
-				
+
 				label3.setText("Choose Superclass:");
 				box2.setSelectedItem("Superclasses");
 				box2.setEnabled(true);
@@ -491,17 +590,22 @@ public class GUI extends javax.swing.JFrame {
 			}
 				break;
 			}
-			
-		} 
+
+		}
 
 		Set<OWLClass> classes = wine.getClasses();
 		System.out.println(classes.toString());
-		for(OWLClass cls : classes){
-			System.out.println("ay haga b2a");
-			box2.addItem(cls.getIRI().getFragment());
+		for (OWLClass cls : classes) {
+			IRI ir = cls.getIRI();
+			String iri = ir.toString();
+//			try{
+//			box2.addItem(iri.substring(60, 63) + ":" + ir.getShortForm());
+//			} catch(StringIndexOutOfBoundsException e){
+//				box2.addItem("Owl:Thing");
+//			}
+			box2.addItem(new ClassObj(cls));
 		}
-		
-		
+
 	}
 
 	private void box5ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -531,33 +635,29 @@ public class GUI extends javax.swing.JFrame {
 					break;
 				}
 		} catch (ClassNotFoundException ex) {
-			java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
+			java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (InstantiationException ex) {
-			java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
+			java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (IllegalAccessException ex) {
-			java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
+			java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null,
-					ex);
+			java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		}
 		// </editor-fold>
 
 		/* Create and display the form */
 		java.awt.EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				new GUI().setVisible(true);
+				new Gui().setVisible(true);
 			}
 		});
 	}
 
 	// Variables declaration - do not modify
 	private javax.swing.JComboBox box1;
-	private javax.swing.JComboBox box2;
-	private javax.swing.JComboBox box3;
-	private javax.swing.JComboBox box4;
+	private javax.swing.JComboBox<ClassObj> box2;
+	private javax.swing.JComboBox<IndObj> box3;
+	private javax.swing.JComboBox<PropertyObj> box4;
 	private javax.swing.JComboBox box5;
 	private javax.swing.ButtonGroup buttonGroup1;
 	private javax.swing.JButton exitButton;

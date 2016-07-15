@@ -5,11 +5,11 @@ import org.mindswap.pellet.Bachelor.Wine;
 public class Engine {
 	
 	Wine wine;
-	GUI gui;
+	Gui gui;
 	
 	
 	public Engine(){
-		gui = new GUI();
+		gui = new Gui();
 	}
 	
 	
