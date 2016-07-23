@@ -80,15 +80,16 @@ public class Wine {
 	private static PelletExplanation expGen;
 	private static ArrayList<OWLObjectProperty> objectProps;
 	private static ArrayList<BiValue> mapper;
+	private static int countExplanations;
+	private static String outputFile1 = "/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt";
+	private static String outputFile2 = "/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out2.txt";
+	private static String outputFile3 = "/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out3.txt";
 
 	public Wine(String f) throws OWLOntologyCreationException, OWLException, IOException {
 		file = "file://" + f;
-		outer = new PrintWriter("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out2.txt");
-		fr = new FileReader("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt");
-		br = new BufferedReader(fr);
-		out = new PrintWriter(
-				new FileWriter("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt"));
-		out2 = new PrintWriter(System.out);
+		
+		outer = new PrintWriter(outputFile2);
+		out = new PrintWriter(outputFile1);
 		renderer = new ManchesterSyntaxExplanationRenderer();
 		PelletExplanation.setup();
 		renderer.startRendering(out);
@@ -101,8 +102,21 @@ public class Wine {
 		mapper = new ArrayList<BiValue>();
 		System.out.println("been through here");
 		initObjectProperties();
+		countExplanations = 1;
 		run();
 
+	}
+
+	public String getOutputFile1() {
+		return outputFile1;
+	}
+
+	public String getOutputFile2() {
+		return outputFile2;
+	}
+
+	public String getOutputFile3() {
+		return outputFile3;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -364,13 +378,14 @@ public class Wine {
 	}
 
 	public static void removeExtras() throws IOException {
-		fr = new FileReader("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out2.txt");
-		out = new PrintWriter("/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out3.txt");
+		
+		fr = new FileReader(outputFile2);
+		out = new PrintWriter(outputFile3);
 		br = new BufferedReader(fr);
 		String s = br.readLine();
 		while (s != null) {
 			String exp = s;
-			
+
 			if (s.matches(".*\\d+.*") || exp.trim().equals("") || exp.trim() == null) {
 				s = br.readLine();
 				continue;
@@ -463,22 +478,40 @@ public class Wine {
 		return objectProps;
 
 	}
-
+	public static void printFile(String yarab) throws IOException{
+		FileReader fer = new FileReader(yarab);
+		BufferedReader ber = new BufferedReader(fer);
+		String toPrint = ber.readLine();
+		
+		while( toPrint != null){
+			System.out.println("=========" + toPrint);
+			toPrint = ber.readLine();
+		}
+		
+	}
 	public void naturalGeneration() throws IOException {
-
+		fr = new FileReader(outputFile1);
+		br = new BufferedReader(fr);
+		buffer = br.readLine();
+		int loop = 0;
+			while(loop<1000){
+				if(buffer != null && buffer.startsWith(""+countExplanations)) break;
+				buffer = br.readLine();
+				loop++;
+			}
+			
+			
+		// Lexicon lexicon = Lexicon.getDefaultLexicon();
+		// NLGFactory nlgFactory = new NLGFactory(lexicon);
+		// Realiser realiser = new Realiser(lexicon);
+		outer = new PrintWriter(outputFile2);
 		statement = "";
 		String word = "";
-
-		Lexicon lexicon = Lexicon.getDefaultLexicon();
-		NLGFactory nlgFactory = new NLGFactory(lexicon);
-		Realiser realiser = new Realiser(lexicon);
-
-		br.readLine();
+		
 		boolean checked = false;
 		int count = 0;
 		boolean end = false;
-		buffer = br.readLine();
-
+		
 		while (buffer != null) {
 			statement = buffer;
 			buffer = br.readLine();
@@ -527,6 +560,8 @@ public class Wine {
 		}
 
 		outer.close();
+		countExplanations++;
+
 	}
 
 	public static boolean checkNextLine() throws IOException {
@@ -602,6 +637,20 @@ public class Wine {
 		}
 
 		return messages.getString("" + s + "");
+
+	}
+
+	public static void resetRenderer() throws FileNotFoundException {
+		// out2 = new PrintWriter(outputFile1);
+		// out2.print("");
+		// out2.close();
+		// out2 = new PrintWriter(outputFile2);
+		// out2.print("");
+		// out2.close();
+		// out2 = new PrintWriter(outputFile3);
+		// out2.print("");
+		// out2.close();
+		//
 
 	}
 
