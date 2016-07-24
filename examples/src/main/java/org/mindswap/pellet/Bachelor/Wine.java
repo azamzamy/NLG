@@ -1,6 +1,8 @@
 package org.mindswap.pellet.Bachelor;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -8,18 +10,32 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.jena.riot.RDFDataMgr;
+import org.apache.jena.riot.RDFLanguages;
 import org.apache.xerces.util.SynchronizedSymbolTable;
+import org.mindswap.pellet.PelletOptions;
+import org.mindswap.pellet.jena.vocabulary.SWRL;
+import org.semanticweb.owlapi.apibinding.OWLManager;
+import org.semanticweb.owlapi.io.OWLOntologyDocumentSource;
+import org.semanticweb.owlapi.io.StreamDocumentSource;
 import org.semanticweb.owlapi.io.SystemOutDocumentTarget;
+import org.semanticweb.owlapi.model.AddAxiom;
+import org.semanticweb.owlapi.model.AxiomType;
 import org.semanticweb.owlapi.model.IRI;
+import org.semanticweb.owlapi.model.MissingImportHandlingStrategy;
 import org.semanticweb.owlapi.model.OWLAnnotation;
 import org.semanticweb.owlapi.model.OWLAnnotationAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLAnnotationProperty;
@@ -37,15 +53,37 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyAssertionAxiom;
 import org.semanticweb.owlapi.model.OWLObjectPropertyExpression;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
+import org.semanticweb.owlapi.model.OWLOntologyLoaderConfiguration;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import org.semanticweb.owlapi.model.OWLOntologyStorageException;
 import org.semanticweb.owlapi.model.PrefixManager;
+import org.semanticweb.owlapi.reasoner.InferenceType;
+import org.semanticweb.owlapi.reasoner.OWLReasoner;
 import org.semanticweb.owlapi.util.DefaultPrefixManager;
+import org.semanticweb.owlapi.util.InferredAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredClassAssertionAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredDataPropertyCharacteristicAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredDisjointClassesAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredEquivalentClassAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredEquivalentDataPropertiesAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredEquivalentObjectPropertyAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredInverseObjectPropertiesAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredObjectPropertyAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredObjectPropertyCharacteristicAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredOntologyGenerator;
+import org.semanticweb.owlapi.util.InferredPropertyAssertionGenerator;
+import org.semanticweb.owlapi.util.InferredSubClassAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredSubDataPropertyAxiomGenerator;
+import org.semanticweb.owlapi.util.InferredSubObjectPropertyAxiomGenerator;
 
 import com.clarkparsia.owlapi.explanation.PelletExplanation;
 import com.clarkparsia.owlapi.explanation.io.manchester.ManchesterSyntaxExplanationRenderer;
 import com.clarkparsia.owlapiv3.OWL;
 import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
 import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
+import com.hp.hpl.jena.ontology.OntModel;
+import com.hp.hpl.jena.ontology.OntModelSpec;
+import com.hp.hpl.jena.rdf.model.ModelFactory;
 
 import simplenlg.framework.*;
 import simplenlg.lexicon.*;
@@ -73,21 +111,25 @@ public class Wine {
 	static String buffer;
 	private static OWLDataFactory fac;
 	private static OWLOntology ontology;
+	private static OWLOntology infOnt;
 	private static OWLOntologyManager manager;
 	private static PrintWriter out2;
 	private static ManchesterSyntaxExplanationRenderer renderer;
 	private static PelletReasoner reasoner;
 	private static PelletExplanation expGen;
 	private static ArrayList<OWLObjectProperty> objectProps;
-	private static ArrayList<BiValue> mapper;
+	private static ArrayList<BiValue> mapperProps;
+	private static ArrayList<BiValue> mapperClasses;
 	private static int countExplanations;
+	private static String ruleClass1;
+	private static String ruleClass2;
 	private static String outputFile1 = "/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt";
 	private static String outputFile2 = "/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out2.txt";
 	private static String outputFile3 = "/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out3.txt";
 
-	public Wine(String f) throws OWLOntologyCreationException, OWLException, IOException {
+	public Wine(String f, int count) throws OWLOntologyCreationException, OWLException, IOException {
 		file = "file://" + f;
-		
+
 		outer = new PrintWriter(outputFile2);
 		out = new PrintWriter(outputFile1);
 		renderer = new ManchesterSyntaxExplanationRenderer();
@@ -99,11 +141,13 @@ public class Wine {
 		reasoner = PelletReasonerFactory.getInstance().createReasoner(ontology);
 		expGen = new PelletExplanation(reasoner);
 		objectProps = new ArrayList<OWLObjectProperty>();
-		mapper = new ArrayList<BiValue>();
-		System.out.println("been through here");
+		mapperProps = new ArrayList<BiValue>();
+		mapperClasses = new ArrayList<BiValue>();
 		initObjectProperties();
-		countExplanations = 1;
-		run();
+		countExplanations = count;
+		addObjectProperties();
+		PelletOptions.DL_SAFE_RULES = false;
+		// inferOntology();
 
 	}
 
@@ -119,134 +163,10 @@ public class Wine {
 		return outputFile3;
 	}
 
-	@SuppressWarnings("deprecation")
-	public void run() throws OWLOntologyCreationException, OWLException, IOException {
-
-		addObjectProperties();
-		System.out.println(manager.getOntologies().toString());
-
-		// PrefixManager pm = new DefaultPrefixManager(
-		// IRI.create("file:src/main/resources/data/wineTunaSubclass3.owl").toString());
-
-		OWLClass meatCourse = OWL.Class(NS + "DarkMeatFowlCourse");
-
-		OWLClass mealCourse = OWL.Class(NS + "MealCourse");
-		OWLClass consumable = OWL.Class(NS + "ConsumableThing");
-		OWLClass tuna = OWL.Class(NS + "Tuna");
-		OWLClass seafoodCourse = OWL.Class(NS + "seaFoodCourse");
-		OWLClass wine = OWL.Class(NSWine + "Winery");
-		OWLClass sauvignon = OWL.Class(NSWine + "SauvignonBlanc");
-		OWLClass margaux = OWL.Class(NSWine + "Margaux");
-		OWLClass thing = OWL.Class("http://www.w3.org/2002/07/owl#Thing");
-
-		int count = 0;
-
-		// manager.saveOntology(ontology, new SystemOutDocumentTarget());
-		// OWLNamedIndividual tuna1 = fac.getOWLNamedIndividual(IRI.create(NS +
-		// "TunaSalad"));
-		// OWLNamedIndividual wine1 = fac.getOWLNamedIndividual(IRI.create(NS +
-		// "StonleighSauvignonBlanc"));
-		// OWLObjectPropertyExpression property =
-		// fac.getOWLObjectProperty(IRI.create("http://www.w3.org/TR/2003/PR-owl-guide-20031209/food#goesWellWith"));
-		// try {
-		// // System.out.println("testing mealCourse: " +
-		// // mealCourse.toString()+"\n");
-		// // System.out.println("testing goesWellWith Property: " +
-		// // property.toString() +"\n");
-		//
-		// // System.out.println("testing tunasalad Property: " +
-		// // tuna1.toString()+"\n");
-		// // System.out.println("testing StonleighSauvignonBlanc Property: " +
-		// // wine1.toString()+"\n");
-		// } catch (NullPointerException e) {
-		// e.printStackTrace();
-		// }
-		//
-		// // OWLObjectPropertyAssertionAxiom assertion =
-		// // fac.getOWLObjectPropertyAssertionAxiom(property, tuna1, wine1);
-		// // //System.out.println(assertion.toString());
-		// // //OWLAxiom axiom = OWL.classAssertion(
-		// // Set<Set<OWLAxiom>> exp2 =
-		// // expGen.getEntailmentExplanations(assertion);
-		// // renderer.render(exp2);
-		// //
-		// //System.out.println("--------------------------------------------------------------");
-		//
-		// Set<OWLNamedIndividual> individuals =
-		// reasoner.getInstances(consumable, false).getFlattened();
-		// Set<OWLNamedIndividual> individuals2 = reasoner.getInstances(margaux,
-		// false).getFlattened();
-		// // System.out.println("ind 2 size: "+individuals2.size());
-		// // System.out.println("individuals: " + individuals.size());
-		// for (OWLNamedIndividual ind : individuals) {
-		// int c = 0;
-		// IRI cIRI = ind.getIRI();
-		// // boolean check =
-		// // cIRI.toString().equals(tuna1.getIRI().toString());
-		// // if(check){
-		// // System.out.println("loop" + ++count);
-		// Set<OWLAnnotationAssertionAxiom> list =
-		// ontology.getAnnotationAssertionAxioms(cIRI);
-		// for (OWLAnnotationAssertionAxiom a : list) {
-		// // System.out.println("In 2nd Loop");
-		// //// System.out.println(ind.getIRI().getFragment());
-		// count++;
-		// for (OWLNamedIndividual ind2 : individuals2) {
-		// // System.out.println("counter Two: " + c++);
-		// // System.out.println("ind 2 size: " + individuals2.size());
-		// IRI cIRI2 = ind2.getIRI();
-		// for (OWLAnnotationAssertionAxiom a2 : list) {
-		// if (a2.getValue() instanceof OWLLiteral && !a2.equals(null)) {
-		// // if
-		// //
-		// (cIRI2.toString().equals("http://www.w3.org/TR/2003/PR-owl-guide-20031209/wine#StonleighSauvignonBlanc"))
-		// // {
-		// // System.out.println("horraaaay");
-		// OWLLiteral val = (OWLLiteral) a2.getValue();
-		// OWLObjectPropertyAssertionAxiom assertion =
-		// fac.getOWLObjectPropertyAssertionAxiom(property,
-		// ind, ind2);
-		// // System.out.println(assertion.toString());
-		// // OWLAxiom axiom = OWL.classAssertion(
-		// try {
-		// Set<Set<OWLAxiom>> exp2 = expGen.getEntailmentExplanations(assertion,
-		// 1);
-		// renderer.render(exp2);
-		// } catch (NullPointerException e) {
-		// // System.out.println(e.toString());
-		//
-		// } catch (Exception e) {
-		// // System.out.println(e.toString());
-		// }
-		//
-		// // System.out.println(
-		// // "--------------------------------------------------------------");
-		// break;
-		// // }
-		// // }
-		// // OWLLiteral val = (OWLLiteral) a.getValue();
-		// // OWLObjectPropertyAssertionAxiom assertion =
-		// // fac.getOWLObjectPropertyAssertionAxiom(property,
-		// // tuna1, wine1);
-		// // //System.out.println(assertion.toString());
-		// // OWLAxiom axiom = OWL.classAssertion(
-		// // Set<Set<OWLAxiom>> exp2 =
-		// // expGen.getEntailmentExplanations(assertion);
-		// // renderer.render(exp2);
-		// //
-		// //System.out.println("--------------------------------------------------------------");
-		// // break;
-		// }
-		// }
-		// }
-		// }
-		// }
-		//
-		// renderer.endRendering();
-		// out.flush();
-		// naturalGeneration();
-		// removeExtras();
-	}
+	// renderer.endRendering();
+	// out.flush();
+	// naturalGeneration();
+	// removeExtras();
 
 	public static String getFile() {
 		return file;
@@ -344,60 +264,78 @@ public class Wine {
 		return objectProps;
 	}
 
-	public static ArrayList<BiValue> getMapper() {
-		return mapper;
+	public static ArrayList<BiValue> getMapperProps() {
+		return mapperProps;
 	}
 
-	public Set<OWLClass> getClasses() {
+	public static ArrayList<BiValue> getMapperClasses() {
+		return mapperClasses;
+	}
+
+	public static Set<OWLClass> getClasses() {
 
 		System.out.println(ontology.getClassesInSignature());
 		return ontology.getClassesInSignature();
 
 	}
 
-	public void initObjectProperties() {
+	public static void initObjectProperties() {
 
-		mapper.add(new BiValue("hasVintageYear", "wine"));
-		mapper.add(new BiValue("hasFood", "food"));
-		mapper.add(new BiValue("course", "food"));
-		mapper.add(new BiValue("adjacentRegion", "wine"));
-		mapper.add(new BiValue("hasSugar", "wine"));
-		mapper.add(new BiValue("hasWineDescriptor", "wine"));
-		mapper.add(new BiValue("hasDrink", "food"));
-		mapper.add(new BiValue("hasFlavor", "wine"));
-		mapper.add(new BiValue("hasMaker", "wine"));
-		mapper.add(new BiValue("locatedIn", "wine"));
-		mapper.add(new BiValue("madeIntoWine", "wine"));
-		mapper.add(new BiValue("hasBody", "wine"));
-		mapper.add(new BiValue("madeFromFruit", "food"));
-		mapper.add(new BiValue("hasColor", "wine"));
-		mapper.add(new BiValue("goesWellWith", "food"));
-		mapper.add(new BiValue("producesWine", "wine"));
-		mapper.add(new BiValue("madeFromGrape", "wine"));
+		mapperProps.add(new BiValue("hasVintageYear", "wine"));
+		mapperProps.add(new BiValue("hasFood", "food"));
+		mapperProps.add(new BiValue("course", "food"));
+		mapperProps.add(new BiValue("adjacentRegion", "wine"));
+		mapperProps.add(new BiValue("hasSugar", "wine"));
+		mapperProps.add(new BiValue("hasWineDescriptor", "wine"));
+		mapperProps.add(new BiValue("hasDrink", "food"));
+		mapperProps.add(new BiValue("hasFlavor", "wine"));
+		mapperProps.add(new BiValue("hasMaker", "wine"));
+		mapperProps.add(new BiValue("locatedIn", "wine"));
+		mapperProps.add(new BiValue("madeIntoWine", "wine"));
+		mapperProps.add(new BiValue("hasBody", "wine"));
+		mapperProps.add(new BiValue("madeFromFruit", "food"));
+		mapperProps.add(new BiValue("hasColor", "wine"));
+		mapperProps.add(new BiValue("goesWellWith", "food"));
+		mapperProps.add(new BiValue("producesWine", "wine"));
+		mapperProps.add(new BiValue("madeFromGrape", "wine"));
 
+		mapperClasses.add(new BiValue("RedBordeaux", "wine"));
+		mapperClasses.add(new BiValue("DarkMeatFowlCourse", "food"));
 	}
 
 	public static void removeExtras() throws IOException {
-		
+
 		fr = new FileReader(outputFile2);
 		out = new PrintWriter(outputFile3);
 		br = new BufferedReader(fr);
 		String s = br.readLine();
+		System.out.println("________" + s);
+
 		while (s != null) {
 			String exp = s;
 
-			if (s.matches(".*\\d+.*") || exp.trim().equals("") || exp.trim() == null) {
+			if (exp.trim().equals("") || exp.trim() == null) {
 				s = br.readLine();
 				continue;
+			}
+			if (s.matches("\\d.*")) {
+				s = s.substring(3);
+			}
+			if (isContain(s, "is similar to") && isContain(s, "or")) {
+				int pos = s.indexOf("is similar to") + 13;
+				s = s.substring(0, pos) + " either " + s.substring(pos);
+			}
+			if (isContain(s, "is of type has the following drink: only has the color")) {
+				s.replace("is of type has the following drink: only has the color",
+						"goes well with a drink tha has the color");
 			}
 			String res = s.replaceAll("\\s+", " ");
 			String finale = "";
 			String res1 = "";
 			String res2 = "";
 			boolean split = false;
-			if (res.contains("is of type has the color")) {
-				res.replace("is of type has the color", "has the color");
-			}
+			// res.replace("is of type has the color", "has the color");
+
 			try {
 				finale = res.substring(0, res.length() - 1) + ".";
 			} catch (Exception e) {
@@ -425,28 +363,53 @@ public class Wine {
 				out.println(res2);
 
 			}
+
 			s = br.readLine();
 		}
 		out.close();
 
 	}
 
-	private void addObjectProperties() {
+	private static void addObjectProperties() {
 
 		OWLObjectProperty local;
 		for (int i = 0; i < 17; i++) {
 
-			if (mapper.get(i).getValue() == "wine") {
-				local = fac.getOWLObjectProperty((IRI.create(NSWine + mapper.get(i).getKey())));
+			if (mapperProps.get(i).getValue() == "wine") {
+				local = fac.getOWLObjectProperty((IRI.create(NSWine + mapperProps.get(i).getKey())));
 			} else {
-				local = fac.getOWLObjectProperty((IRI.create(NS + mapper.get(i).getKey())));
+				local = fac.getOWLObjectProperty((IRI.create(NS + mapperProps.get(i).getKey())));
 			}
 
 			objectProps.add(local);
 		}
 	}
 
-	public Collection getIndividuals() {
+	private static boolean isContain(String source, String subItem) {
+		String pattern = "\\b" + subItem + "\\b";
+		Pattern p = Pattern.compile(pattern);
+		Matcher m = p.matcher(source);
+		return m.find();
+	}
+
+	public static BiValue searchMapperClasses(String s) {
+
+		BiValue local = null;
+		mapperClasses.size();
+		System.out.println(mapperClasses);
+		for (int i = 0; i < mapperClasses.size(); i++) {
+			System.out.println(mapperClasses.get(i).getKey() + "   <-- mapper : s-->   " + s);
+			if (mapperClasses.get(i).getKey().equals(s)) {
+				local = mapperClasses.get(i);
+				System.out.println("FOUND::::::::::::::::" + mapperClasses.get(i));
+				break;
+			}
+		}
+		System.out.println("#####################################" + local);
+		return local;
+	}
+
+	public static Collection getIndividuals() {
 		Collection classes = ontology.getClassesInSignature();
 		// System.out.println("size: " + classes.size());
 		// for (Iterator it = classes.iterator(); it.hasNext();) {
@@ -478,90 +441,177 @@ public class Wine {
 		return objectProps;
 
 	}
-	public static void printFile(String yarab) throws IOException{
+
+	public static void printFile(String yarab) throws IOException {
 		FileReader fer = new FileReader(yarab);
 		BufferedReader ber = new BufferedReader(fer);
 		String toPrint = ber.readLine();
-		
-		while( toPrint != null){
+
+		while (toPrint != null) {
 			System.out.println("=========" + toPrint);
 			toPrint = ber.readLine();
 		}
-		
+
 	}
+
 	public void naturalGeneration() throws IOException {
+		outer = new PrintWriter(outputFile2);
+		
+		
 		fr = new FileReader(outputFile1);
 		br = new BufferedReader(fr);
 		buffer = br.readLine();
+		int num = 0;
+		int max = 0;
 		int loop = 0;
-			while(loop<1000){
-				if(buffer != null && buffer.startsWith(""+countExplanations)) break;
-				buffer = br.readLine();
-				loop++;
+
+		while (br.ready()) {
+			if (buffer.matches("\\d.*")) {
+				num = Integer.parseInt(buffer.substring(0, 1));
+				if (num > max) {
+					max = num;
+				}
 			}
-			
-			
+			buffer = br.readLine();
+		}
+
+		fr = new FileReader(outputFile1);
+		br = new BufferedReader(fr);
+		buffer = br.readLine();
+		while (!buffer.startsWith("" + max)) {
+			buffer = br.readLine();
+		}
 		// Lexicon lexicon = Lexicon.getDefaultLexicon();
 		// NLGFactory nlgFactory = new NLGFactory(lexicon);
 		// Realiser realiser = new Realiser(lexicon);
-		outer = new PrintWriter(outputFile2);
 		statement = "";
+
 		String word = "";
-		
+
 		boolean checked = false;
 		int count = 0;
 		boolean end = false;
-		
 		while (buffer != null) {
 			statement = buffer;
 			buffer = br.readLine();
-			if (checkNextLine()) {
-				end = true;
-			} else {
-				end = false;
-			}
 
-			// skipping the domain sentence until we found a solution
-			if (statement.contains("domain") || statement.contains("Rule")) {
-				statement = br.readLine();
-				continue;
-			} else if (statement.contains("DisjointClasses")) {
-				System.out.println("statement: " + statement);
-				outer.print(disjointPrinting(statement) + "\n");
-				buffer = br.readLine();
-				continue;
-			}
+			for (int i = 0; i < statement.length(); i++) {
+				if (statement.matches("\\d.*")) {
+					int x = statement.indexOf("[0-9]");
+					if (Character.isDigit(statement.charAt(i))) {
+						statement = statement.substring(statement.charAt(i) + 1);
+					} else
+						break;
+				}
 
-			st = new StringTokenizer(statement);
-			String out = "";
-			while (st.hasMoreTokens()) {
-				String orig = st.nextToken();
-				System.out.println("A TOKEN HERE IS: " + orig);
-				if ((int) orig.charAt(0) == 49) {
+				if (checkNextLine()) {
+					end = true;
+				} else {
+					end = false;
+				}
+
+				// skipping the domain sentence until we found a solution
+				if (statement.contains("domain")) {
+					buffer = br.readLine();
+					continue;
+				} else if (statement.contains("Rule")) {
+					checkRule(statement);
+					System.out.println("dsvfeqgqrer" + ruleClass1 + "          " + ruleClass2);
+					buffer = br.readLine();
+					continue;
+				} else if (statement.contains("DisjointClasses")) {
+					System.out.println("statement: " + statement);
+					outer.print(disjointPrinting(statement) + "\n");
+					buffer = br.readLine();
 					continue;
 				}
 
-				String s = getCorrectness(orig) + " ";
-				outer.print(s);
+				st = new StringTokenizer(statement);
+				String out = "";
+				while (st.hasMoreTokens()) {
+					String orig = st.nextToken();
+					System.out.println("A TOKEN HERE IS: " + orig);
+					if ((int) orig.charAt(0) == 49) {
+						continue;
+					}
 
+					String s = getCorrectness(orig) + " ";
+					outer.print(s);
+
+					if (end) {
+
+					} else {
+						outer.print(" ");
+					}
+				}
 				if (end) {
+					outer.print("\n");
+					end = false;
 
 				} else {
-					outer.print(" ");
+
 				}
 			}
-			if (end) {
-				outer.print("\n");
-				end = false;
 
-			} else {
-
-			}
+			outer.close();
+			countExplanations++;
 		}
+	}
 
-		outer.close();
-		countExplanations++;
+	public static void checkRule(String s) {
+		String p1;
+		char p11 = '\0';
+		char p22 = '\0';
+		String p2 = "";
+		char prop1 = '\0';
+		char prop2 = '\0';
+		st = new StringTokenizer(s);
+		System.out.println("HOBAAAAA");
 
+		String m = st.nextToken();
+		System.out.println("________________________________________________________" + m);
+		int c = m.substring(5).indexOf(40);
+		System.out.println("C!!!!! should be bracket " + c);
+		p1 = m.substring(5, c + 5);
+		p11 = m.substring(c + 7, c + 8).charAt(0);
+		m = st.nextToken();
+		System.out.println(m);
+		c = m.indexOf(40);
+		p2 = m.substring(0, c);
+		p22 = m.substring(c + 2, c + 3).charAt(0);
+		st.nextToken();
+		m = st.nextToken();
+		System.out.println(m);
+		c = m.indexOf(40);
+		prop1 = m.substring(c + 2, c + 3).charAt(0);
+		m = st.nextToken();
+		System.out.println(m);
+		prop2 = m.substring(1, 2).charAt(0);
+		System.out.println("p1: " + p1 + "----- p2: " + p2 + "----- p11: " + p11 + "----- p22: " + p22
+				+ "------- prop1: " + prop1 + "----- prop2: " + prop2);
+		if (p11 == prop1) {
+			System.out.println("AM I HEEEERE?");
+			ruleClass1 = p1;
+			ruleClass2 = p2;
+		} else if (p11 == prop2) {
+			System.out.println("OR AM I THEEEEERE?");
+			ruleClass1 = p2;
+			ruleClass2 = p1;
+		}
+		System.out.println(mapperClasses);
+
+	}
+
+	public static int getCountExplanations() {
+		return countExplanations;
+	}
+
+	public static String getRuleClass1() {
+		return ruleClass1;
+	}
+
+	public static String getRuleClass2() {
+		return ruleClass2;
 	}
 
 	public static boolean checkNextLine() throws IOException {
@@ -595,6 +645,18 @@ public class Wine {
 		}
 		// System.out.println();
 		return tabs;
+	}
+
+	public static String getOutputFromFile() throws IOException {
+		fr = new FileReader(outputFile3);
+		br = new BufferedReader(fr);
+		String result = "";
+		String s = br.readLine();
+		while (s != null) {
+			result += s + "\n";
+		}
+		return result;
+
 	}
 
 	public static String disjointPrinting(String s) throws IOException {
@@ -640,29 +702,48 @@ public class Wine {
 
 	}
 
-	public static void resetRenderer() throws FileNotFoundException {
-		// out2 = new PrintWriter(outputFile1);
-		// out2.print("");
-		// out2.close();
-		// out2 = new PrintWriter(outputFile2);
-		// out2.print("");
-		// out2.close();
-		// out2 = new PrintWriter(outputFile3);
-		// out2.print("");
-		// out2.close();
-		//
-
-	}
-
 	public static String splitCamelCase(String s) {
 		return s.replaceAll(String.format("(?<!(^|[A-Z0-9]))(?=[A-Z0-9])|(?<!^)(?=[A-Z][a-z])"), " ");
 	}
 
-	// public static void main(String[] args) throws
-	// OWLOntologyCreationException, OWLException, IOException {
-	// Wine app = new Wine();
-	//
-	// app.run();
-	// }
+	public static void inferOntology() throws OWLOntologyCreationException {
+		reasoner.precomputeInferences(InferenceType.CLASS_HIERARCHY);
+		reasoner.precomputeInferences(InferenceType.OBJECT_PROPERTY_HIERARCHY);
+		reasoner.precomputeInferences(InferenceType.OBJECT_PROPERTY_ASSERTIONS);
+		reasoner.precomputeInferences(InferenceType.DIFFERENT_INDIVIDUALS);
+
+		List<InferredAxiomGenerator<? extends OWLAxiom>> gens = new ArrayList<InferredAxiomGenerator<? extends OWLAxiom>>();
+
+		gens.add(new InferredSubClassAxiomGenerator());
+		gens.add(new InferredEquivalentClassAxiomGenerator());
+		gens.add(new InferredSubClassAxiomGenerator());
+		gens.add(new InferredClassAssertionAxiomGenerator());
+		gens.add(new InferredDisjointClassesAxiomGenerator());
+		gens.add(new InferredEquivalentClassAxiomGenerator());
+		gens.add(new InferredEquivalentDataPropertiesAxiomGenerator());
+		gens.add(new InferredEquivalentObjectPropertyAxiomGenerator());
+		gens.add(new InferredInverseObjectPropertiesAxiomGenerator());
+		gens.add(new InferredObjectPropertyCharacteristicAxiomGenerator());
+		gens.add(new InferredPropertyAssertionGenerator());
+		gens.add(new InferredSubDataPropertyAxiomGenerator());
+		gens.add(new InferredDataPropertyCharacteristicAxiomGenerator());
+		gens.add(new InferredSubObjectPropertyAxiomGenerator());
+
+		reasoner.getKB().realize();
+		InferredOntologyGenerator iog = new InferredOntologyGenerator(reasoner, gens);
+		infOnt = manager.createOntology();
+		iog.fillOntology(reasoner.getManager().getOWLDataFactory(), infOnt);
+
+		for (OWLOntology o : manager.getImportsClosure(ontology)) {
+			for (OWLAnnotationAssertionAxiom ax : o.getAxioms(AxiomType.ANNOTATION_ASSERTION)) {
+				manager.applyChange(new AddAxiom(infOnt, ax));
+			}
+		}
+
+		// ontology = infOnt;
+		fac = manager.getOWLDataFactory();
+		reasoner = PelletReasonerFactory.getInstance().createReasoner(infOnt);
+		ontology = infOnt;
+	}
 
 }

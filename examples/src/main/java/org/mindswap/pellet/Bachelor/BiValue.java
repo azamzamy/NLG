@@ -26,4 +26,10 @@ public class BiValue {
 		this.value = value;
 	}
 
+	@Override
+	public String toString() {
+		return "BiValue [key=" + key + ", value=" + value + "]";
+	}
+
+	
 }
