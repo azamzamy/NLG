@@ -1,7 +1,5 @@
--Nuts is of type Cheese Nuts Dessert.
--Cheese is of type Cheese Nuts Dessert.
--Mixed Fruit is of type Sweet Fruit.
--Edible Thing is of type Consumable Thing.
--Vegetarian Food is of type Edible Thing.
--Sweet Fruit is of type Vegetarian Food.
--Goose is of type Dark Meat Fowl.
+-Dessert is a special kind of Vegetarian Food.
+-Vegetarian Food is a special kind of Edible Thing.
+-Pie is a special kind of Sweet Dessert.
+-Sweet Dessert is a special kind of Dessert.
+

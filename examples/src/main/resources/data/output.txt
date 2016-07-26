@@ -1,4 +1,64 @@
 Explanation(s): 
-1)   Cheese type CheeseNutsDessert
+1)   Duck type DarkMeatFowl
+
+
+2)   EdibleThing equivalentTo Fowl
+                              or Meat
+                              or Pasta
+                              or Seafood
+                              or VegetarianFood
+     DarkMeatFowl subClassOf Fowl
+
+
+3)   Dessert subClassOf VegetarianFood
+
+
+4)   DessertCourse subClassOf VegetarianCourse
+
+
+5)   DarkMeatFowl subClassOf Fowl
+
+
+6)   EdibleThing equivalentTo Fowl
+                              or Meat
+                              or Pasta
+                              or Seafood
+                              or VegetarianFood
+     EdibleThing subClassOf ConsumableThing
+     DarkMeatFowl subClassOf Fowl
+
+
+7)   Fish disjointWith Shellfish
+     Fish subClassOf Seafood
+     hasFood domain MealCourse
+     ShellfishCourse equivalentTo MealCourse
+                                  and hasFood only Shellfish
+     TunaSalad hasFood Tuna
+     SeafoodCourse equivalentTo MealCourse
+                                and hasFood some Seafood
+     SeafoodCourse equivalentTo FishCourse
+                                or ShellfishCourse
+     NonBlandFish subClassOf Fish
+     Tuna type NonBlandFish
+
+
+8)   RoastedDuck hasFood Duck
+     hasFood range EdibleThing
+
+
+9)   Grape subClassOf SweetFruit
+     WineGrape subClassOf Grape
+     VegetarianFood subClassOf EdibleThing
+     SweetFruit subClassOf VegetarianFood
+     SauvignonBlancGrape type WineGrape
+
+
+10)   TunaSalad type ConsumableThing
+
+
+11)   Dessert subClassOf VegetarianFood
+      VegetarianFood subClassOf EdibleThing
+      Pie type SweetDessert
+      SweetDessert subClassOf Dessert
 
 

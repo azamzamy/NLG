@@ -8,7 +8,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -23,6 +25,7 @@ import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.jena.riot.RDFDataMgr;
 import org.apache.jena.riot.RDFLanguages;
 import org.apache.xerces.util.SynchronizedSymbolTable;
@@ -109,6 +112,10 @@ public class Wine {
 	boolean lastSentence;
 	static String statement;
 	static String buffer;
+	static int index = 0;
+	static int resSize = 0;
+	private static String line;
+	static ArrayList<String> ans;
 	private static OWLDataFactory fac;
 	private static OWLOntology ontology;
 	private static OWLOntology infOnt;
@@ -123,15 +130,18 @@ public class Wine {
 	private static int countExplanations;
 	private static String ruleClass1;
 	private static String ruleClass2;
+	private static StringWriter stringOut;
+	private static HashMap<String, ArrayList<String>> subjects;
+	private static HashMap<String, ArrayList<String>> objects;
+	private static HashMap<String, String> subToObj;
 	private static String outputFile1 = "/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt";
 	private static String outputFile2 = "/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out2.txt";
 	private static String outputFile3 = "/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out3.txt";
 
 	public Wine(String f, int count) throws OWLOntologyCreationException, OWLException, IOException {
 		file = "file://" + f;
-
-		outer = new PrintWriter(outputFile2);
-		out = new PrintWriter(outputFile1);
+		out = new PrintWriter(new FileWriter(outputFile1));
+		// stringOut = new StringWriter();
 		renderer = new ManchesterSyntaxExplanationRenderer();
 		PelletExplanation.setup();
 		renderer.startRendering(out);
@@ -147,7 +157,11 @@ public class Wine {
 		countExplanations = count;
 		addObjectProperties();
 		PelletOptions.DL_SAFE_RULES = false;
-		// inferOntology();
+		subjects = new HashMap<String, ArrayList<String>>();
+		objects = new HashMap<String, ArrayList<String>>();
+		subToObj = new HashMap<String, String>();
+		line = "";
+//		 inferOntology();
 
 	}
 
@@ -306,30 +320,23 @@ public class Wine {
 	public static void removeExtras() throws IOException {
 
 		fr = new FileReader(outputFile2);
-		out = new PrintWriter(outputFile3);
 		br = new BufferedReader(fr);
-		String s = br.readLine();
-		System.out.println("________" + s);
+		out = new PrintWriter(outputFile3);
 
+		String finalString = "";
+		String s = br.readLine();
 		while (s != null) {
 			String exp = s;
-
-			if (exp.trim().equals("") || exp.trim() == null) {
+			System.out.println("EXP::::::::" + exp);
+			if (exp.trim().isEmpty() || exp.trim() == null) {
 				s = br.readLine();
 				continue;
 			}
-			if (s.matches("\\d.*")) {
-				s = s.substring(3);
-			}
-			if (isContain(s, "is similar to") && isContain(s, "or")) {
-				int pos = s.indexOf("is similar to") + 13;
-				s = s.substring(0, pos) + " either " + s.substring(pos);
-			}
-			if (isContain(s, "is of type has the following drink: only has the color")) {
-				s.replace("is of type has the following drink: only has the color",
-						"goes well with a drink tha has the color");
-			}
-			String res = s.replaceAll("\\s+", " ");
+			s = modifyStatements(s);
+			s = s.replaceAll("  ", " ");
+			s = s.trim();
+			String res = s;
+			System.out.println("MIDDLE: " + s);
 			String finale = "";
 			String res1 = "";
 			String res2 = "";
@@ -337,7 +344,8 @@ public class Wine {
 			// res.replace("is of type has the color", "has the color");
 
 			try {
-				finale = res.substring(0, res.length() - 1) + ".";
+				finale = res.substring(0, res.length()) + ".";
+
 			} catch (Exception e) {
 				System.out.println();
 			}
@@ -355,20 +363,72 @@ public class Wine {
 					}
 				}
 			}
-
+			System.out.println("FINALE:   " + finale);
 			if (!split)
-				out.println("-" + finale);
+				finalString += "-" + finale + "\n";
 			else {
-				out.println(res1);
-				out.println(res2);
+				finalString += res1 + "\n";
+				finalString += res2 + "\n";
 
 			}
-
 			s = br.readLine();
 		}
+		System.out.println("**************FINAL STRING*******************\n" + finalString);
+		out.println(finalString);
 		out.close();
 
 	}
+	private static String modifyStatements(String s){
+		if (s.matches("\\d.*")) {
+			s = s.substring(s.lastIndexOf(41) + 1);
+		}
+		if (isContain(s, "is similar to") && isContain(s, "or")) {
+			int pos = s.indexOf("is similar to") + 13;
+			s = s.substring(0, pos) + " either " + s.substring(pos);
+		}
+		if (isContain(s, "is identical to") && isContain(s, "or")){
+			int pos = s.indexOf("is identical to") + 16;
+			s = s.substring(0, pos) + " either " + s.substring(pos);
+		}
+		if (isContain(s, "is a special kind of has the following drink: only has the color")) {
+			s.replace("is a special kind of has the following drink: only has the color",
+					"goes well with a drink that has the color");
+		}
+		s.replace("is a special kind of has the color", "has color");
+		System.out.println("EXP2:::::::::::" + s);
+		s.replace("not contains", "does not contain");
+		s.replace("contains only", "only contains");
+		s.replaceAll("drinks is", "Drinks are");
+		s.replaceAll("\\s+", " ");
+		System.out.println("SUPPOSED TO FUCKING GO THERE: " + s);
+		if(s.contains("has color")) s = shiftWord(s, "color");
+		if(s.contains("has flavor")) s = shiftWord(s, "flavor");
+		if(s.contains("has sugar")) s = shiftWord(s, "sugar");
+		s.replace("that White Wine", "that is also white wine");
+		s.replace("that red Wine", "that is also red wine");
+		return s;
+		
+	}
+	
+	public static String shiftWord(String s, String word){
+		String [] sentence = s.split(" "); 
+		int sel = 0;
+		for(int i=0; i<sentence.length; i++){
+			if(!(sentence[i].equals(word))) continue;
+			sel = i;
+			sentence[i-1] += " a ";
+			break;
+		}
+		for(int i=sel; i<sentence.length-1; i++){
+			sentence[i+1] = sentence[i+1].toLowerCase();
+			sentence[i] = sentence[i+1]; 
+		}
+		sentence[sentence.length-1] = word;
+		System.out.println("shiftword: _~_~_~_~ " + s);
+		return s = StringUtils.join(sentence, " ");
+		
+	}
+	
 
 	private static void addObjectProperties() {
 
@@ -454,109 +514,161 @@ public class Wine {
 
 	}
 
+	public static void clearFile2() throws IOException {
+		FileWriter fwOb = new FileWriter(outputFile2, false);
+		PrintWriter pwOb = new PrintWriter(fwOb, false);
+		pwOb.flush();
+		pwOb.close();
+		fwOb.close();
+	}
+
 	public void naturalGeneration() throws IOException {
-		outer = new PrintWriter(outputFile2);
-		
-		
+
+		// outer = new PrintWriter(outputFile2);
+		// clearFile2();
+		// fr = new FileReader(outputFile1);
+		// StringBuffer str = stringOut.getBuffer();
+		// br = new BufferedReader(new InputStreamReader(new
+		// ByteArrayInputStream(str.toString().getBytes())));
+		// stringOut.getBuffer();
+		// br2 = new BufferedReader(new InputStreamReader(new
+		// ByteArrayInputStream(str.toString().getBytes())));
+		// Lexicon lexicon = Lexicon.getDefaultLexicon();
+		// NLGFactory nlgFactory = new NLGFactory(lexicon);
+		// Realiser realiser = new Realiser(lexicon);
+		index = 0;
+		int resSize = 0;
 		fr = new FileReader(outputFile1);
+		outer = new PrintWriter(outputFile2);
 		br = new BufferedReader(fr);
-		buffer = br.readLine();
+
+		statement = "";
+		String word = "";
+		System.out.println("BUFFER1: " + buffer);
+		boolean checked = false;
+		int count = 0;
+		boolean end = false;
+		ans = new ArrayList<String>();
+		String strLine;
+		while ((strLine = br.readLine()) != null) {
+			System.out.println(strLine);
+			ans.add(strLine);
+		}
+		resSize = ans.size();
+
 		int num = 0;
 		int max = 0;
 		int loop = 0;
-
-		while (br.ready()) {
-			if (buffer.matches("\\d.*")) {
-				num = Integer.parseInt(buffer.substring(0, 1));
+		for (String singleLine : ans) {
+			buffer = singleLine;
+			System.out.println("BUFFER: " + buffer);
+			if (!buffer.isEmpty() && Character.isDigit(buffer.charAt(0))) {
+				if (!buffer.isEmpty() && Character.isDigit(buffer.charAt(1))) {
+					num = Integer.parseInt(buffer.substring(0, 2));
+				} else {
+					num = Integer.parseInt(buffer.substring(0, 1));
+				}
 				if (num > max) {
 					max = num;
 				}
 			}
-			buffer = br.readLine();
 		}
 
-		fr = new FileReader(outputFile1);
-		br = new BufferedReader(fr);
-		buffer = br.readLine();
-		while (!buffer.startsWith("" + max)) {
-			buffer = br.readLine();
-		}
-		// Lexicon lexicon = Lexicon.getDefaultLexicon();
-		// NLGFactory nlgFactory = new NLGFactory(lexicon);
-		// Realiser realiser = new Realiser(lexicon);
-		statement = "";
-
-		String word = "";
-
-		boolean checked = false;
-		int count = 0;
-		boolean end = false;
+		System.out.println("NUMBER TO TAKE:" + max);
+		buffer = ans.get(index++);
+		line = "";
 		while (buffer != null) {
+			if (!buffer.isEmpty() && buffer.startsWith("" + max))
+				break;
+			else if (index < resSize)
+				buffer = ans.get(index++);
+			else
+				break;
+		}
+
+		System.out.println("NUMBER that was actually taken:" + max);
+
+		
+
+		while (buffer != null)
+
+		{
+			if (buffer.contains("subPropertyOf"))
+
+			{
+				if (index < resSize)
+					buffer = ans.get(index++);
+				else
+					break;
+			}
+			if (buffer.contains("Explanations"))
+				buffer = ans.get(index++);
 			statement = buffer;
-			buffer = br.readLine();
+			if (index < resSize)
+				buffer = ans.get(index++);
+			else
+				break;
 
-			for (int i = 0; i < statement.length(); i++) {
-				if (statement.matches("\\d.*")) {
-					int x = statement.indexOf("[0-9]");
-					if (Character.isDigit(statement.charAt(i))) {
-						statement = statement.substring(statement.charAt(i) + 1);
-					} else
-						break;
-				}
 
-				if (checkNextLine()) {
-					end = true;
-				} else {
-					end = false;
-				}
-
-				// skipping the domain sentence until we found a solution
-				if (statement.contains("domain")) {
-					buffer = br.readLine();
-					continue;
-				} else if (statement.contains("Rule")) {
-					checkRule(statement);
-					System.out.println("dsvfeqgqrer" + ruleClass1 + "          " + ruleClass2);
-					buffer = br.readLine();
-					continue;
-				} else if (statement.contains("DisjointClasses")) {
-					System.out.println("statement: " + statement);
-					outer.print(disjointPrinting(statement) + "\n");
-					buffer = br.readLine();
-					continue;
-				}
-
-				st = new StringTokenizer(statement);
-				String out = "";
-				while (st.hasMoreTokens()) {
-					String orig = st.nextToken();
-					System.out.println("A TOKEN HERE IS: " + orig);
-					if ((int) orig.charAt(0) == 49) {
-						continue;
-					}
-
-					String s = getCorrectness(orig) + " ";
-					outer.print(s);
-
-					if (end) {
-
-					} else {
-						outer.print(" ");
-					}
-				}
-				if (end) {
-					outer.print("\n");
-					end = false;
-
-				} else {
-
-				}
+			if (checkNextLine()) {
+				end = true;
+			} else {
+				end = false;
+			}
+			
+			if (statement.contains("Rule")) {
+				checkRule(statement);
+				System.out.println("dsvfeqgqrer" + ruleClass1 + "          " + ruleClass2);
+				if (index < resSize)
+					buffer = ans.get(index++);
+				else
+					break;
+				continue;
+			} else if (statement.contains("DisjointClasses")) {
+				System.out.println("statement: " + statement);
+				outer.print(disjointPrinting(statement) + "\n");
+				if (index < resSize)
+					buffer = ans.get(index++);
+				else
+					break;
+				continue;
 			}
 
-			outer.close();
-			countExplanations++;
+			st = new StringTokenizer(statement);
+			String out = "";
+			while (st.hasMoreTokens()) {
+				String orig = st.nextToken();
+				System.out.println("A TOKEN HERE IS: " + orig);
+				if ((int) orig.charAt(0) == 49) {
+					continue;
+				}
+
+				String s = getCorrectness(orig) + " ";
+				outer.print(s);
+				System.out.println("Natural generation strings: " + s);
+
+				if (end) {
+
+				} else {
+					outer.print(" ");
+				}
+			}
+			if (end) {
+				outer.print("\n");
+				end = false;
+
+			} else {
+
+			}
 		}
+		
+		outer.close();
+		countExplanations++;
 	}
+
+	// public static String genSubproperty(String s) {
+	//
+	// }
 
 	public static void checkRule(String s) {
 		String p1;
@@ -662,16 +774,16 @@ public class Wine {
 	public static String disjointPrinting(String s) throws IOException {
 		String result = "";
 		System.out.println("what is this??" + s);
-		result += "Disjoint Classes are: ";
 		result += s.substring(21) + ", ";
 		String component = buffer;
-		component.replace(" ", "");
-		System.out.println("should be meat, is it?" + component);
+		component.trim();
 		while (component.charAt(component.length() - 1) != ')') {
-			component.replace(" ", "");
 			result += getCorrectness(component);
 			result += ", ";
-			buffer = br.readLine();
+			if (index < resSize)
+				buffer = ans.get(index++);
+			else
+				break;
 			component = buffer;
 		}
 		component.replace(" ", "");
@@ -681,6 +793,7 @@ public class Wine {
 			result += getCorrectness(component);
 
 		System.out.println("RESULT IIIIIISSSS: " + result);
+		result += " are disjoint classes";
 		return result;
 	}
 

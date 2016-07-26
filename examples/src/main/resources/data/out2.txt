@@ -1,0 +1,5 @@
+Dessert is a special kind of  Vegetarian Food 
+Vegetarian Food is a special kind of  Edible Thing 
+Pie is a special kind of Sweet Dessert 
+Sweet Dessert is a special kind of  Dessert 
+
