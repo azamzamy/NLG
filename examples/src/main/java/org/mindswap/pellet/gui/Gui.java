@@ -442,6 +442,7 @@ public class Gui extends javax.swing.JFrame {
 			PropertyObj prop = (PropertyObj) box4.getSelectedItem();
 			PropertyObj prop2 = new PropertyObj(wine.getFac().getOWLObjectProperty(
 					IRI.create("http://www.w3.org/TR/2003/PR-owl-guide-20031209/food#goesWellWith")));
+			wine.setTarget(ind1.getValue());
 			IndObj ind2 = (IndObj) box5.getSelectedItem();
 			OWLObjectPropertyAssertionAxiom assertion = wine.getFac().getOWLObjectPropertyAssertionAxiom(prop.getObj(),
 					ind1.getIndOf(), ind2.getIndOf());
@@ -526,6 +527,7 @@ public class Gui extends javax.swing.JFrame {
 		case 3: { // Instance Explanation
 			ClassObj cl1 = (ClassObj) box2.getSelectedItem();
 			IndObj ind1 = (IndObj) box3.getSelectedItem();
+			wine.setTarget(ind1.getValue());
 			System.out.println("Instances and classes: " + cl1 + ind1);
 			exp = wine.getExpGen().getInstanceExplanations(ind1.getIndOf(), cl1.getClassOf(), 1);
 			explanationRes.setText(ind1 + " is an instance of: " + cl1);
@@ -535,6 +537,7 @@ public class Gui extends javax.swing.JFrame {
 		case 4: { // subclass Explanation
 			ClassObj subclass = (ClassObj) box2.getSelectedItem();
 			ClassObj superclass = (ClassObj) box3.getSelectedItem();
+			wine.setTarget(subclass.getValue());
 			exp = wine.getExpGen().getSubClassExplanations(subclass.getClassOf(), superclass.getClassOf(), 1);
 			explanationRes.setText(subclass + " is a subclass of: " + superclass);
 

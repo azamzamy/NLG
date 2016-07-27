@@ -1,5 +1,10 @@
-Dessert is a special kind of  Vegetarian Food 
-Vegetarian Food is a special kind of  Edible Thing 
-Pie is a special kind of Sweet Dessert 
-Sweet Dessert is a special kind of  Dessert 
+Bland Fish Course is identical to Meal Course that contains only Bland Fish 
+Bland Fish is a special kind of  Fish 
+Fish is a special kind of  Seafood 
+Shellfish Course is identical to Meal Course that contains only Shellfish 
+Shellfish Course is identical to Meal Course that contains only Shellfish 
+Seafood Course is identical to Fish Course or Shellfish Course 
+Seafood Course is identical to Fish Course or Shellfish Course 
+Seafood Course is identical to Meal Course that contains some Seafood 
+Seafood Course is identical to Meal Course that contains some Seafood 
 

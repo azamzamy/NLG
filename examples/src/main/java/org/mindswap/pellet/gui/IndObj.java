@@ -8,12 +8,14 @@ public class IndObj {
 
 	   private OWLNamedIndividual cls;
 	    private String value;
-
+	    
 	    public IndObj(OWLNamedIndividual cl) {
 	        cls = cl;
 	        this.value = cls.getIRI().getShortForm();
+	        
 	    }
-
+	    
+	    
 	    public OWLNamedIndividual getIndOf() {
 	        return cls;
 	    }

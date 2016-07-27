@@ -84,6 +84,7 @@ import com.clarkparsia.owlapi.explanation.io.manchester.ManchesterSyntaxExplanat
 import com.clarkparsia.owlapiv3.OWL;
 import com.clarkparsia.pellet.owlapiv3.PelletReasoner;
 import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
+import com.google.common.base.Strings;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
@@ -111,6 +112,7 @@ public class Wine {
 	private static StringTokenizer st;
 	boolean lastSentence;
 	static String statement;
+	static ArrayList<String> strings;
 	static String buffer;
 	static int index = 0;
 	static int resSize = 0;
@@ -131,9 +133,11 @@ public class Wine {
 	private static String ruleClass1;
 	private static String ruleClass2;
 	private static StringWriter stringOut;
+	private static String target;
+	private static int max;
 	private static HashMap<String, ArrayList<String>> subjects;
 	private static HashMap<String, ArrayList<String>> objects;
-	private static HashMap<String, String> subToObj;
+	private static HashMap<String, ArrayList<String>> subToObj;
 	private static String outputFile1 = "/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/output.txt";
 	private static String outputFile2 = "/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out2.txt";
 	private static String outputFile3 = "/Users/zamzamy/Desktop/pellet2/examples/src/main/resources/data/out3.txt";
@@ -142,6 +146,7 @@ public class Wine {
 		file = "file://" + f;
 		out = new PrintWriter(new FileWriter(outputFile1));
 		// stringOut = new StringWriter();
+		strings = new ArrayList<String>();
 		renderer = new ManchesterSyntaxExplanationRenderer();
 		PelletExplanation.setup();
 		renderer.startRendering(out);
@@ -159,10 +164,19 @@ public class Wine {
 		PelletOptions.DL_SAFE_RULES = false;
 		subjects = new HashMap<String, ArrayList<String>>();
 		objects = new HashMap<String, ArrayList<String>>();
-		subToObj = new HashMap<String, String>();
+		subToObj = new HashMap<String, ArrayList<String>>();
 		line = "";
-//		 inferOntology();
+		target = "";
+		// inferOntology();
 
+	}
+
+	public static String getTarget() {
+		return target;
+	}
+
+	public static void setTarget(String target) {
+		Wine.target = target;
 	}
 
 	public String getOutputFile1() {
@@ -325,18 +339,21 @@ public class Wine {
 
 		String finalString = "";
 		String s = br.readLine();
+		String s2 = br.readLine();
 		while (s != null) {
+			if(s.equals(s2)) s2 = br.readLine();
 			String exp = s;
-			System.out.println("EXP::::::::" + exp);
+			// System.out.println("EXP::::::::" + exp);
 			if (exp.trim().isEmpty() || exp.trim() == null) {
 				s = br.readLine();
 				continue;
 			}
+
 			s = modifyStatements(s);
 			s = s.replaceAll("  ", " ");
 			s = s.trim();
 			String res = s;
-			System.out.println("MIDDLE: " + s);
+			// System.out.println("MIDDLE: " + s);
 			String finale = "";
 			String res1 = "";
 			String res2 = "";
@@ -363,7 +380,7 @@ public class Wine {
 					}
 				}
 			}
-			System.out.println("FINALE:   " + finale);
+			// System.out.println("FINALE: " + finale);
 			if (!split)
 				finalString += "-" + finale + "\n";
 			else {
@@ -371,64 +388,80 @@ public class Wine {
 				finalString += res2 + "\n";
 
 			}
-			s = br.readLine();
+			s = s2;
+			s2 = br.readLine();
 		}
 		System.out.println("**************FINAL STRING*******************\n" + finalString);
 		out.println(finalString);
 		out.close();
 
 	}
-	private static String modifyStatements(String s){
+
+	private static String modifyStatements(String s) {
+		
 		if (s.matches("\\d.*")) {
 			s = s.substring(s.lastIndexOf(41) + 1);
 		}
+		s = s.replaceAll("\\s+", " ");
 		if (isContain(s, "is similar to") && isContain(s, "or")) {
 			int pos = s.indexOf("is similar to") + 13;
 			s = s.substring(0, pos) + " either " + s.substring(pos);
 		}
-		if (isContain(s, "is identical to") && isContain(s, "or")){
+		if (isContain(s, "is identical to") && isContain(s, "or")) {
 			int pos = s.indexOf("is identical to") + 16;
 			s = s.substring(0, pos) + " either " + s.substring(pos);
 		}
 		if (isContain(s, "is a special kind of has the following drink: only has the color")) {
-			s.replace("is a special kind of has the following drink: only has the color",
+		s =	s.replace("is a special kind of has the following drink: only has the color",
 					"goes well with a drink that has the color");
 		}
-		s.replace("is a special kind of has the color", "has color");
-		System.out.println("EXP2:::::::::::" + s);
-		s.replace("not contains", "does not contain");
-		s.replace("contains only", "only contains");
-		s.replaceAll("drinks is", "Drinks are");
-		s.replaceAll("\\s+", " ");
-		System.out.println("SUPPOSED TO FUCKING GO THERE: " + s);
-		if(s.contains("has color")) s = shiftWord(s, "color");
-		if(s.contains("has flavor")) s = shiftWord(s, "flavor");
-		if(s.contains("has sugar")) s = shiftWord(s, "sugar");
-		s.replace("that White Wine", "that is also white wine");
-		s.replace("that red Wine", "that is also red wine");
-		return s;
+		s = s.replace("a special kind of has the color", "a special kind of wine that with red color");
 		
+			System.out.println("s before:  "+ s);
+			s = s.replace("that Red", "and Red");
+			System.out.println("s after:  "+ s);
+		
+		s = s.replace("that White", "and White");
+		System.out.println("s after:  "+ s);
+		s = s.replace("is a special kind of has the color", "has color");
+		System.out.println("s after:  "+ s);
+		// System.out.println("EXP2:::::::::::" + s);
+		s = s.replace("not contains", "does not contain");
+		s = s.replace("contains only", "only contains");
+		s = s.replaceAll("drinks is", "Drinks are");
+		
+		// System.out.println("SUPPOSED TO FUCKING GO THERE: " + s);
+		if (s.contains("has color"))
+			s = shiftWord(s, "color");
+		if (s.contains("has flavor"))
+			s = shiftWord(s, "flavor");
+		if (s.contains("has sugar"))
+			s = shiftWord(s, "sugar");
+		s = s.replace("that White Wine", "that is also white wine");
+		s = s.replace("that red Wine", "that is also red wine");
+		return s;
+
 	}
-	
-	public static String shiftWord(String s, String word){
-		String [] sentence = s.split(" "); 
+
+	public static String shiftWord(String s, String word) {
+		String[] sentence = s.split(" ");
 		int sel = 0;
-		for(int i=0; i<sentence.length; i++){
-			if(!(sentence[i].equals(word))) continue;
+		for (int i = 0; i < sentence.length; i++) {
+			if (!(sentence[i].equals(word)))
+				continue;
 			sel = i;
-			sentence[i-1] += " a ";
+			sentence[i - 1] += " a ";
 			break;
 		}
-		for(int i=sel; i<sentence.length-1; i++){
-			sentence[i+1] = sentence[i+1].toLowerCase();
-			sentence[i] = sentence[i+1]; 
+		for (int i = sel; i < sentence.length - 1; i++) {
+			sentence[i + 1] = sentence[i + 1].toLowerCase();
+			sentence[i] = sentence[i + 1];
 		}
-		sentence[sentence.length-1] = word;
+		sentence[sentence.length - 1] = word;
 		System.out.println("shiftword: _~_~_~_~ " + s);
 		return s = StringUtils.join(sentence, " ");
-		
+
 	}
-	
 
 	private static void addObjectProperties() {
 
@@ -458,7 +491,8 @@ public class Wine {
 		mapperClasses.size();
 		System.out.println(mapperClasses);
 		for (int i = 0; i < mapperClasses.size(); i++) {
-			System.out.println(mapperClasses.get(i).getKey() + "   <-- mapper : s-->   " + s);
+			// System.out.println(mapperClasses.get(i).getKey() + " <-- mapper :
+			// s--> " + s);
 			if (mapperClasses.get(i).getKey().equals(s)) {
 				local = mapperClasses.get(i);
 				System.out.println("FOUND::::::::::::::::" + mapperClasses.get(i));
@@ -522,6 +556,15 @@ public class Wine {
 		fwOb.close();
 	}
 
+	public static void clearMaps() {
+		subjects.clear();
+		objects.clear();
+		subToObj.clear();
+		subjects = new HashMap<String, ArrayList<String>>();
+		objects = new HashMap<String, ArrayList<String>>();
+		subToObj = new HashMap<String, ArrayList<String>>();
+	}
+
 	public void naturalGeneration() throws IOException {
 
 		// outer = new PrintWriter(outputFile2);
@@ -536,6 +579,8 @@ public class Wine {
 		// Lexicon lexicon = Lexicon.getDefaultLexicon();
 		// NLGFactory nlgFactory = new NLGFactory(lexicon);
 		// Realiser realiser = new Realiser(lexicon);
+
+		clearMaps();
 		index = 0;
 		int resSize = 0;
 		fr = new FileReader(outputFile1);
@@ -557,7 +602,7 @@ public class Wine {
 		resSize = ans.size();
 
 		int num = 0;
-		int max = 0;
+		max = 0;
 		int loop = 0;
 		for (String singleLine : ans) {
 			buffer = singleLine;
@@ -588,8 +633,6 @@ public class Wine {
 
 		System.out.println("NUMBER that was actually taken:" + max);
 
-		
-
 		while (buffer != null)
 
 		{
@@ -609,13 +652,12 @@ public class Wine {
 			else
 				break;
 
-
 			if (checkNextLine()) {
 				end = true;
 			} else {
 				end = false;
 			}
-			
+
 			if (statement.contains("Rule")) {
 				checkRule(statement);
 				System.out.println("dsvfeqgqrer" + ruleClass1 + "          " + ruleClass2);
@@ -626,7 +668,7 @@ public class Wine {
 				continue;
 			} else if (statement.contains("DisjointClasses")) {
 				System.out.println("statement: " + statement);
-				outer.print(disjointPrinting(statement) + "\n");
+				line += disjointPrinting(statement) + "\n";
 				if (index < resSize)
 					buffer = ans.get(index++);
 				else
@@ -643,32 +685,231 @@ public class Wine {
 					continue;
 				}
 
-				String s = getCorrectness(orig) + " ";
-				outer.print(s);
+				// String s = getCorrectness(orig) + " ";
+				String s = orig + " ";
+
+				line += s;
 				System.out.println("Natural generation strings: " + s);
 
 				if (end) {
 
 				} else {
-					outer.print(" ");
+					line += " ";
 				}
 			}
 			if (end) {
-				outer.print("\n");
+				line += "\n";
 				end = false;
 
 			} else {
 
 			}
 		}
-		
+		String output = hashStatements(line);
+		outer.println(output);
 		outer.close();
 		countExplanations++;
 	}
 
-	// public static String genSubproperty(String s) {
-	//
-	// }
+	public static String hashStatements(String single) {
+		strings = new ArrayList<String>();
+
+		if (max > 1) {
+			single = single.substring(single.lastIndexOf(41) + 1);
+		}
+
+		System.out.println("string testing: ********" + single + "********");
+		int emptyLine = single.lastIndexOf(10);
+		single = single.substring(0, emptyLine);
+
+		emptyLine = single.lastIndexOf(10);
+		single = single.substring(0, emptyLine);
+		single.replaceAll("^\\s+", "");
+		single = single.trim();
+
+		while (single.lastIndexOf(10) != -1) {
+
+			emptyLine = single.lastIndexOf(10);
+			String oneLine = single.substring(emptyLine + 1);
+
+			strings.add(oneLine);
+			if (!single.isEmpty())
+				single = single.substring(0, emptyLine);
+
+		}
+		System.out.println("SD");
+		strings.add(single);
+		System.out.println("STRING testing: ********" + strings + "********");
+		// System.out.println("*****STRINGS*****: " + strings.size() + "lets
+		// go\n 1-" + strings.get(0) + "\n2- "
+		// + strings.get(1) + "\n3- " + strings.get(2) + "\n4- " +
+		// strings.get(3) + "\n5- " + strings.get(4)
+		// + "\n6- " + strings.get(5) + "\n7 -" + strings.get(6));
+
+		for (String i : strings) {
+			String[] words = i.split(" ");
+			String first = words[0];
+			String last = words[words.length - 1];
+			if (subjects.containsKey(first)) {
+				subjects.get(first).add(i);
+				continue;
+			} else {
+				subjects.put(first, new ArrayList<String>() {
+					{
+						add(i);
+					}
+				});
+			}
+			if (objects.containsKey(last)) {
+				objects.get(last).add(i);
+				continue;
+			} else {
+				objects.put(last, new ArrayList<String>() {
+					{
+						add(i);
+					}
+				});
+			}
+			if (subToObj.containsKey(first)) {
+				subToObj.get(first).add(last);
+			} else {
+				subToObj.put(first, new ArrayList<String>() {
+					{
+						add(last);
+					}
+				});
+			}
+
+		}
+		System.out.println("subjects: " + subjects);
+		System.out.println("objects: " + objects);
+		System.out.println("subToOBj: " + subToObj);
+		System.out.println("Stringsssss size: " + strings.size());
+
+		return reArrange();
+
+	}
+
+	public static String reArrange() {
+		ArrayList<String> output = new ArrayList<String>();
+		String nextSubject = "";
+		System.out.println(subjects);
+		String sentence = "";
+		boolean end = false;
+		if (subjects.containsKey(target)) {
+			sentence = subjects.get(target).get(0);
+			output.add(sentence);
+			String[] parts = sentence.split(" ");
+			String object = parts[parts.length - 1];
+			subjects.get(target).remove(subjects.get(target).indexOf(sentence));
+			objects.get(object).remove(objects.get(object).indexOf(sentence));
+			subToObj.get(target).remove(object);
+			removeEmptyHashes(target, object);
+			
+			nextSubject = object;
+			
+			System.out.println("**********MY FUCKING OUTPUT No.1: " + output.get(0));
+			System.out.println("My next subject: " + nextSubject);
+			System.out.println("strings size --" + strings.size());
+		} else {
+			Map.Entry<String, ArrayList<String>> randomSentence = subjects.entrySet().iterator().next();
+			String randomSubject = randomSentence.getKey();
+			String selectedSentence = subjects.get(randomSubject).get(0);
+			output.add(selectedSentence);
+			String [] sentenceArray = selectedSentence.split(" ");
+			String selectedObject = sentenceArray[sentenceArray.length-1];
+			
+			System.out.println("random object: " + selectedObject);
+			System.out.println("selected sentence: " + selectedSentence);
+			// remove output sentence from hash maps
+			subjects.get(randomSubject).remove(selectedSentence);
+			objects.get(selectedObject).remove(selectedSentence);
+//			subToObj.get(randomSubject).remove(selectedObject);
+			removeEmptyHashes(randomSubject, selectedObject);
+			nextSubject = selectedObject;
+		}
+		ArrayList<String> links = new ArrayList<String>();
+		for (int i = 0; i < strings.size(); i++) {
+			if(end) break;
+			System.out.println("HELLOOOOOOOOOOO");
+			if(subjects.isEmpty()) end = true;
+			if (subjects.containsKey(nextSubject) && subjects.get(nextSubject) != null) {
+				System.out.println("!@$%^%#@!%^&*%$#@:\n" + output);
+				ArrayList<String> selectedSentences = subjects.get(nextSubject);
+				String selectedSentence = selectedSentences.get(0); 
+				System.out.println("sub to obj of next sub: " + links);
+				String [] sentenceArray = selectedSentence.split(" ");
+				String selectedObject = sentenceArray[sentenceArray.length-1];
+				
+				System.out.println("did i even get here?: " + selectedObject);
+				
+				String toOutput = selectedSentence;
+				System.out.println("did i even get here?2: " + toOutput);
+				output.add(toOutput);
+				// remove the output sentence from hash maps
+				subjects.get(nextSubject).remove(toOutput);
+				objects.get(selectedObject).remove(toOutput);
+//				subToObj.get(nextSubject).remove(selectedObject);
+				removeEmptyHashes(nextSubject, selectedObject);
+				nextSubject = selectedObject;
+			} else {
+				System.out.println("!@$%^%#@!%^&*%$#@:\n" + output);
+				Map.Entry<String, ArrayList<String>> randomSentence;
+				try{
+				randomSentence = subjects.entrySet().iterator().next();
+				} catch(Exception e){
+					break;
+				}
+				
+				System.out.println("RANDOM SENTENCE:   " + randomSentence);
+				String randomSubject = randomSentence.getKey();
+				String selectedSentence = subjects.get(randomSubject).get(0);
+				output.add(selectedSentence);
+				String [] sentenceArray = selectedSentence.split(" ");
+				String selectedObject = sentenceArray[sentenceArray.length-1];
+				System.out.println("random object: " + selectedObject);
+				System.out.println("selected sentence: " + selectedSentence);
+				output.add(selectedSentence);
+				// remove output sentence from hash maps
+				System.out.println("Selected object that doesnt exist: " + randomSubject + "\n the real array is: " + subjects);
+				if( subjects.get(randomSubject) !=null && !subjects.get(randomSubject).isEmpty()  )
+				subjects.get(randomSubject).remove(selectedSentence);
+				if(objects.get(selectedObject) !=null && !objects.get(selectedObject).isEmpty() )
+				objects.get(selectedObject).remove(selectedSentence);
+//				subToObj.get(randomSubject).remove(selectedObject);
+				removeEmptyHashes(randomSubject, selectedObject);
+				nextSubject = selectedObject;
+			}
+
+		}
+		System.out.println("**********MY FUCKING OUTPUT: " + output);
+
+		return reStructureSentence(output);
+	}
+
+	public static void removeEmptyHashes(String sub, String obj) {
+		if (subjects.get(sub) == null || subjects.get(sub).isEmpty()) {
+			subjects.remove(sub);
+		}
+		if (objects.get(obj) == null || objects.get(obj).isEmpty()) {
+			objects.remove(obj);
+		}
+//		if (subToObj.get(sub) == null || subToObj.get(sub).isEmpty()) {
+//			subjects.remove(sub);
+//		}
+	}
+
+	public static String reStructureSentence(ArrayList<String> output) {
+		String out = "";
+		for (int i = 0; i < output.size(); i++) {
+			st = new StringTokenizer(output.get(i));
+			while (st.hasMoreTokens()) {
+				out += getCorrectness(st.nextToken()) + " ";
+			}
+			out += "\n";
+		}
+		return out;
+	}
 
 	public static void checkRule(String s) {
 		String p1;
