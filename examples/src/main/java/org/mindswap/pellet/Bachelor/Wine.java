@@ -158,9 +158,9 @@ public class Wine {
 		objectProps = new ArrayList<OWLObjectProperty>();
 		mapperProps = new ArrayList<BiValue>();
 		mapperClasses = new ArrayList<BiValue>();
-		initObjectProperties();
+//		initObjectProperties();
 		countExplanations = count;
-		addObjectProperties();
+//		addObjectProperties();
 		PelletOptions.DL_SAFE_RULES = false;
 		subjects = new HashMap<String, ArrayList<String>>();
 		objects = new HashMap<String, ArrayList<String>>();
@@ -307,29 +307,29 @@ public class Wine {
 
 	}
 
-	public static void initObjectProperties() {
-
-		mapperProps.add(new BiValue("hasVintageYear", "wine"));
-		mapperProps.add(new BiValue("hasFood", "food"));
-		mapperProps.add(new BiValue("course", "food"));
-		mapperProps.add(new BiValue("adjacentRegion", "wine"));
-		mapperProps.add(new BiValue("hasSugar", "wine"));
-		mapperProps.add(new BiValue("hasWineDescriptor", "wine"));
-		mapperProps.add(new BiValue("hasDrink", "food"));
-		mapperProps.add(new BiValue("hasFlavor", "wine"));
-		mapperProps.add(new BiValue("hasMaker", "wine"));
-		mapperProps.add(new BiValue("locatedIn", "wine"));
-		mapperProps.add(new BiValue("madeIntoWine", "wine"));
-		mapperProps.add(new BiValue("hasBody", "wine"));
-		mapperProps.add(new BiValue("madeFromFruit", "food"));
-		mapperProps.add(new BiValue("hasColor", "wine"));
-		mapperProps.add(new BiValue("goesWellWith", "food"));
-		mapperProps.add(new BiValue("producesWine", "wine"));
-		mapperProps.add(new BiValue("madeFromGrape", "wine"));
-
-		mapperClasses.add(new BiValue("RedBordeaux", "wine"));
-		mapperClasses.add(new BiValue("DarkMeatFowlCourse", "food"));
-	}
+//	public static void initObjectProperties() {
+//
+//		mapperProps.add(new BiValue("hasVintageYear", "wine"));
+//		mapperProps.add(new BiValue("hasFood", "food"));
+//		mapperProps.add(new BiValue("course", "food"));
+//		mapperProps.add(new BiValue("adjacentRegion", "wine"));
+//		mapperProps.add(new BiValue("hasSugar", "wine"));
+//		mapperProps.add(new BiValue("hasWineDescriptor", "wine"));
+//		mapperProps.add(new BiValue("hasDrink", "food"));
+//		mapperProps.add(new BiValue("hasFlavor", "wine"));
+//		mapperProps.add(new BiValue("hasMaker", "wine"));
+//		mapperProps.add(new BiValue("locatedIn", "wine"));
+//		mapperProps.add(new BiValue("madeIntoWine", "wine"));
+//		mapperProps.add(new BiValue("hasBody", "wine"));
+//		mapperProps.add(new BiValue("madeFromFruit", "food"));
+//		mapperProps.add(new BiValue("hasColor", "wine"));
+//		mapperProps.add(new BiValue("goesWellWith", "food"));
+//		mapperProps.add(new BiValue("producesWine", "wine"));
+//		mapperProps.add(new BiValue("madeFromGrape", "wine"));
+//
+//		mapperClasses.add(new BiValue("RedBordeaux", "wine"));
+//		mapperClasses.add(new BiValue("DarkMeatFowlCourse", "food"));
+//	}
 
 	public static void removeExtras() throws IOException {
 
@@ -415,7 +415,8 @@ public class Wine {
 		s =	s.replace("is a special kind of has the following drink: only has the color",
 					"goes well with a drink that has the color");
 		}
-		s = s.replace("a special kind of has the color", "a special kind of wine that with red color");
+//		check
+		s = s.replace("a special kind of has the color", "a special kind of wine that has color");
 		
 			System.out.println("s before:  "+ s);
 			s = s.replace("that Red", "and Red");
@@ -485,23 +486,23 @@ public class Wine {
 		return m.find();
 	}
 
-	public static BiValue searchMapperClasses(String s) {
-
-		BiValue local = null;
-		mapperClasses.size();
-		System.out.println(mapperClasses);
-		for (int i = 0; i < mapperClasses.size(); i++) {
-			// System.out.println(mapperClasses.get(i).getKey() + " <-- mapper :
-			// s--> " + s);
-			if (mapperClasses.get(i).getKey().equals(s)) {
-				local = mapperClasses.get(i);
-				System.out.println("FOUND::::::::::::::::" + mapperClasses.get(i));
-				break;
-			}
-		}
-		System.out.println("#####################################" + local);
-		return local;
-	}
+//	public static BiValue searchMapperClasses(String s) {
+//
+//		BiValue local = null;
+//		mapperClasses.size();
+//		System.out.println(mapperClasses);
+//		for (int i = 0; i < mapperClasses.size(); i++) {
+//			// System.out.println(mapperClasses.get(i).getKey() + " <-- mapper :
+//			// s--> " + s);
+//			if (mapperClasses.get(i).getKey().equals(s)) {
+//				local = mapperClasses.get(i);
+//				System.out.println("FOUND::::::::::::::::" + mapperClasses.get(i));
+//				break;
+//			}
+//		}
+//		System.out.println("#####################################" + local);
+//		return local;
+//	}
 
 	public static Collection getIndividuals() {
 		Collection classes = ontology.getClassesInSignature();
