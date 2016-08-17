@@ -1,34 +1,21 @@
 Explanation(s): 
 1)   DarkMeatFowl disjointWith LightMeatFowl
-     Medoc equivalentTo Bordeaux
-                        and locatedIn value MedocRegion
      hasFood domain MealCourse
-     RedWine equivalentTo Wine
-                          and hasColor value Red
      RedMeat subClassOf Meat
-     Margaux equivalentTo Medoc
-                          and locatedIn value MargauxRegion
      NonRedMeat subClassOf Meat
      MeatCourse equivalentTo MealCourse
                              and hasFood some Fowl
                                               or Meat
-     Medoc subClassOf hasColor value Red
      NonRedMeatCourse equivalentTo MealCourse
                                    and hasFood only NonRedMeat
-     Rule(RedBordeaux(?y), DarkMeatFowlCourse(?x) -> goesWellWith(?x, ?y))
-     RedBordeaux equivalentTo Bordeaux
-                              and RedWine
      RedMeatCourse equivalentTo MealCourse
                                 and hasFood only RedMeat
-     Bordeaux equivalentTo Wine
-                           and locatedIn value BordeauxRegion
      Duck type DarkMeatFowl
      DisjointClasses(Fowl
                      Meat
                      Pasta
                      Seafood
                      VegetarianFood)
-     ChateauMargaux type Margaux
      DarkMeatFowl subClassOf Fowl
      RoastedDuck hasFood Duck
      MeatCourse equivalentTo DarkMeatFowlCourse
@@ -39,4 +26,3 @@ Explanation(s):
                                       and hasFood only LightMeatFowl
 
 
-2)3)4)5)6)

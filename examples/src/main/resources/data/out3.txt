@@ -1,32 +1,16 @@
-Sauterne Region
-Cake
-Spaghetti With Tomato Sauce
-Off Dry
-Moderate
-Tuna Salad
-Mountadam Riesling
-Pinot Blanc Grape
-Italian Region
-Pauillac Region
-Foxen
-Longridge
-Forman Cabernet Sauvignon
-Taylor
-Santa Cruz Mountain Vineyard Cabernet Sauvignon
-Marietta
-Mountadam
-Forman
-Tours Region
-Light
-Chateau D Ychem Sauterne
-Lane Tanner
-Chardonnay Grape
-Steak
-Beaujolais Region
-Red
-Page Mill Winery Cabernet Sauvignon
-Handley
-South Australia Region
-Schloss Volrad Trochenbierenauslese Riesling
-Marietta Old Vines Red
-Mount Eden Vineyard
+-Roasted Duck contains Duck.
+-Duck is a special kind of Dark Meat Fowl.
+-Dark Meat Fowl is a special kind of Fowl.
+-Meat Course is identical to either Meal Course that contains some Fowl or Meat.
+-Red Meat is a special kind of Meat.
+-Non Red Meat is a special kind of Meat.
+-Fowl, Meat, Pasta, Seafood, Vegetarian Food are disjoint classes.
+-Red Meat Course is identical to Meal Course that only contains Red Meat.
+-Non Red Meat Course is identical to Meal Course that only contains Non Red Meat.
+-Light Meat Fowl Course is identical to Meal Course that only contains Light Meat
+ Fowl.
+-Dark Meat Fowl is disjoint with Light Meat Fowl.
+-Meat Course is identical to either Dark Meat Fowl Course or Light Meat Fowl Course or Non
+ Red Meat Course or Red Meat Course.
+-contains property is given to a Meal Course.
+
