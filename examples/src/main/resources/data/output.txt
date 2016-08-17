@@ -1,74 +1,28 @@
 Explanation(s): 
-1)   ChateauChevalBlancStEmilion type StEmilion
-     RedBordeaux equivalentTo Bordeaux
-                              and RedWine
-     RedWine equivalentTo Wine
-                          and hasColor value Red
-     Bordeaux equivalentTo Wine
-                           and locatedIn value BordeauxRegion
-     StEmilion equivalentTo Bordeaux
-                            and locatedIn value StEmilionRegion
-     StEmilion subClassOf hasColor value Red
-
-
-2)   MealCourse subClassOf ConsumableThing
+1)   DarkMeatFowl disjointWith LightMeatFowl
      hasFood domain MealCourse
+     RedMeat subClassOf Meat
+     NonRedMeat subClassOf Meat
+     MeatCourse equivalentTo MealCourse
+                             and hasFood some Fowl
+                                              or Meat
+     NonRedMeatCourse equivalentTo MealCourse
+                                   and hasFood only NonRedMeat
+     RedMeatCourse equivalentTo MealCourse
+                                and hasFood only RedMeat
+     Duck type DarkMeatFowl
+     DisjointClasses(Fowl
+                     Meat
+                     Pasta
+                     Seafood
+                     VegetarianFood)
+     DarkMeatFowl subClassOf Fowl
      RoastedDuck hasFood Duck
-
-
-3)   Margaux equivalentTo Medoc
-                          and locatedIn value MargauxRegion
-     Medoc equivalentTo Bordeaux
-                        and locatedIn value MedocRegion
-     RedBordeaux equivalentTo Bordeaux
-                              and RedWine
-     RedWine equivalentTo Wine
-                          and hasColor value Red
-     Bordeaux equivalentTo Wine
-                           and locatedIn value BordeauxRegion
-     ChateauMargaux type Margaux
-     Medoc subClassOf hasColor value Red
-
-
-4)   Fish subClassOf Seafood
-     BlandFish subClassOf Fish
-     Seafood subClassOf EdibleThing
-     Halibut type BlandFish
-
-
-5)   Grape subClassOf SweetFruit
-     WineGrape subClassOf Grape
-     VegetarianFood subClassOf EdibleThing
-     SweetFruit subClassOf VegetarianFood
-     MalbecGrape type WineGrape
-
-
-6)   Fish subClassOf Seafood
-     Seafood subClassOf EdibleThing
-     Swordfish type NonBlandFish
-     NonBlandFish subClassOf Fish
-
-
-7)   EdibleThing subClassOf ConsumableThing
-     VegetarianFood subClassOf EdibleThing
-     Pizza type OtherTomatoBasedFood
-     OtherTomatoBasedFood subClassOf VegetarianFood
-
-
-8)   MealCourse subClassOf ConsumableThing
-     BlandFishCourse equivalentTo MealCourse
-                                  and hasFood only BlandFish
-
-
-9)   Fish subClassOf Seafood
-     ShellfishCourse equivalentTo MealCourse
-                                  and hasFood only Shellfish
-     BlandFishCourse equivalentTo MealCourse
-                                  and hasFood only BlandFish
-     BlandFish subClassOf Fish
-     SeafoodCourse equivalentTo MealCourse
-                                and hasFood some Seafood
-     SeafoodCourse equivalentTo FishCourse
-                                or ShellfishCourse
+     MeatCourse equivalentTo DarkMeatFowlCourse
+                             or LightMeatFowlCourse
+                             or NonRedMeatCourse
+                             or RedMeatCourse
+     LightMeatFowlCourse equivalentTo MealCourse
+                                      and hasFood only LightMeatFowl
 
 

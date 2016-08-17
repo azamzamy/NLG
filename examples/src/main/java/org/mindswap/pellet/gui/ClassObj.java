@@ -1,6 +1,6 @@
 package org.mindswap.pellet.gui;
 
-import org.mindswap.pellet.Bachelor.Wine;
+import org.mindswap.pellet.Bachelor.NLGEngine;
 import org.semanticweb.owlapi.model.OWLClass;
 
 public class ClassObj {
@@ -23,7 +23,7 @@ public class ClassObj {
 
 		@Override
 		public String toString() {
-			return Wine.getCorrectness(value);
+			return NLGEngine.getCorrectness(value);
 		}
 
 }

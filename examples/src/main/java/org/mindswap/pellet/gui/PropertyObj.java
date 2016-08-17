@@ -1,6 +1,6 @@
 package org.mindswap.pellet.gui;
 
-import org.mindswap.pellet.Bachelor.Wine;
+import org.mindswap.pellet.Bachelor.NLGEngine;
 import org.semanticweb.owlapi.model.OWLObjectProperty;
 
 import com.github.jsonldjava.utils.Obj;
@@ -30,7 +30,7 @@ public class PropertyObj {
 	
 	@Override
 	public String toString() {
-		return Wine.getCorrectness(value);
+		return value;
 	}
 	
 	

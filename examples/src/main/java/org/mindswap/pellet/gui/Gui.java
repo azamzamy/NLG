@@ -45,7 +45,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import org.mindswap.pellet.Bachelor.BiValue;
-import org.mindswap.pellet.Bachelor.Wine;
+import org.mindswap.pellet.Bachelor.NLGEngine;
 import org.semanticweb.owlapi.model.OWLException;
 import org.semanticweb.owlapi.model.OWLIndividual;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
@@ -94,7 +94,7 @@ import com.hp.hpl.jena.ontology.OntClass;
 
 public class Gui extends javax.swing.JFrame {
 
-	Wine wine;
+	NLGEngine wine;
 
 	public Gui() throws OWLOntologyCreationException, OWLException, IOException {
 		initComponents();
@@ -132,6 +132,7 @@ public class Gui extends javax.swing.JFrame {
 		box5 = new javax.swing.JComboBox<IndObj>();
 		jPanel2 = new javax.swing.JPanel();
 		jLabel6 = new javax.swing.JLabel();
+		 inferButton = new javax.swing.JButton();
 		error = 0;
 
 		explanationRes = new javax.swing.JLabel();
@@ -139,287 +140,281 @@ public class Gui extends javax.swing.JFrame {
 		jScrollPane1 = new javax.swing.JScrollPane();
 		jTextPane1 = new javax.swing.JTextPane();
 		setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-		setTitle("NLG Explanation");
+		setTitle("OWL Reasoner NLG generator");
 		setBackground(new java.awt.Color(204, 204, 255));
 
-		jPanel1.setBackground(new java.awt.Color(204, 204, 255));
-		jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(" Input "));
+        jPanel1.setBackground(new java.awt.Color(204, 204, 255));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(" Input "));
 
-		jLabel1.setText("File name:");
+        jLabel1.setText("File name:");
 
-		jLabel3.setText("Selected File:");
+        jLabel3.setText("Selected File:");
 
-		label1.setText("Choose Type of Explanation:");
+        label1.setText("Choose Type of Explanation:");
 
-		box1.setModel(new javax.swing.DefaultComboBoxModel(
-				new String[] { "Type of Explanation", "Entailment Explanation", "Inconsistency Explanation",
-						"Instance Explanation", "Subclass Explanation", "Unsatisfiable Explanation" }));
-		box1.setSelectedIndex(0);
-		box1.setEnabled(false);
-		box1.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				box1ActionPerformed(evt);
-			}
-		});
+        box1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Type of Explanation", "Entailment Explanation", "Inconsistency Explanation", "Instance Explanation", "Subclass Explanation", "Unsatisfiable Explanation" }));
+        box1.setSelectedIndex(0);
+        box1.setEnabled(false);
+        box1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                box1ActionPerformed(evt);
+            }
+        });
 
-		jButton7.setText("Browse");
-		jButton7.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				try {
+        jButton7.setText("Browse");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
 					jButton7ActionPerformed(evt);
-				} catch (OWLException | IOException e) {
+				} catch (OWLOntologyCreationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (OWLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
-		});
+            }
+        });
 
-		fname.setText("No File");
+        fname.setText("No File");
 
-		label2.setText("Choose Class:");
+        label2.setText("Choose Class:");
 
-		box2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Classes" }));
-		box2.setEnabled(false);
-		box2.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				box2ActionPerformed(evt);
-			}
-		});
+        box2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Classes" }));
+        box2.setEnabled(false);
+        box2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                box2ActionPerformed(evt);
+            }
+        });
 
-		label3.setText("Choose Instance: ");
-		box3.setEnabled(false);
-		box3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Instances" }));
-		box3.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				box3ActionPerformed(evt);
-			}
-		});
+        label3.setText("Choose Instance: ");
 
-		label3.setText("Choose Instance:");
+        box3.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Instances" }));
+        box3.setEnabled(false);
+        box3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                box3ActionPerformed(evt);
+            }
+        });
 
-		label4.setText("Choose Choose Object Property:");
+        label4.setText("Choose Choose Object Property:");
 
-		box4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Object properties" }));
-		box4.setEnabled(false);
-		box4.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				try {
+        box4.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Object properties" }));
+        box4.setEnabled(false);
+        box4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
 					box4ActionPerformed(evt);
-				} catch (OWLOntologyCreationException | InterruptedException e) {
+				} catch (OWLOntologyCreationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
-		});
+            }
+        });
 
-		jButton8.setText("Activate Reasoner");
-		jButton8.setEnabled(false);
-		jButton8.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				try {
+        jButton8.setText("Get Explanation");
+        jButton8.setEnabled(false);
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
 					jButton8ActionPerformed(evt);
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					JOptionPane.showMessageDialog(Gui.this, e.getMessage());
 				} catch (OWLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
-					JOptionPane.showMessageDialog(Gui.this, e.getMessage());
 				}
-			}
-		});
+            }
+        });
 
-		jLabel2.setForeground(new java.awt.Color(102, 102, 102));
-		jLabel2.setText("Please select .owl file");
+        jLabel2.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel2.setText("Please select .owl file");
 
-		label5.setText("Choose Corresponding instance:");
+        label5.setText("Choose Corresponding instance:");
 
-		box5.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Instances" }));
-		box5.setEnabled(false);
-		box5.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				box5ActionPerformed(evt);
-			}
-		});
+        box5.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Instances" }));
+        box5.setEnabled(false);
+        box5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                box5ActionPerformed(evt);
+            }
+        });
 
-		org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
-		jPanel1.setLayout(jPanel1Layout);
-		jPanel1Layout.setHorizontalGroup(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-				.add(jPanel1Layout.createSequentialGroup().addContainerGap().add(jPanel1Layout
-						.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-						.add(jPanel1Layout.createSequentialGroup()
-								.add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-										.add(jLabel1).add(label5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 211,
-												org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-								.add(88, 721, Short.MAX_VALUE))
-						.add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
-								.add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-										.add(jPanel1Layout.createSequentialGroup().add(jPanel1Layout
-												.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-												.add(jPanel1Layout.createSequentialGroup()
-														.add(label1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																Short.MAX_VALUE)
-														.add(32, 32, 32))
-												.add(jPanel1Layout.createSequentialGroup()
-														.add(jLabel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																Short.MAX_VALUE)
-														.addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)))
-												.add(40, 40, 40)
-												.add(jPanel1Layout
-														.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-														.add(jPanel1Layout.createSequentialGroup().add(6, 6, 6).add(
-																fname, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-																323, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-														.add(box1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 573,
-																org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-														.add(jPanel1Layout.createSequentialGroup().add(jButton7)
-																.addPreferredGap(
-																		org.jdesktop.layout.LayoutStyle.RELATED)
-																.add(jLabel2))))
-										.add(jPanel1Layout.createSequentialGroup()
-												.add(jPanel1Layout
-														.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-														.add(label3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-																202, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-												.add(label4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 211,
-														org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(label2,
-																org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 219,
-																org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-												.addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED,
-														org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-												.add(jPanel1Layout
-														.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-														.add(jButton8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-																212, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-														.add(jPanel1Layout
-																.createParallelGroup(
-																		org.jdesktop.layout.GroupLayout.LEADING, false)
-																.add(org.jdesktop.layout.GroupLayout.TRAILING, box3, 0,
-																		org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																		Short.MAX_VALUE)
-																.add(org.jdesktop.layout.GroupLayout.TRAILING, box2, 0,
-																		org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																		Short.MAX_VALUE)
-																.add(box4, 0, 573, Short.MAX_VALUE).add(box5, 0,
-																		org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-																		Short.MAX_VALUE)))))
-								.add(85, 85, 85)))));
-		jPanel1Layout
-				.setVerticalGroup(
-						jPanel1Layout
-								.createParallelGroup(
-										org.jdesktop.layout.GroupLayout.LEADING)
-								.add(jPanel1Layout.createSequentialGroup()
-										.add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-												.add(jLabel1).add(jButton7).add(jLabel2))
-								.addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-								.add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-										.add(jLabel3).add(fname))
-						.addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-						.add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-								.add(box1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-								.add(label1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-						.addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-						.add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-								.add(box2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-								.add(label2))
-						.addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-						.add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
-								.add(box3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 27,
-										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-								.add(label3))
-						.add(10, 10, 10)
-						.add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-								.add(box4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-								.add(label4))
-						.addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-						.add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-								.add(box5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-										org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-								.add(label5)).addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-						.add(jButton8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 35,
-								org.jdesktop.layout.GroupLayout.PREFERRED_SIZE).add(0, 6, Short.MAX_VALUE)));
+        inferButton.setText("Infer Axioms");
+        inferButton.setEnabled(false);
+        inferButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                try {
+					inferButtonActionPerformed(evt);
+				} catch (OWLOntologyCreationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+            }
+        });
 
-		jPanel2.setBackground(new java.awt.Color(204, 204, 255));
-		jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(" Output "));
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                            .add(jLabel1)
+                            .add(label5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 211, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
+                            .add(jPanel1Layout.createSequentialGroup()
+                                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(jPanel1Layout.createSequentialGroup()
+                                        .add(label1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .add(32, 32, 32))
+                                    .add(jLabel3, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .add(40, 40, 40)
+                                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(jPanel1Layout.createSequentialGroup()
+                                        .add(6, 6, 6)
+                                        .add(fname, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 323, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                    .add(box1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 573, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                    .add(jPanel1Layout.createSequentialGroup()
+                                        .add(jButton7)
+                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                        .add(jLabel2)
+                                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                                        .add(inferButton, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 212, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))))
+                            .add(jPanel1Layout.createSequentialGroup()
+                                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(label3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 202, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                    .add(label4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 211, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                    .add(label2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 219, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                                    .add(jButton8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 212, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                                    .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING, false)
+                                        .add(org.jdesktop.layout.GroupLayout.TRAILING, box3, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .add(org.jdesktop.layout.GroupLayout.TRAILING, box2, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .add(box4, 0, 573, Short.MAX_VALUE)
+                                        .add(box5, 0, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                        .add(85, 85, 85))))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel1)
+                    .add(jButton7)
+                    .add(jLabel2)
+                    .add(inferButton))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(jLabel3)
+                    .add(fname))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(box1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(label1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(box2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(label2))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.BASELINE)
+                    .add(box3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 27, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(label3))
+                .add(10, 10, 10)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(box4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(label4))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(box5, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(label5))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jButton8, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 35, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
 
-		jLabel6.setText("Explanation For: ");
+        jPanel2.setBackground(new java.awt.Color(204, 204, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(" Output "));
 
-		jScrollPane1.setViewportView(jTextPane1);
+        jLabel6.setText("Explanation For: ");
 
-		org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
-		jPanel2.setLayout(jPanel2Layout);
-		jPanel2Layout.setHorizontalGroup(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-				.add(jPanel2Layout.createSequentialGroup().addContainerGap().add(jLabel6).add(209, 209, 209)
-						.add(explanationRes, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 460,
-								org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-						.addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				.add(org.jdesktop.layout.GroupLayout.TRAILING,
-						jPanel2Layout.createSequentialGroup()
-								.addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 906,
-										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-								.addContainerGap()));
-		jPanel2Layout.setVerticalGroup(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-				.add(jPanel2Layout.createSequentialGroup()
-						.add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-								.add(explanationRes, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 31,
-										org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-						.add(jPanel2Layout.createSequentialGroup().addContainerGap().add(jLabel6)))
-						.addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-						.add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 278, Short.MAX_VALUE)
-						.addContainerGap()));
+        exitButton.setText("Done");
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitButtonActionPerformed(evt);
+            }
+        });
 
-		exitButton.setText("Done");
-		exitButton.addActionListener(new java.awt.event.ActionListener() {
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
-				exitButtonActionPerformed(evt);
-			}
-		});
+        jScrollPane1.setViewportView(jTextPane1);
 
-		org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
-		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout
-				.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(
-						layout.createSequentialGroup().addContainerGap()
-								.add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-										.add(org.jdesktop.layout.GroupLayout.TRAILING,
-												layout.createSequentialGroup().add(0, 0, Short.MAX_VALUE)
-														.add(exitButton))
-										.add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2,
-												org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-												org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-				.addContainerGap()).add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1, 0,
-						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
-		layout.setVerticalGroup(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING).add(layout
-				.createSequentialGroup().addContainerGap()
-				.add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE,
-						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-				.addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-				.add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE,
-						org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-				.addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED).add(exitButton).addContainerGap()));
+        org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jScrollPane1)
+                    .add(jPanel2Layout.createSequentialGroup()
+                        .add(jLabel6)
+                        .add(212, 212, 212)
+                        .add(explanationRes, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 460, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(0, 48, Short.MAX_VALUE))
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .add(0, 0, Short.MAX_VALUE)
+                        .add(exitButton)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(explanationRes, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 31, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .add(jLabel6)))
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 333, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(exitButton))
+        );
 
-		jPanel1.getAccessibleContext().setAccessibleName(" ");
+        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1, 0, 0, Short.MAX_VALUE)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(layout.createSequentialGroup()
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(0, 0, 0))
+        );
 
-		pack();
+        jPanel1.getAccessibleContext().setAccessibleName(" ");
 
-		path = "/Users/zamzamy/wine77.owl";
-		box1.setEnabled(true);
-		wine = new Wine(path, 1);
-		//
-		jButton8.setEnabled(true);
+        pack();
+//		path = "/Users/zamzamy/wine77.owl";
+//		box1.setEnabled(true);
+//		wine = new Wine(path, 1);
+//		jButton8.setEnabled(true);
 	}// </editor-fold>
 
 	private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -673,8 +668,9 @@ public class Gui extends javax.swing.JFrame {
 				box1.setEnabled(true);
 				System.out.println("got the path");
 				System.out.println(path);
-				wine = new Wine(path, 1);
+				wine = new NLGEngine(path, 1);
 				jButton8.setEnabled(true);
+				inferButton.setEnabled(true);
 			}
 		}
 	}
@@ -695,7 +691,7 @@ public class Gui extends javax.swing.JFrame {
 				box3.setEnabled(true);
 
 				System.out.println("_______cl___________: " + cl.toString());
-				NodeSet<OWLNamedIndividual> indi = Wine.getReasoner().getInstances(((OWLClass) (cl.getClassOf())),
+				NodeSet<OWLNamedIndividual> indi = NLGEngine.getReasoner().getInstances(((OWLClass) (cl.getClassOf())),
 						false);
 				// System.out.println("tab eh gai wla eldor elgai" + indi);
 				for (Node<OWLNamedIndividual> ind : indi) {
@@ -832,6 +828,11 @@ public class Gui extends javax.swing.JFrame {
 		}
 
 	}
+	private void inferButtonActionPerformed(java.awt.event.ActionEvent evt) throws OWLOntologyCreationException {                                            
+        // TODO add your handling code here:
+		wine.inferOntology();
+		inferButton.setEnabled(false);
+    }   
 
 	private void box5ActionPerformed(java.awt.event.ActionEvent evt) {
 		// TODO add your handling code here:
@@ -893,6 +894,7 @@ public class Gui extends javax.swing.JFrame {
 	private javax.swing.JComboBox box3;
 	private javax.swing.JComboBox<PropertyObj> box4;
 	private javax.swing.JComboBox<IndObj> box5;
+	private javax.swing.JButton inferButton;
 	private javax.swing.ButtonGroup buttonGroup1;
 	private javax.swing.JButton exitButton;
 	private javax.swing.JLabel explanationRes;

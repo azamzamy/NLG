@@ -1,6 +1,6 @@
 package org.mindswap.pellet.gui;
 
-import org.mindswap.pellet.Bachelor.Wine;
+import org.mindswap.pellet.Bachelor.NLGEngine;
 import org.semanticweb.owlapi.model.OWLClass;
 import org.semanticweb.owlapi.model.OWLNamedIndividual;
 
@@ -15,7 +15,6 @@ public class IndObj {
 	        
 	    }
 	    
-	    
 	    public OWLNamedIndividual getIndOf() {
 	        return cls;
 	    }
@@ -25,6 +24,6 @@ public class IndObj {
 	    }
 	    
 	    public String toString(){
-	    	return Wine.getCorrectness(value);
+	    	return NLGEngine.getCorrectness(value);
 	    }
 	}
