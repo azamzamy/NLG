@@ -1,16 +1,3 @@
--Roasted Duck contains Duck.
--Duck is a special kind of Dark Meat Fowl.
--Dark Meat Fowl is a special kind of Fowl.
--Meat Course is identical to either Meal Course that contains some Fowl or Meat.
--Red Meat is a special kind of Meat.
--Non Red Meat is a special kind of Meat.
--Fowl, Meat, Pasta, Seafood, Vegetarian Food are disjoint classes.
--Red Meat Course is identical to Meal Course that only contains Red Meat.
--Non Red Meat Course is identical to Meal Course that only contains Non Red Meat.
--Light Meat Fowl Course is identical to Meal Course that only contains Light Meat
- Fowl.
--Dark Meat Fowl is disjoint with Light Meat Fowl.
--Meat Course is identical to either Dark Meat Fowl Course or Light Meat Fowl Course or Non
- Red Meat Course or Red Meat Course.
--contains property is given to a Meal Course.
+- Turkey is a special kind of Light meat fowl.
+- Light meat fowl is a special kind of Fowl.
 
