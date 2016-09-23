@@ -1,28 +1,10 @@
 Explanation(s): 
-1)   DarkMeatFowl disjointWith LightMeatFowl
-     hasFood domain MealCourse
-     RedMeat subClassOf Meat
-     NonRedMeat subClassOf Meat
-     MeatCourse equivalentTo MealCourse
-                             and hasFood some Fowl
-                                              or Meat
-     NonRedMeatCourse equivalentTo MealCourse
-                                   and hasFood only NonRedMeat
-     RedMeatCourse equivalentTo MealCourse
-                                and hasFood only RedMeat
-     Duck type DarkMeatFowl
-     DisjointClasses(Fowl
-                     Meat
-                     Pasta
-                     Seafood
-                     VegetarianFood)
-     DarkMeatFowl subClassOf Fowl
-     RoastedDuck hasFood Duck
-     MeatCourse equivalentTo DarkMeatFowlCourse
-                             or LightMeatFowlCourse
-                             or NonRedMeatCourse
-                             or RedMeatCourse
-     LightMeatFowlCourse equivalentTo MealCourse
-                                      and hasFood only LightMeatFowl
+1)   EdibleThing equivalentTo Fowl
+                              or Meat
+                              or Pasta
+                              or Seafood
+                              or VegetarianFood
+     LightMeatFowl subClassOf Fowl
+     Turkey type LightMeatFowl
 
 

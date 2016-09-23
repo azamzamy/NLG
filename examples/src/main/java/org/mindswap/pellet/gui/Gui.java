@@ -454,7 +454,6 @@ public class Gui extends javax.swing.JFrame {
 			explanationRes.setText(ind1 + " " + prop + " " + ind2);
 			wine.getOut().flush();
 			wine.naturalGeneration();
-			wine.removeExtras();
 			// ClassObj classObj1;
 			// ClassObj classObj2;
 			// BiValue tempObj1 = new BiValue();

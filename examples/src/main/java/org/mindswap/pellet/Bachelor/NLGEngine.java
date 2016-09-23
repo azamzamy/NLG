@@ -110,8 +110,7 @@ public class NLGEngine {
 	private static FileReader fr;
 	private static BufferedReader br;
 	private static StringTokenizer st;
-	
-	
+
 	private static OWLDataFactory fac;
 	private static OWLOntology ontology;
 	private static OWLOntology infOnt;
@@ -119,14 +118,13 @@ public class NLGEngine {
 	private static ManchesterSyntaxExplanationRenderer renderer;
 	private static PelletReasoner reasoner;
 	private static PelletExplanation expGen;
-	
+
 	private static boolean lastSentence;
 	private static boolean sameSentence = false;
 	private static int index = 0;
 	private static int resSize = 0;
 	private static int max;
 	private static int countExplanations;
-	
 
 	private static String ruleClass1;
 	private static String ruleClass2;
@@ -139,10 +137,10 @@ public class NLGEngine {
 	private static ArrayList<BiValue> mapperClasses;
 	private static ArrayList<String> strings;
 	private static ArrayList<String> ans;
+	private static ArrayList<String> output;
+	private static ArrayList<String> finalOutput; 
 	private static HashMap<String, ArrayList<String>> subjects;
 	private static HashMap<String, ArrayList<String>> objects;
-	private static HashMap<String, ArrayList<String>> subToObj;
-	
 
 	public NLGEngine(String f, int count) throws OWLOntologyCreationException, OWLException, IOException {
 		file = "file://" + f;
@@ -162,12 +160,10 @@ public class NLGEngine {
 		mapperClasses = new ArrayList<BiValue>();
 		initObjectProperties();
 		countExplanations = count;
-		addObjectProperties();
+//		addObjectProperties();
 		PelletOptions.DL_SAFE_RULES = false;
 		subjects = new HashMap<String, ArrayList<String>>();
 		objects = new HashMap<String, ArrayList<String>>();
-		subToObj = new HashMap<String, ArrayList<String>>();
-		// inferOntology();
 
 	}
 
@@ -309,23 +305,30 @@ public class NLGEngine {
 
 	public static void initObjectProperties() {
 
-		mapperProps.add(new BiValue("hasVintageYear", "wine"));
-		mapperProps.add(new BiValue("hasFood", "food"));
-		mapperProps.add(new BiValue("course", "food"));
-		mapperProps.add(new BiValue("adjacentRegion", "wine"));
-		mapperProps.add(new BiValue("hasSugar", "wine"));
-		mapperProps.add(new BiValue("hasWineDescriptor", "wine"));
-		mapperProps.add(new BiValue("hasDrink", "food"));
-		mapperProps.add(new BiValue("hasFlavor", "wine"));
-		mapperProps.add(new BiValue("hasMaker", "wine"));
-		mapperProps.add(new BiValue("locatedIn", "wine"));
-		mapperProps.add(new BiValue("madeIntoWine", "wine"));
-		mapperProps.add(new BiValue("hasBody", "wine"));
-		mapperProps.add(new BiValue("madeFromFruit", "food"));
-		mapperProps.add(new BiValue("hasColor", "wine"));
-		mapperProps.add(new BiValue("goesWellWith", "food"));
-		mapperProps.add(new BiValue("producesWine", "wine"));
-		mapperProps.add(new BiValue("madeFromGrape", "wine"));
+		Set<OWLObjectProperty> objProperties = ontology.getObjectPropertiesInSignature();
+		Iterator<OWLObjectProperty> it = objProperties.iterator();
+		while(it.hasNext()){
+			OWLObjectProperty obj = it.next();
+			System.out.println(obj.getIRI().getShortForm());
+			objectProps.add(obj);
+		}
+//		mapperProps.add(new BiValue("hasVintageYear", "wine"));
+//		mapperProps.add(new BiValue("hasFood", "food"));
+//		mapperProps.add(new BiValue("course", "food"));
+//		mapperProps.add(new BiValue("adjacentRegion", "wine"));
+//		mapperProps.add(new BiValue("hasSugar", "wine"));
+//		mapperProps.add(new BiValue("hasWineDescriptor", "wine"));
+//		mapperProps.add(new BiValue("hasDrink", "food"));
+//		mapperProps.add(new BiValue("hasFlavor", "wine"));
+//		mapperProps.add(new BiValue("hasMaker", "wine"));
+//		mapperProps.add(new BiValue("locatedIn", "wine"));
+//		mapperProps.add(new BiValue("madeIntoWine", "wine"));
+//		mapperProps.add(new BiValue("hasBody", "wine"));
+//		mapperProps.add(new BiValue("madeFromFruit", "food"));
+//		mapperProps.add(new BiValue("hasColor", "wine"));
+//		mapperProps.add(new BiValue("goesWellWith", "food"));
+//		mapperProps.add(new BiValue("producesWine", "wine"));
+//		mapperProps.add(new BiValue("madeFromGrape", "wine"));
 
 		mapperClasses.add(new BiValue("RedBordeaux", "wine"));
 		mapperClasses.add(new BiValue("DarkMeatFowlCourse", "food"));
@@ -333,18 +336,24 @@ public class NLGEngine {
 
 	public static void removeExtras() throws IOException {
 
-		fr = new FileReader(outputFile2);
-		br = new BufferedReader(fr);
+		FileReader fileR = new FileReader(outputFile2);
+		br = new BufferedReader(fileR);
 		out = new PrintWriter(outputFile3);
 
+		int arIndex = 0;
+		System.out.println("3andak aho el final output size ya m3alem shof enta b2a: " + finalOutput.size());
 		String finalString = "";
-		String s = br.readLine();
-		String s2 = br.readLine();
-		while (s != null) {
-			System.out.println("RX: " + s);
+		String s2 = "";
+		String s = finalOutput.get(arIndex++);
+		if(arIndex<finalOutput.size())
+		s2 = finalOutput.get(arIndex++);
+		System.out.println("CAAAAAAAAAAAAAAAAAAAAAAATCH: " + s + "\n" + s2);
+		while (s != null || s.equals("")) {
+			//System.out.println("RX: " + s);
 
 			if (s.equals(s2))
-				s2 = br.readLine();
+				if(arIndex < finalOutput.size())
+					s2 = finalOutput.get(arIndex++);
 			s = s.replaceFirst(" and ", " that ");
 			String exp = s;
 			// System.out.println("EXP::::::::" + exp);
@@ -376,7 +385,7 @@ public class NLGEngine {
 				for (int i = 71; i < 91; i++) {
 					try {
 						if ((int) finale.charAt(i) == 32) {
-							res1 = "-" + finale.substring(0, i);
+							res1 = "- " + finale.substring(0, i);
 							res2 = finale.substring(i);
 							split = true;
 						}
@@ -387,14 +396,16 @@ public class NLGEngine {
 			}
 			// System.out.println("FINALE: " + finale);
 			if (!split)
-				finalString += "-" + finale + "\n";
+				finalString += "- " + finale + "\n";
 			else {
-				finalString += res1 + "\n";
+				finalString += res1 + "\n  ";
 				finalString += res2 + "\n";
 
 			}
 			s = s2;
-			s2 = br.readLine();
+			if(arIndex < finalOutput.size())
+				s2 = finalOutput.get(arIndex++);
+			else break;
 		}
 		System.out.println("**************FINAL STRING*******************\n" + finalString);
 		out.println(finalString);
@@ -407,15 +418,12 @@ public class NLGEngine {
 		if (s.matches("\\d.*")) {
 			s = s.substring(s.lastIndexOf(41) + 1);
 		}
-		s = s.replaceAll("\\s+", " ");
-		if (isContain(s, "is similar to") && isContain(s, "or")) {
-			int pos = s.indexOf("is similar to") + 13;
-			s = s.substring(0, pos) + " either " + s.substring(pos);
-		}
-		if (isContain(s, "is identical to") && isContain(s, "or")) {
-			int pos = s.indexOf("is identical to") + 16;
-			s = s.substring(0, pos) + " either " + s.substring(pos);
-		}
+//		s = s.replaceAll("\\s+", " ");
+
+//		if (isContain(s, "is identical to") && isContain(s, "or")) {
+//			int pos = s.indexOf("is identical to") + 16;
+//			s = s.substring(0, pos) + " either " + s.substring(pos);
+//		}
 		// if (isContain(s, "is a special kind of has the following drink: only
 		// has the color")) {
 		// s = s.replace("is a special kind of has the following drink: only has
@@ -426,10 +434,10 @@ public class NLGEngine {
 		s = s.replace("is a special kind of has", "has");
 
 		// System.out.println("s before: " + s);
-		s = s.replace("that Red", "and Red");
+//		s = s.replace("that Red", "and Red");
 		// System.out.println("s after: " + s);
 
-		s = s.replace("that White", "and White");
+//		s = s.replace("that White", "and White");
 		// System.out.println("s after: " + s);
 		// s = s.replace("is a special kind of has the color", "has color");
 		// System.out.println("s after: " + s);
@@ -439,12 +447,12 @@ public class NLGEngine {
 		s = s.replaceAll("drinks is", "Drinks are");
 
 		// System.out.println("SUPPOSED TO FUCKING GO THERE: " + s);
-		if (s.contains("has color"))
-			s = shiftWord(s, "color");
-		if (s.contains("has flavor"))
-			s = shiftWord(s, "flavor");
-		if (s.contains("has sugar"))
-			s = shiftWord(s, "sugar");
+		// if (s.contains("has color"))
+		// s = shiftWord(s, "color");
+		// if (s.contains("has flavor"))
+		// s = shiftWord(s, "flavor");
+		// if (s.contains("has sugar"))
+		// s = shiftWord(s, "sugar");
 		s = s.replace("that White Wine", "that is also white wine");
 		s = s.replace("that red Wine", "that is also red wine");
 		return s;
@@ -470,20 +478,20 @@ public class NLGEngine {
 
 	}
 
-	private static void addObjectProperties() {
-
-		OWLObjectProperty local;
-		for (int i = 0; i < 17; i++) {
-
-			if (mapperProps.get(i).getValue() == "wine") {
-				local = fac.getOWLObjectProperty((IRI.create(NSWine + mapperProps.get(i).getKey())));
-			} else {
-				local = fac.getOWLObjectProperty((IRI.create(NS + mapperProps.get(i).getKey())));
-			}
-
-			objectProps.add(local);
-		}
-	}
+//	private static void addObjectProperties() {
+//
+//		OWLObjectProperty local;
+//		for (int i = 0; i < 17; i++) {
+//
+//			if (mapperProps.get(i).getValue() == "wine") {
+//				local = fac.getOWLObjectProperty((IRI.create(NSWine + mapperProps.get(i).getKey())));
+//			} else {
+//				local = fac.getOWLObjectProperty((IRI.create(NS + mapperProps.get(i).getKey())));
+//			}
+//
+//			objectProps.add(local);
+//		}
+//	}
 
 	private static boolean isContain(String source, String subItem) {
 		String pattern = "\\b" + subItem + "\\b";
@@ -566,12 +574,42 @@ public class NLGEngine {
 	public static void clearMaps() {
 		subjects.clear();
 		objects.clear();
-		subToObj.clear();
+
 		subjects = new HashMap<String, ArrayList<String>>();
 		objects = new HashMap<String, ArrayList<String>>();
-		subToObj = new HashMap<String, ArrayList<String>>();
+
 	}
 
+	
+
+	public static String disjointPrinting(String s) throws IOException {
+		String result = "";
+		System.out.println("what is this??" + s);
+		s = s.trim();
+		result += s.substring(16) + ", ";
+		System.out.println("DisjointClasses????? :::::::::::::::: " + result);
+		String component = buffer;
+
+		while (component.charAt(component.length() - 1) != ')') {
+			component = component.trim();
+			System.out.println("component: " + component);
+			result += getCorrectness(component);
+			result += ", ";
+			buffer = ans.get(index++);
+			component = buffer;
+		}
+		component = component.trim();
+		component = component.substring(0, component.length());
+
+		if (component != null)
+			result += getCorrectness(component);
+		result = result.substring(0, result.length() - 1);
+
+		System.out.println("RESULT IIIIIISSSS: " + result);
+		result += " are disjoint classes";
+		return result;
+	}
+	
 	public void naturalGeneration() throws IOException {
 
 		// outer = new PrintWriter(outputFile2);
@@ -586,7 +624,6 @@ public class NLGEngine {
 		// Lexicon lexicon = Lexicon.getDefaultLexicon();
 		// NLGFactory nlgFactory = new NLGFactory(lexicon);
 		// Realiser realiser = new Realiser(lexicon);
-
 		clearMaps();
 		index = 0;
 		int resSize = 0;
@@ -627,7 +664,9 @@ public class NLGEngine {
 		}
 
 		System.out.println("NUMBER TO TAKE:" + max);
-		buffer = ans.get(index++);
+		if (index < resSize)
+			buffer = ans.get(index++);
+		
 		line = "";
 		while (buffer != null) {
 			if (!buffer.isEmpty() && buffer.startsWith("" + max))
@@ -642,15 +681,8 @@ public class NLGEngine {
 		System.out.println("first line of buffer to be taken is: " + buffer);
 		while (buffer != null) {
 			System.out.println("lines: " + buffer);
-			if (buffer.contains("subPropertyOf"))
 
-			{
-				if (index < resSize)
-					buffer = ans.get(index++);
-				else
-					break;
-			}
-			if (buffer.contains("Explanations"))
+			if (buffer.contains("Explanations") || buffer.contains("Functional") || buffer.contains("subPropertyOf"))
 				buffer = ans.get(index++);
 			statement = buffer;
 			if (index < resSize)
@@ -665,7 +697,8 @@ public class NLGEngine {
 			}
 
 			if (statement.contains("Rule")) {
-				checkRule(statement);
+				String rule = checkRule(statement);
+				line += rule + "\n";
 				System.out.println("dsvfeqgqrer" + ruleClass1 + "          " + ruleClass2);
 				if (index < resSize)
 					buffer = ans.get(index++);
@@ -711,41 +744,15 @@ public class NLGEngine {
 
 			}
 		}
-		String output = hashStatements(line);
-		outer.println(output);
+		ArrayList<String> outputString = hashStatements(line);
+		
+		outer.println(outputString);
+		removeExtras();
 		outer.close();
 		countExplanations++;
 	}
 
-	public static String disjointPrinting(String s) throws IOException {
-		String result = "";
-		System.out.println("what is this??" + s);
-		s = s.trim();
-		result += s.substring(16) + ", ";
-		System.out.println("DisjointClasses????? :::::::::::::::: " + result);
-		String component = buffer;
-
-		while (component.charAt(component.length() - 1) != ')') {
-			component = component.trim();
-			System.out.println("component: " + component);
-			result += getCorrectness(component);
-			result += ", ";
-			buffer = ans.get(index++);
-			component = buffer;
-		}
-		component = component.trim();
-		component = component.substring(0, component.length());
-
-		if (component != null)
-			result += getCorrectness(component);
-		result = result.substring(0, result.length()-1);
-
-		System.out.println("RESULT IIIIIISSSS: " + result);
-		result += " are disjoint classes";
-		return result;
-	}
-
-	public static String hashStatements(String single) {
+	public static ArrayList<String> hashStatements(String single) {
 		strings = new ArrayList<String>();
 
 		if (max > 1) {
@@ -805,15 +812,6 @@ public class NLGEngine {
 					}
 				});
 			}
-			if (subToObj.containsKey(first)) {
-				subToObj.get(first).add(last);
-			} else {
-				subToObj.put(first, new ArrayList<String>() {
-					{
-						add(last);
-					}
-				});
-			}
 
 		}
 		// System.out.println("subjects: " + subjects);
@@ -825,8 +823,8 @@ public class NLGEngine {
 
 	}
 
-	public static String reArrange() {
-		ArrayList<String> output = new ArrayList<String>();
+	public static ArrayList<String> reArrange() {
+		output = new ArrayList<String>();
 		String nextSubject = "";
 		String prevSentence = "";
 		String selectedSentence = "";
@@ -842,12 +840,11 @@ public class NLGEngine {
 			String object = parts[parts.length - 1];
 			subjects.get(target).remove(subjects.get(target).indexOf(sentence));
 			objects.get(object).remove(objects.get(object).indexOf(sentence));
-			subToObj.get(target).remove(object);
 			removeEmptyHashes(target, object);
 
 			nextSubject = object;
 
-			// System.out.println("**********MY FUCKING OUTPUT No.1: " +
+			// System.out.println("**********MY OUTPUT No.1: " +
 			// output.get(0));
 			// System.out.println("My next subject: " + nextSubject);
 			// System.out.println("strings size --" + strings.size());
@@ -902,7 +899,7 @@ public class NLGEngine {
 
 				while (it.hasNext()) {
 
-					System.out.println("iterator: " + it.toString());
+
 					Map.Entry<String, ArrayList<String>> entry = it.next();
 					if (prevSentence.length() == 0)
 						break;
@@ -942,7 +939,6 @@ public class NLGEngine {
 					} catch (Exception e) {
 						break;
 					}
-					foundMatch = false;
 
 					// System.out.println("RANDOM SENTENCE: " + randomSentence);
 					String randomSubject = randomSentence.getKey();
@@ -991,19 +987,67 @@ public class NLGEngine {
 		// }
 	}
 
-	public static String reStructureSentence(ArrayList<String> output) {
+	public static ArrayList<String> reStructureSentence(ArrayList<String> outArray) {
 		String out = "";
+		finalOutput = new ArrayList<String>();
 		for (int i = 0; i < output.size(); i++) {
-			st = new StringTokenizer(output.get(i));
-			while (st.hasMoreTokens()) {
-				out += getCorrectness(st.nextToken()) + " ";
+			out="";
+			if (outArray.get(i).contains("or")) {
+				String modified = addEither(outArray.get(i));
+				st = new StringTokenizer(modified);
+				while (st.hasMoreTokens()) {
+					out += getCorrectness(st.nextToken()) + " ";
+					
+				}
+				finalOutput.add(out);
+				System.out.println("here is one sentence########: " + out + " ########");
+			} else {
+				st = new StringTokenizer(outArray.get(i));
+				while (st.hasMoreTokens()) {
+					out += getCorrectness(st.nextToken()) + " ";
+				}
+				finalOutput.add(out);
+				System.out.println("here is one sentence########: " + out + " ########");
+				
 			}
-			out += "\n";
 		}
-		return out;
+		System.out.println("OUT??????:::::" + out);
+		return finalOutput;
 	}
 
-	public static void checkRule(String s) {
+	public static String addEither(String op) {
+		String res = "";
+		op.indexOf("or");
+		StringTokenizer tokenizer = new StringTokenizer(op);
+		String curr = "";
+		String next = "";
+		while (tokenizer.hasMoreTokens()) {
+			curr = tokenizer.nextToken();
+			if(tokenizer.hasMoreTokens()) next = tokenizer.nextToken();
+			else{
+				res += curr; 
+				break;
+			}
+			System.out.println("## addEither: ###  curr: " + curr + "  next:  " + next);
+			
+			if(next.equals("or")){
+					res += " either " + curr + " " + next + " ";
+					break;
+				}
+				else {
+					res += curr + " " + next + " ";
+				}
+			 
+			
+		}
+		while (tokenizer.hasMoreTokens()) {
+			res += " " + tokenizer.nextToken() + " ";
+		}
+		System.out.println("resuuuuuult: " + res);
+		return res;
+	}
+
+	public static String checkRule(String s) {
 		String p1;
 		char p11 = '\0';
 		char p22 = '\0';
@@ -1031,6 +1075,7 @@ public class NLGEngine {
 		prop1 = m.substring(c + 2, c + 3).charAt(0);
 		m = st.nextToken();
 		System.out.println(m);
+		String objectProperty = m.substring(0, m.length() - 4);
 		prop2 = m.substring(1, 2).charAt(0);
 		System.out.println("p1: " + p1 + "----- p2: " + p2 + "----- p11: " + p11 + "----- p22: " + p22
 				+ "------- prop1: " + prop1 + "----- prop2: " + prop2);
@@ -1044,6 +1089,7 @@ public class NLGEngine {
 			ruleClass2 = p1;
 		}
 		System.out.println(mapperClasses);
+		return p2 + " " + objectProperty + p1;
 
 	}
 
@@ -1073,7 +1119,7 @@ public class NLGEngine {
 
 		}
 		System.out.println();
-		if (i > 17)
+		if (i > 12)
 			return false;
 		return true;
 
@@ -1114,16 +1160,33 @@ public class NLGEngine {
 		} catch (Exception e) {
 			// System.out.println("error came from the word: " + s);
 			ret = splitCamelCase(s);
+			System.out.println("!@#$@!@# bi2olak da exception w gab camel case: " + ret);
 			return ret;
-
+			
 		}
-
-		return messages.getString("" + s + "");
+		
+		ret = messages.getString("" + s + "");
+		System.out.println("!@#$@!@# bi2olak da gab mel resource bundle: " + ret);
+		return ret; 
+		
 
 	}
 
 	public static String splitCamelCase(String s) {
-		return s.replaceAll(String.format("(?<!(^|[A-Z0-9]))(?=[A-Z0-9])|(?<!^)(?=[A-Z][a-z])"), " ");
+		s = s.replaceAll(String.format("(?<!(^|[A-Z0-9]))(?=[A-Z0-9])|(?<!^)(?=[A-Z][a-z])"), " ");
+		String[] stringArray = s.split(" ");
+		for (int i = 1; i < stringArray.length; i++) {
+			stringArray[i] = stringArray[i].toLowerCase();
+		}
+		String result = "";
+		for (int i = 0; i < stringArray.length; i++) {
+			if (i == stringArray.length - 1)
+				result += stringArray[i];
+			else
+				result += stringArray[i] + " ";
+		}
+		return result;
+
 	}
 
 	public static void inferOntology() throws OWLOntologyCreationException {
