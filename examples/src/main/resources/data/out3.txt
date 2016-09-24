@@ -1,3 +1,10 @@
-- Turkey is a special kind of Light meat fowl.
-- Light meat fowl is a special kind of Fowl.
+- Tuna salad contains Tuna.
+- Tuna is a special kind of Non bland fish.
+- Non bland fish is a special kind of Fish.
+- Fish is a special kind of Seafood.
+- Seafood course is identical to Meal course that contains some Seafood.
+- Meat course is identical to Meal course that contains some either Fowl or Meat.
+- Fish course is identical to Meal course that does not contain some Fowl or Meat and contains some Fish.
+- contains property is given to a Meal course.
+- Meat course, Seafood course, Vegetarian course are disjoint classes.
 
