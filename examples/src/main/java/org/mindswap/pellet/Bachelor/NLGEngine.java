@@ -312,24 +312,6 @@ public class NLGEngine {
 			System.out.println(obj.getIRI().getShortForm());
 			objectProps.add(obj);
 		}
-//		mapperProps.add(new BiValue("hasVintageYear", "wine"));
-//		mapperProps.add(new BiValue("hasFood", "food"));
-//		mapperProps.add(new BiValue("course", "food"));
-//		mapperProps.add(new BiValue("adjacentRegion", "wine"));
-//		mapperProps.add(new BiValue("hasSugar", "wine"));
-//		mapperProps.add(new BiValue("hasWineDescriptor", "wine"));
-//		mapperProps.add(new BiValue("hasDrink", "food"));
-//		mapperProps.add(new BiValue("hasFlavor", "wine"));
-//		mapperProps.add(new BiValue("hasMaker", "wine"));
-//		mapperProps.add(new BiValue("locatedIn", "wine"));
-//		mapperProps.add(new BiValue("madeIntoWine", "wine"));
-//		mapperProps.add(new BiValue("hasBody", "wine"));
-//		mapperProps.add(new BiValue("madeFromFruit", "food"));
-//		mapperProps.add(new BiValue("hasColor", "wine"));
-//		mapperProps.add(new BiValue("goesWellWith", "food"));
-//		mapperProps.add(new BiValue("producesWine", "wine"));
-//		mapperProps.add(new BiValue("madeFromGrape", "wine"));
-
 		mapperClasses.add(new BiValue("RedBordeaux", "wine"));
 		mapperClasses.add(new BiValue("DarkMeatFowlCourse", "food"));
 	}
@@ -347,7 +329,6 @@ public class NLGEngine {
 		String s = finalOutput.get(arIndex++);
 		if(arIndex<finalOutput.size())
 		s2 = finalOutput.get(arIndex++);
-		System.out.println("CAAAAAAAAAAAAAAAAAAAAAAATCH: " + s + "\n" + s2);
 		while (s != null || s.equals("")) {
 			//System.out.println("RX: " + s);
 
@@ -368,9 +349,6 @@ public class NLGEngine {
 			String res = s;
 			// System.out.println("MIDDLE: " + s);
 			String finale = "";
-			String res1 = "";
-			String res2 = "";
-			boolean split = false;
 			// res.replace("is of type has the color", "has the color");
 
 			try {
@@ -380,34 +358,14 @@ public class NLGEngine {
 				System.out.println("caught an exception");
 			}
 
-			// if one line is longer than 81 characters, divide it into 2 lines
-			if (finale.length() >= 81) {
-				for (int i = 71; i < 91; i++) {
-					try {
-						if ((int) finale.charAt(i) == 32) {
-							res1 = "- " + finale.substring(0, i);
-							res2 = finale.substring(i);
-							split = true;
-						}
-					} catch (Exception e) {
-
-					}
-				}
-			}
 			// System.out.println("FINALE: " + finale);
-			if (!split)
 				finalString += "- " + finale + "\n";
-			else {
-				finalString += res1 + "\n  ";
-				finalString += res2 + "\n";
-
-			}
-			s = s2;
+		
+				s = s2;
 			if(arIndex < finalOutput.size())
 				s2 = finalOutput.get(arIndex++);
 			else break;
 		}
-		System.out.println("**************FINAL STRING*******************\n" + finalString);
 		out.println(finalString);
 		out.close();
 
@@ -418,41 +376,10 @@ public class NLGEngine {
 		if (s.matches("\\d.*")) {
 			s = s.substring(s.lastIndexOf(41) + 1);
 		}
-//		s = s.replaceAll("\\s+", " ");
-
-//		if (isContain(s, "is identical to") && isContain(s, "or")) {
-//			int pos = s.indexOf("is identical to") + 16;
-//			s = s.substring(0, pos) + " either " + s.substring(pos);
-//		}
-		// if (isContain(s, "is a special kind of has the following drink: only
-		// has the color")) {
-		// s = s.replace("is a special kind of has the following drink: only has
-		// the color",
-		// "goes well with a drink that has the color");
-		// }
-		// ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		s = s.replace("is a special kind of has", "has");
-
-		// System.out.println("s before: " + s);
-//		s = s.replace("that Red", "and Red");
-		// System.out.println("s after: " + s);
-
-//		s = s.replace("that White", "and White");
-		// System.out.println("s after: " + s);
-		// s = s.replace("is a special kind of has the color", "has color");
-		// System.out.println("s after: " + s);
-		// System.out.println("EXP2:::::::::::" + s);
 		s = s.replace("not contains", "does not contain");
 		s = s.replace("contains only", "only contains");
 		s = s.replaceAll("drinks is", "Drinks are");
-
-		// System.out.println("SUPPOSED TO FUCKING GO THERE: " + s);
-		// if (s.contains("has color"))
-		// s = shiftWord(s, "color");
-		// if (s.contains("has flavor"))
-		// s = shiftWord(s, "flavor");
-		// if (s.contains("has sugar"))
-		// s = shiftWord(s, "sugar");
 		s = s.replace("that White Wine", "that is also white wine");
 		s = s.replace("that red Wine", "that is also red wine");
 		return s;
@@ -478,68 +405,11 @@ public class NLGEngine {
 
 	}
 
-//	private static void addObjectProperties() {
-//
-//		OWLObjectProperty local;
-//		for (int i = 0; i < 17; i++) {
-//
-//			if (mapperProps.get(i).getValue() == "wine") {
-//				local = fac.getOWLObjectProperty((IRI.create(NSWine + mapperProps.get(i).getKey())));
-//			} else {
-//				local = fac.getOWLObjectProperty((IRI.create(NS + mapperProps.get(i).getKey())));
-//			}
-//
-//			objectProps.add(local);
-//		}
-//	}
-
 	private static boolean isContain(String source, String subItem) {
 		String pattern = "\\b" + subItem + "\\b";
 		Pattern p = Pattern.compile(pattern);
 		Matcher m = p.matcher(source);
 		return m.find();
-	}
-
-	public static BiValue searchMapperClasses(String s) {
-
-		BiValue local = null;
-		mapperClasses.size();
-		System.out.println(mapperClasses);
-		for (int i = 0; i < mapperClasses.size(); i++) {
-			// System.out.println(mapperClasses.get(i).getKey() + " <-- mapper :
-			// s--> " + s);
-			if (mapperClasses.get(i).getKey().equals(s)) {
-				local = mapperClasses.get(i);
-				System.out.println("FOUND::::::::::::::::" + mapperClasses.get(i));
-				break;
-			}
-		}
-		// System.out.println("#####################################" + local);
-		return local;
-	}
-
-	public static Collection getIndividuals() {
-		Collection classes = ontology.getClassesInSignature();
-		// System.out.println("size: " + classes.size());
-		// for (Iterator it = classes.iterator(); it.hasNext();) {
-		//
-		// OWLClass cls = (OWLClass) it.next();
-		// // Collection instances = cls.getInstances(false);
-		// // System.out.println("Class " + cls.getIRI().getFragment());
-		//
-		// }
-
-		return classes;
-
-	}
-
-	public Collection getInstances(OWLClass cls) {
-		Set<OWLNamedIndividual> individuals = reasoner.getInstances(cls, false).getFlattened();
-		// for (Iterator jt = individuals.iterator(); jt.hasNext();) {
-		// OWLNamedIndividual individual = (OWLNamedIndividual) jt.next();
-		//
-		// }
-		return individuals;
 	}
 
 	public ArrayList<OWLObjectProperty> getDataProperties() {
@@ -548,18 +418,6 @@ public class NLGEngine {
 		x.lastIndexOf(".");
 
 		return objectProps;
-
-	}
-
-	public static void printFile(String yarab) throws IOException {
-		FileReader fer = new FileReader(yarab);
-		BufferedReader ber = new BufferedReader(fer);
-		String toPrint = ber.readLine();
-
-		while (toPrint != null) {
-			// System.out.println("=========" + toPrint);
-			toPrint = ber.readLine();
-		}
 
 	}
 
@@ -612,42 +470,30 @@ public class NLGEngine {
 	
 	public void naturalGeneration() throws IOException {
 
-		// outer = new PrintWriter(outputFile2);
-		// clearFile2();
-		// fr = new FileReader(outputFile1);
-		// StringBuffer str = stringOut.getBuffer();
-		// br = new BufferedReader(new InputStreamReader(new
-		// ByteArrayInputStream(str.toString().getBytes())));
-		// stringOut.getBuffer();
-		// br2 = new BufferedReader(new InputStreamReader(new
-		// ByteArrayInputStream(str.toString().getBytes())));
-		// Lexicon lexicon = Lexicon.getDefaultLexicon();
-		// NLGFactory nlgFactory = new NLGFactory(lexicon);
-		// Realiser realiser = new Realiser(lexicon);
 		clearMaps();
 		index = 0;
 		int resSize = 0;
 		fr = new FileReader(outputFile1);
 		outer = new PrintWriter(outputFile2);
 		br = new BufferedReader(fr);
-
+		
 		statement = "";
 		String word = "";
-		// System.out.println("BUFFER1: " + buffer);
 		boolean checked = false;
 		int count = 0;
 		boolean end = false;
 		ans = new ArrayList<String>();
 		String strLine;
+		resSize = ans.size();
+		int num = 0;
+		max = 0;
+		int loop = 0;
+		
 		while ((strLine = br.readLine()) != null) {
 			System.out.println(strLine);
 			ans.add(strLine);
 		}
-		resSize = ans.size();
-
-		int num = 0;
-		max = 0;
-		int loop = 0;
+		
 		for (String singleLine : ans) {
 			buffer = singleLine;
 			System.out.println("BUFFER: " + buffer);
@@ -677,10 +523,7 @@ public class NLGEngine {
 				break;
 		}
 
-		System.out.println("NUMBER that was actually taken:" + max);
-		System.out.println("first line of buffer to be taken is: " + buffer);
 		while (buffer != null) {
-			System.out.println("lines: " + buffer);
 
 			if (buffer.contains("Explanations") || buffer.contains("Functional") || buffer.contains("subPropertyOf"))
 				buffer = ans.get(index++);
@@ -699,14 +542,12 @@ public class NLGEngine {
 			if (statement.contains("Rule")) {
 				String rule = checkRule(statement);
 				line += rule + "\n";
-				System.out.println("dsvfeqgqrer" + ruleClass1 + "          " + ruleClass2);
 				if (index < resSize)
 					buffer = ans.get(index++);
 				else
 					break;
 				continue;
 			} else if (statement.contains("DisjointClasses")) {
-				System.out.println("statement: " + statement);
 				line += disjointPrinting(statement) + "\n";
 				if (index < resSize)
 					buffer = ans.get(index++);
@@ -719,28 +560,19 @@ public class NLGEngine {
 			String out = "";
 			while (st.hasMoreTokens()) {
 				String orig = st.nextToken();
-				// System.out.println("A TOKEN HERE IS: " + orig);
 				if ((int) orig.charAt(0) == 49) {
 					continue;
 				}
-
-				// String s = getCorrectness(orig) + " ";
 				String s = orig + " ";
 
 				line += s;
-				// System.out.println("Natural generation strings: " + s);
-
-				if (end) {
-
-				} else {
+				if (!end){
 					line += " ";
 				}
 			}
 			if (end) {
 				line += "\n";
 				end = false;
-
-			} else {
 
 			}
 		}
@@ -759,7 +591,6 @@ public class NLGEngine {
 			single = single.substring(single.lastIndexOf(41) + 1);
 		}
 
-		// System.out.println("string testing: ********" + single + "********");
 		int emptyLine = single.lastIndexOf(10);
 		single = single.substring(0, emptyLine);
 
@@ -778,15 +609,8 @@ public class NLGEngine {
 				single = single.substring(0, emptyLine);
 
 		}
-		// System.out.println("SD");
+
 		strings.add(single);
-		// System.out.println("STRING testing: ********" + strings +
-		// "********");
-		// System.out.println("*****STRINGS*****: " + strings.size() + "lets
-		// go\n 1-" + strings.get(0) + "\n2- "
-		// + strings.get(1) + "\n3- " + strings.get(2) + "\n4- " +
-		// strings.get(3) + "\n5- " + strings.get(4)
-		// + "\n6- " + strings.get(5) + "\n7 -" + strings.get(6));
 
 		for (String i : strings) {
 			String[] words = i.split(" ");
@@ -814,13 +638,7 @@ public class NLGEngine {
 			}
 
 		}
-		// System.out.println("subjects: " + subjects);
-		// System.out.println("objects: " + objects);
-		// System.out.println("subToOBj: " + subToObj);
-		// System.out.println("Stringsssss size: " + strings.size());
-
 		return reArrange();
-
 	}
 
 	public static ArrayList<String> reArrange() {
@@ -830,7 +648,6 @@ public class NLGEngine {
 		String selectedSentence = "";
 		Map.Entry<String, ArrayList<String>> randomSentence = null;
 		boolean foundMatch = false;
-		// System.out.println(subjects);
 		String sentence = "";
 		boolean end = false;
 		if (subjects.containsKey(target)) {
@@ -841,13 +658,7 @@ public class NLGEngine {
 			subjects.get(target).remove(subjects.get(target).indexOf(sentence));
 			objects.get(object).remove(objects.get(object).indexOf(sentence));
 			removeEmptyHashes(target, object);
-
 			nextSubject = object;
-
-			// System.out.println("**********MY OUTPUT No.1: " +
-			// output.get(0));
-			// System.out.println("My next subject: " + nextSubject);
-			// System.out.println("strings size --" + strings.size());
 		} else {
 			randomSentence = subjects.entrySet().iterator().next();
 			String randomSubject = randomSentence.getKey();
@@ -855,13 +666,8 @@ public class NLGEngine {
 			output.add(selectedSentence);
 			String[] sentenceArray = selectedSentence.split(" ");
 			String selectedObject = sentenceArray[sentenceArray.length - 1];
-
-			// System.out.println("random object: " + selectedObject);
-			// System.out.println("selected sentence: " + selectedSentence);
-			// remove output sentence from hash maps
 			subjects.get(randomSubject).remove(selectedSentence);
 			objects.get(selectedObject).remove(selectedSentence);
-			// subToObj.get(randomSubject).remove(selectedObject);
 			removeEmptyHashes(randomSubject, selectedObject);
 			nextSubject = selectedObject;
 			prevSentence = selectedSentence;
@@ -870,22 +676,14 @@ public class NLGEngine {
 		for (int i = 0; i < strings.size(); i++) {
 			if (end)
 				break;
-			// System.out.println("HELLOOOOOOOOOOO");
 			if (subjects.isEmpty())
 				end = true;
 			if (subjects.containsKey(nextSubject) && subjects.get(nextSubject) != null) {
-				// System.out.println("!@$%^%#@!%^&*%$#@:\n" + output);
 				ArrayList<String> selectedSentences = subjects.get(nextSubject);
 				selectedSentence = selectedSentences.get(0);
-				// System.out.println("sub to obj of next sub: " + links);
 				String[] sentenceArray = selectedSentence.split(" ");
 				String selectedObject = sentenceArray[sentenceArray.length - 1];
-
-				// System.out.println("did i even get here?: " +
-				// selectedObject);
-
 				String toOutput = selectedSentence;
-				// System.out.println("did i even get here?2: " + toOutput);
 				output.add(toOutput);
 				// remove the output sentence from hash maps
 				subjects.get(nextSubject).remove(toOutput);
@@ -894,12 +692,8 @@ public class NLGEngine {
 				nextSubject = selectedObject;
 				prevSentence = toOutput;
 			} else {
-
 				Iterator<Map.Entry<String, ArrayList<String>>> it = subjects.entrySet().iterator();
-
 				while (it.hasNext()) {
-
-
 					Map.Entry<String, ArrayList<String>> entry = it.next();
 					if (prevSentence.length() == 0)
 						break;
@@ -933,14 +727,11 @@ public class NLGEngine {
 						break;
 				}
 				if (!foundMatch) {
-					// System.out.println("!@$%^%#@!%^&*%$#@:\n" + output);
 					try {
 						randomSentence = subjects.entrySet().iterator().next();
 					} catch (Exception e) {
 						break;
 					}
-
-					// System.out.println("RANDOM SENTENCE: " + randomSentence);
 					String randomSubject = randomSentence.getKey();
 					if (subjects.get(randomSubject).get(0) != null)
 						selectedSentence = subjects.get(randomSubject).get(0);
@@ -949,30 +740,19 @@ public class NLGEngine {
 					output.add(selectedSentence);
 					String[] sentenceArray = selectedSentence.split(" ");
 					String selectedObject = sentenceArray[sentenceArray.length - 1];
-					// System.out.println("random object: " + selectedObject);
-					// System.out.println("selected sentence: " +
-					// selectedSentence);
 					output.add(selectedSentence);
-					// remove output sentence from hash maps
-					// System.out.println(
-					// "Selected object that doesnt exist: " + randomSubject +
-					// "\n
-					// the real array is: " + subjects);
 					if (subjects.get(randomSubject) != null && !subjects.get(randomSubject).isEmpty())
 						subjects.get(randomSubject).remove(selectedSentence);
 					if (objects.get(selectedObject) != null && !objects.get(selectedObject).isEmpty())
 						objects.get(selectedObject).remove(selectedSentence);
-					// subToObj.get(randomSubject).remove(selectedObject);
 					removeEmptyHashes(randomSubject, selectedObject);
 					nextSubject = selectedObject;
 					prevSentence = selectedSentence;
 				}
 				foundMatch = false;
 			}
-			// System.out.println("**********MY FUCKING OUTPUT: " + output);
 		}
 		return reStructureSentence(output);
-
 	}
 
 	public static void removeEmptyHashes(String sub, String obj) {
@@ -982,9 +762,6 @@ public class NLGEngine {
 		if (objects.get(obj) == null || objects.get(obj).isEmpty()) {
 			objects.remove(obj);
 		}
-		// if (subToObj.get(sub) == null || subToObj.get(sub).isEmpty()) {
-		// subjects.remove(sub);
-		// }
 	}
 
 	public static ArrayList<String> reStructureSentence(ArrayList<String> outArray) {
@@ -997,21 +774,17 @@ public class NLGEngine {
 				st = new StringTokenizer(modified);
 				while (st.hasMoreTokens()) {
 					out += getCorrectness(st.nextToken()) + " ";
-					
 				}
 				finalOutput.add(out);
-				System.out.println("here is one sentence########: " + out + " ########");
 			} else {
 				st = new StringTokenizer(outArray.get(i));
 				while (st.hasMoreTokens()) {
 					out += getCorrectness(st.nextToken()) + " ";
 				}
 				finalOutput.add(out);
-				System.out.println("here is one sentence########: " + out + " ########");
-				
+
 			}
 		}
-		System.out.println("OUT??????:::::" + out);
 		return finalOutput;
 	}
 
@@ -1028,8 +801,6 @@ public class NLGEngine {
 				res += curr; 
 				break;
 			}
-			System.out.println("## addEither: ###  curr: " + curr + "  next:  " + next);
-			
 			if(next.equals("or")){
 					res += " either " + curr + " " + next + " ";
 					break;
@@ -1037,13 +808,10 @@ public class NLGEngine {
 				else {
 					res += curr + " " + next + " ";
 				}
-			 
-			
 		}
 		while (tokenizer.hasMoreTokens()) {
 			res += " " + tokenizer.nextToken() + " ";
 		}
-		System.out.println("resuuuuuult: " + res);
 		return res;
 	}
 
@@ -1055,40 +823,28 @@ public class NLGEngine {
 		char prop1 = '\0';
 		char prop2 = '\0';
 		st = new StringTokenizer(s);
-		System.out.println("HOBAAAAA");
-
 		String m = st.nextToken();
-		System.out.println("________________________________________________________" + m);
 		int c = m.substring(5).indexOf(40);
-		System.out.println("C!!!!! should be bracket " + c);
 		p1 = m.substring(5, c + 5);
 		p11 = m.substring(c + 7, c + 8).charAt(0);
 		m = st.nextToken();
-		System.out.println(m);
 		c = m.indexOf(40);
 		p2 = m.substring(0, c);
 		p22 = m.substring(c + 2, c + 3).charAt(0);
 		st.nextToken();
 		m = st.nextToken();
-		System.out.println(m);
 		c = m.indexOf(40);
 		prop1 = m.substring(c + 2, c + 3).charAt(0);
 		m = st.nextToken();
-		System.out.println(m);
 		String objectProperty = m.substring(0, m.length() - 4);
 		prop2 = m.substring(1, 2).charAt(0);
-		System.out.println("p1: " + p1 + "----- p2: " + p2 + "----- p11: " + p11 + "----- p22: " + p22
-				+ "------- prop1: " + prop1 + "----- prop2: " + prop2);
 		if (p11 == prop1) {
-			System.out.println("AM I HEEEERE?");
 			ruleClass1 = p1;
 			ruleClass2 = p2;
 		} else if (p11 == prop2) {
-			System.out.println("OR AM I THEEEEERE?");
 			ruleClass1 = p2;
 			ruleClass2 = p1;
 		}
-		System.out.println(mapperClasses);
 		return p2 + " " + objectProperty + p1;
 
 	}
@@ -1111,7 +867,6 @@ public class NLGEngine {
 			return true;
 		}
 		for (i = 0; i < buffer.length(); i++) {
-			// System.out.print("#" + i + ": " + (int) buffer.charAt(i) + " ");
 			if ((int) buffer.charAt(i) == 32)
 				continue;
 			else
@@ -1132,9 +887,7 @@ public class NLGEngine {
 
 			if ((int) statement.charAt(i) == 32)
 				tabs++;
-			// System.out.print(" #"+i+": " + (int) statement.charAt(i));
 		}
-		// System.out.println();
 		return tabs;
 	}
 
@@ -1158,15 +911,12 @@ public class NLGEngine {
 				return "";
 			messages.getString("" + s + "");
 		} catch (Exception e) {
-			// System.out.println("error came from the word: " + s);
 			ret = splitCamelCase(s);
-			System.out.println("!@#$@!@# bi2olak da exception w gab camel case: " + ret);
 			return ret;
 			
 		}
 		
 		ret = messages.getString("" + s + "");
-		System.out.println("!@#$@!@# bi2olak da gab mel resource bundle: " + ret);
 		return ret; 
 		
 
@@ -1214,9 +964,7 @@ public class NLGEngine {
 
 		reasoner.getKB().realize();
 		InferredOntologyGenerator iog = new InferredOntologyGenerator(reasoner, gens);
-		System.out.println("INFERRED AXIOMS GENERATED: " + gens);
 		infOnt = manager.createOntology();
-		System.out.println("INFERRED ONTOLOGY: " + infOnt.getAxiomCount() + " : " + infOnt.getAnnotations());
 		iog.fillOntology(reasoner.getManager().getOWLDataFactory(), infOnt);
 
 		for (OWLOntology o : manager.getImportsClosure(ontology)) {
@@ -1224,8 +972,6 @@ public class NLGEngine {
 				manager.applyChange(new AddAxiom(infOnt, ax));
 			}
 		}
-
-		// ontology = infOnt;
 		fac = manager.getOWLDataFactory();
 		reasoner = PelletReasonerFactory.getInstance().createReasoner(infOnt);
 		ontology = infOnt;

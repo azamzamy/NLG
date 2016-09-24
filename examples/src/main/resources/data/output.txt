@@ -4,7 +4,26 @@ Explanation(s):
                               or Pasta
                               or Seafood
                               or VegetarianFood
-     LightMeatFowl subClassOf Fowl
-     Turkey type LightMeatFowl
+     EdibleThing subClassOf ConsumableThing
+     DarkMeatFowl subClassOf Fowl
+
+
+2)   FishCourse equivalentTo MealCourse
+                             and not hasFood some Fowl
+                                                  or Meat
+                             and hasFood some Fish
+     DisjointClasses(MeatCourse
+                     SeafoodCourse
+                     VegetarianCourse)
+     Fish subClassOf Seafood
+     hasFood domain MealCourse
+     TunaSalad hasFood Tuna
+     SeafoodCourse equivalentTo MealCourse
+                                and hasFood some Seafood
+     MeatCourse equivalentTo MealCourse
+                             and hasFood some Fowl
+                                              or Meat
+     NonBlandFish subClassOf Fish
+     Tuna type NonBlandFish
 
 

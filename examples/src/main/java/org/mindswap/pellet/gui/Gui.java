@@ -441,7 +441,6 @@ public class Gui extends javax.swing.JFrame {
 			IndObj ind2 = (IndObj) box5.getSelectedItem();
 			OWLObjectPropertyAssertionAxiom assertion = wine.getFac().getOWLObjectPropertyAssertionAxiom(prop.getObj(),
 					ind1.getIndOf(), ind2.getIndOf());
-			System.out.println("ASSERTION: ______________: " + assertion);
 			try {
 				exp = wine.getExpGen().getEntailmentExplanations(assertion, 1);
 				wine.getRenderer().render(exp);
@@ -454,53 +453,6 @@ public class Gui extends javax.swing.JFrame {
 			explanationRes.setText(ind1 + " " + prop + " " + ind2);
 			wine.getOut().flush();
 			wine.naturalGeneration();
-			// ClassObj classObj1;
-			// ClassObj classObj2;
-			// BiValue tempObj1 = new BiValue();
-			// tempObj1 = wine.searchMapperClasses(wine.getRuleClass1());
-			// BiValue tempObj2 = new BiValue();
-			// tempObj2 = wine.searchMapperClasses(wine.getRuleClass2());
-			// if (tempObj1.getValue() == "wine") {
-			// classObj1 = new ClassObj(OWL.Class((IRI.create(wine.getNswine() +
-			// tempObj1.getKey()))));
-			// } else {
-			// classObj1 = new ClassObj(OWL.Class((IRI.create(wine.getNs() +
-			// tempObj1.getKey()))));
-			// }
-			// if (tempObj2.getValue() == "wine") {
-			// classObj2 = new ClassObj(OWL.Class((IRI.create(wine.getNswine() +
-			// tempObj2.getKey()))));
-			// } else {
-			// classObj2 = new ClassObj(OWL.Class((IRI.create(wine.getNs() +
-			// tempObj2.getKey()))));
-			// }
-			//
-			//
-			// System.out.println(ind1.getIndOf() + " <--- ind : class -->" +
-			// classObj1);
-			// int backup = wine.getCountExplanations();
-			// wine = null;
-			// wine = new Wine(path, backup);
-			// exp2 = wine.getExpGen().getInstanceExplanations(ind1.getIndOf(),
-			// classObj1.getClassOf());
-			// wine.getRenderer().render(exp);
-			// wine.getOut().flush();
-			// wine.naturalGeneration();
-			// wine.removeExtras();
-			// String outputFromFile = wine.getOutputFromFile();
-			// outputFromFile += "\n \n";
-			// System.out.println(ind2.getIndOf() + " <--- ind : class -->" +
-			// classObj2);
-			// exp3 = wine.getExpGen().getInstanceExplanations(ind2.getIndOf(),
-			// classObj2.getClassOf(), 1);
-			// wine.getRenderer().render(exp2);
-			// wine.getRenderer().endRendering();
-			// wine.getOut().flush();
-			// wine.naturalGeneration();
-			// wine.removeExtras();
-			//
-			// outputFromFile += wine.getOutputFromFile();
-			//
 			if (error == 0) {
 				jTextPane1.read(fr, null);
 				jTextPane1.setEditable(false);
@@ -522,7 +474,6 @@ public class Gui extends javax.swing.JFrame {
 			ClassObj cl1 = (ClassObj) box2.getSelectedItem();
 			IndObj ind1 = (IndObj) box3.getSelectedItem();
 			wine.setTarget(ind1.getValue());
-			System.out.println("Instances and classes: " + cl1 + ind1);
 			exp = wine.getExpGen().getInstanceExplanations(ind1.getIndOf(), cl1.getClassOf(), 1);
 			explanationRes.setText(ind1 + " is an instance of: " + cl1);
 		}
@@ -571,8 +522,6 @@ public class Gui extends javax.swing.JFrame {
 					"No Explanation found! Either Axiom is not entailed, already satisfiable, or consistent!");
 		}
 		fr.close();
-		System.out.println("done");
-
 	}
 
 	private void box4ActionPerformed(java.awt.event.ActionEvent evt)
@@ -592,57 +541,12 @@ public class Gui extends javax.swing.JFrame {
 		PropertyObj prop = (PropertyObj) box4.getSelectedItem();
 		IndObj obj = (IndObj) box3.getSelectedItem();
 		Set<OWLClass> classes = wine.getReasoner().getObjectPropertyRanges(prop.getObj(), true).getFlattened();
-		System.out.println("To string Classes ______: " + classes);
 		for (OWLClass cls : classes) {
 			Set<OWLNamedIndividual> indi = wine.getReasoner().getInstances(cls, false).getFlattened();
 			for (OWLNamedIndividual ind : indi) {
 				box5.addItem(new IndObj(ind));
 			}
 		}
-
-		// Set<OWLNamedIndividual> indis =
-		// wine.getReasoner().getObjectPropertyValues(obj.getIndOf(),
-		// prop.getObj()).getFlattened();
-		// System.out.println("To string Classes ______: " + classes);
-		// List<InferredAxiomGenerator<? extends OWLAxiom>> result = new
-		// ArrayList<InferredAxiomGenerator<? extends OWLAxiom>>();
-		// for (OWLNamedIndividual namedIndividual :
-		// wine.getOntology().getIndividualsInSignature()) {
-		//
-		// NodeSet<OWLNamedIndividual> namedIndividualSet =
-		// wine.getReasoner().getObjectPropertyValues(obj.getIndOf(),
-		// prop.getObj());
-
-		// for (Node<OWLNamedIndividual> namedIndividualsInObjectPropertySet :
-		// namedIndividualSet) {
-		// for (OWLNamedIndividual namedIndividualForObjectPropertySet :
-		// namedIndividualsInObjectPropertySet) {
-		// for (OWLClassExpression owlClass :
-		// namedIndividualForObjectPropertySet.getClassesInSignature()) {
-		// Set<OWLNamedIndividual> namedInds =
-		// wine.getReasoner().getInstances(owlClass, false).getFlattened();
-		//// List<InferredAxiomGenerator<? extends OWLAxiom>> generator = new
-		//// ArrayList<InferredAxiomGenerator<? extends OWLAxiom>>();
-		// generator.createAxioms(wine.getFac(), wine.getReasoner());
-		// for (OWLNamedIndividual in : namedInds) {
-		// box5.addItem(new IndObj(in));
-		// }
-		// InferredObjectPropertyAxiomGenerator<? extends OWLAxiom> generator =
-		// new
-		// InferredObjectPropertyAxiomGenerator<? extends OWLAxiom>();
-		// generator.createAxioms(owldatafactory, reasoner);
-		// for (OWLNamedIndividual in : namedInds) {
-		// box5.addItem(new IndObj(in));
-		// }
-		// // Result contains all the inferred object properties
-		// // shown in the above pictures, so this code works. How
-		// // can I access the explanation for one of the inferred
-		// // object properties by the reasoner here?
-		// }
-		// }
-		// }
-		// }
-		// }
 	}
 
 	private void box3ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -659,14 +563,11 @@ public class Gui extends javax.swing.JFrame {
 		if (returnValue == JFileChooser.APPROVE_OPTION) {
 			File filename = fileChooser.getSelectedFile();
 			path = filename.getAbsolutePath();
-			System.out.println(path.substring(path.lastIndexOf("."), path.length()));
 			if (!(path.substring(path.lastIndexOf("."), path.length()).equals(".owl"))) {
 				JOptionPane.showMessageDialog(this, "Please choose a file of type .owl");
 			} else {
 				fname.setText(path);
 				box1.setEnabled(true);
-				System.out.println("got the path");
-				System.out.println(path);
 				wine = new NLGEngine(path, 1);
 				jButton8.setEnabled(true);
 				inferButton.setEnabled(true);
@@ -688,15 +589,10 @@ public class Gui extends javax.swing.JFrame {
 				box3.removeAllItems();
 				box3.setSelectedItem("Instances");
 				box3.setEnabled(true);
-
-				System.out.println("_______cl___________: " + cl.toString());
 				NodeSet<OWLNamedIndividual> indi = NLGEngine.getReasoner().getInstances(((OWLClass) (cl.getClassOf())),
 						false);
-				// System.out.println("tab eh gai wla eldor elgai" + indi);
 				for (Node<OWLNamedIndividual> ind : indi) {
-
 					Set<OWLNamedIndividual> indis = ind.getEntities();
-					// System.out.println("tab eh gai wla eldor elgai" + ind);
 					for (OWLNamedIndividual i : indis) {
 
 						box3.addItem(new IndObj(i));
@@ -814,15 +710,9 @@ public class Gui extends javax.swing.JFrame {
 			classes2.add(new ClassObj(clss));
 		}
 		Collections.sort(classes2, new CustomClassComparator());
-		// System.out.println(classes.toString());
 		for (ClassObj cls : classes2) {
 			IRI ir = cls.getClassOf().getIRI();
 			String iri = ir.toString();
-			// try{
-			// box2.addItem(iri.substring(60, 63) + ":" + ir.getShortForm());
-			// } catch(StringIndexOutOfBoundsException e){
-			// box2.addItem("Owl:Thing");
-			// }
 			box2.addItem(cls);
 		}
 
@@ -867,7 +757,6 @@ public class Gui extends javax.swing.JFrame {
 		} catch (IllegalAccessException ex) {
 			java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-			System.out.println("is it here??????????????????????????");
 			java.util.logging.Logger.getLogger(Gui.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 		}
 		// </editor-fold>
